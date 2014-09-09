@@ -14,9 +14,11 @@ $(document).ready(function() {
     // create the editor (no option passed)
     editor = new Editor(canvas, {});
     //create the ui.overlay object (is used for the overlays eg. export/import/help)
-    ouioverlay = new UiOverlay();
+    uioverlay = new UiOverlay();
+    //enable the close button
+    uioverlay.enableAutoClose();
     //setup the key listeners
-    keys(editor, ouioverlay);
+    keys(editor, uioverlay);
     //setup the click listener for the canvas
     $("#canvas").on("click", function(e) {
         //check if the clicked point is already a used point

@@ -2,7 +2,7 @@ function UiOverlay(options) {
     //setup defaults
     this.defaultOptions = {
         "activeOpenClass":"showen",
-        "uiOverlayClass":".oi-overlay ",
+        "uiOverlayClass":"ui-overlay ",
         "closeClass":"close",
         "closedEvent":"closed",
         "openedEvent":"showen"
@@ -49,10 +49,10 @@ function UiOverlay(options) {
      */
     this.enableAutoClose = function() {
         //setup an onClick listner for all childen, of all element with the class options.uiOverlayClass, which have the class options.closeClass
-        $("."+this.options.uiOverlayClass+" ."+this.options.closeClass).click(function() {
+        $("."+this.options.uiOverlayClass+"."+this.options.closeClass).click(function(uioverlay){ return function() {
             //close the ui-overlay
-            close($(this).parent());
-        });
+            uioverlay.close($(this).parent());
+        };}(this));
     };
     /**
      * Checks if a ui-overlay is visible
