@@ -1,0 +1,21 @@
+DefaultOptions = function() {
+    return {"maxSelect": 4,
+        "floorColor": "#555555",
+        "wallColor": "#ff8888",
+        "wallWidth": 4,
+        "doorWidth": 2,
+        "doorColor": "#8888ff",
+        "windowWidth": 2,
+        "windowColor": "#88ff88",
+        "zoomFactor": 1.1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "autoSelect": false,
+        "defaultFloorHeight": 50,
+        "pointColor": "#3D9970",
+        "pointLineWidth": 3,
+        "pointStrokeStyle": "#000",
+        "selectedPointColor": "#FF4136",
+        "selectedPointLineWidth": 3,
+        "selectedPointStrokeStyle": "#000"};
+};

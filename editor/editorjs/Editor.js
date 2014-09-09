@@ -1,20 +1,5 @@
 function Editor(canvas, options) {
-    this.optionsDefault = {
-        "maxSelect": 4,
-        "floorColor": "#555555",
-        "wallColor": "#ff8888",
-        "wallWidth": 4,
-        "doorWidth": 2,
-        "doorColor": "#8888ff",
-        "windowWidth": 2,
-        "windowColor": "#88ff88",
-        "zoomFactor": 1.1,
-        "offsetX": 0,
-        "offsetY": 0,
-        "autoSelect": false,
-        "defaultFloorHeight": 50
-
-    };
+    this.optionsDefault = new DefaultOptions();
     this.options = $.extend(this.optionsDefault, options);
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
@@ -23,17 +8,21 @@ function Editor(canvas, options) {
     this.zoomClickes = 0;
     this.exportObjects = new DefaultExportObject();
     this.backgroundImage = null;
+
+    this.zoomFactor = function() {
+        return Math.pow(this.options.zoomFactor, this.zoomClickes);
+    };
     this.newPoint = function(x, y) {
-        var factor = Math.pow(this.options.zoomFactor, this.zoomClickes);
+        var factor = this.zoomFactor();
         this.points.push({"x": Math.floor(1 / factor * x) + this.options.offsetX * -1, "y": Math.floor(1 / factor * y) + this.options.offsetY * -1});
         if (this.options.autoSelect) {
             this.select(this.points.length - 1);
         } else {
-            this.drawPoint(this.points[this.points.length - 1], "new");
+            this.drawPoint(this.points[this.points.length - 1], new Styles.PointStyle(this.options));
         }
     };
     this.targetIsPoint = function(x, y) {
-        var factor = Math.pow(this.options.zoomFactor, this.zoomClickes);
+        var factor = this.zoomFactor();
         x = Math.floor(1 / factor * x);
         y = Math.floor(1 / factor * y);
         var fuzzyness = 10;
@@ -47,31 +36,24 @@ function Editor(canvas, options) {
     };
     this.select = function(index) {
         if ($.inArray(index, this.selectedPoints) !== -1) {
-            this.drawPoint(this.points[index], "new");
+            this.drawPoint(this.points[index], new Styles.PointStyle(this.options));
             this.selectedPoints = Arrays.removeFromArray(index, this.selectedPoints);
             return;
         } else if (this.selectedPoints.length === this.options.maxSelect) {
-            this.drawPoint(this.points[this.selectedPoints[0]], "new");
+            this.drawPoint(this.points[this.selectedPoints[0]], new Styles.PointStyle(this.options));
             this.selectedPoints.shift();
         }
         this.selectedPoints.push(index);
-        this.drawPoint(this.points[index], "selected");
+        this.drawPoint(this.points[index], new Styles.SelectedPointStyle(this.options));
     };
-    this.drawPoint = function(point, type) {
-        if (type === "new") {
-            color = "#00aa00";
-        } else if (type === "selected") {
-            color = "red";
-        } else {
-            color = "#0000ff";
-        }
-
+    this.drawPoint = function(point, style) {
         this.context.beginPath();
         this.context.arc(point.x, point.y, 5, 0, 2 * Math.PI, false);
-        this.context.fillStyle = color;
+        this.context.fillStyle = style.color;
         this.context.fill();
-        this.context.lineWidth = 5;
-        this.context.strokeStyle = '#003300';
+        this.context.lineWidth = style.lineWidth;
+        console.log(style)
+        this.context.strokeStyle = style.strokeStyle;
         this.context.stroke();
         this.context.closePath();
     };
@@ -97,7 +79,7 @@ function Editor(canvas, options) {
             object.points.push(new Array(this.points[this.selectedPoints[0]].x, this.points[this.selectedPoints[0]].y));
             object.points.push(new Array(this.points[this.selectedPoints[1]].x, this.points[this.selectedPoints[1]].y));
             this.exportObjects.wall.push(object);
-            this.drawWall(object);
+            this.drawLine(object, new Styles.WallStyle(this.options));
         }
     };
     this.createDoor = function() {
@@ -107,7 +89,7 @@ function Editor(canvas, options) {
             object.points.push(new Array(this.points[this.selectedPoints[0]].x, this.points[this.selectedPoints[0]].y));
             object.points.push(new Array(this.points[this.selectedPoints[1]].x, this.points[this.selectedPoints[1]].y));
             this.exportObjects.door.push(object);
-            this.drawDoor(object);
+            this.drawLine(object, new Styles.DoorStyle(this.options));
         }
     };
     this.createWindow = function() {
@@ -117,7 +99,7 @@ function Editor(canvas, options) {
             object.points.push(new Array(this.points[this.selectedPoints[0]].x, this.points[this.selectedPoints[0]].y));
             object.points.push(new Array(this.points[this.selectedPoints[1]].x, this.points[this.selectedPoints[1]].y));
             this.exportObjects.window.push(object);
-            this.drawWindow(object);
+            this.drawLine(object, new Styles.WindowStyle(this.options));
         }
     };
     this.drawFloor = function(floor) {
@@ -131,31 +113,11 @@ function Editor(canvas, options) {
         this.context.closePath();
         this.context.fill();
     };
-    this.drawWall = function(wall) {
-        var points = wall.points;
+    this.drawLine = function(line, options) {
+        var points = line.points;
         this.context.beginPath();
-        this.context.lineWidth = this.options.wallWidth;
-        this.context.strokeStyle = this.options.wallColor;
-        this.context.moveTo(points[0][0], points[0][1]);
-        this.context.lineTo(points[1][0], points[1][1]);
-        this.context.stroke();
-        this.context.closePath();
-    };
-    this.drawWindow = function(window) {
-        var points = window.points;
-        this.context.beginPath();
-        this.context.lineWidth = this.options.windowWidth;
-        this.context.strokeStyle = this.options.windowColor;
-        this.context.moveTo(points[0][0], points[0][1]);
-        this.context.lineTo(points[1][0], points[1][1]);
-        this.context.stroke();
-        this.context.closePath();
-    };
-    this.drawDoor = function(door) {
-        var points = door.points;
-        this.context.beginPath();
-        this.context.lineWidth = this.options.doorWidth;
-        this.context.strokeStyle = this.options.doorColor;
+        this.context.lineWidth = options.width;
+        this.context.strokeStyle = options.color;
         this.context.moveTo(points[0][0], points[0][1]);
         this.context.lineTo(points[1][0], points[1][1]);
         this.context.stroke();
@@ -168,11 +130,11 @@ function Editor(canvas, options) {
             if (object.type === "floor3" || object.type === "floor4") {
                 this.drawFloor(object);
             } else if (object.type === "wall") {
-                this.drawWall(object);
+                this.drawLine(object, new Styles.WallStyle(this.options));
             } else if (object.type === "door") {
-                this.drawDoor(object);
+                this.drawLine(object, new Styles.DoorStyle(this.options));
             } else if (object.type === "window") {
-                this.drawWindow(object);
+                this.drawLine(object, new Styles.WindowStyle(this.options));
             }
             this.pushPoints(points, object);
         }
@@ -191,7 +153,7 @@ function Editor(canvas, options) {
         points = points.concat(this.drawArray("window"));
         this.points = new Array();
         for (var i = 0; i < points.length; i++) {
-            this.drawPoint(points[i], "new");
+            this.drawPoint(points[i], new Styles.PointStyle(this.options));
             this.points.push(points[i]);
         }
         this.selectedPoints = new Array();
@@ -203,47 +165,25 @@ function Editor(canvas, options) {
         return array;
     };
     this.clear = function() {
-        this.context.clearRect(this.options.offsetX * -1, this.options.offsetY * -1, canvas.width * 1 / Math.pow(this.options.zoomFactor, this.zoomClickes), canvas.height * 1 / Math.pow(this.options.zoomFactor, this.zoomClickes));
+        var factor = this.zoomFactor();
+        this.context.clearRect(
+                this.options.offsetX * -1,
+                this.options.offsetY * -1,
+                canvas.width * 1 / factor,
+                canvas.height * 1 / factor);
     };
     this.toString = function() {
-        var level = {
-            "floor": "ground0",
-            "y":this.options.defaultFloorHeight
-        };
-        var objects = new Array();
-        for (var i = 0; i < this.exportObjects.floor4.length; i++) {
-            var floor = this.exportObjects.floor4[i];
-            floor.type = "floor4";
-            objects.push(floor);
-        }
-        for (var i = 0; i < this.exportObjects.floor3.length; i++) {
-            var floor = this.exportObjects.floor3[i];
-            floor.type = "floor3";
-            objects.push(floor);
-        }
-        for (var i = 0; i < this.exportObjects.wall.length; i++) {
-            var wall = this.exportObjects.wall[i];
-            wall.type = "wall";
-            objects.push(wall);
-        }
-        for (var i = 0; i < this.exportObjects.window.length; i++) {
-            var window = this.exportObjects.window[i];
-            window.type = "window";
-            objects.push(window);
-        }
-
-        for (var i = 0; i < this.exportObjects.door.length; i++) {
-            var door = this.exportObjects.door[i];
-            door.type = "door";
-            objects.push(door);
-        }
-        level.elements = objects;
-        return JSON.stringify(new Array(level));
+        return EditorIO.toString(this);
     };
+    this.load = function(text) {
+        return EditorIO.load(this, text);
+    };
+
     this.clearSelectedPoints = function() {
+        debug.log("Do not use Editor.clearSelectedPoints you kann use Editor.redraw instead");
         for (var i = 0; i < this.selectedPoints.length; i++) {
             var index = this.selectedPoints[i];
-            this.drawPoint(this.points[index], "new");
+            this.drawPoint(this.points[index], new Styles.PointStyle(this.options));
         }
         this.selectedPoints = new Array();
     };
@@ -251,15 +191,7 @@ function Editor(canvas, options) {
         this.clearSelectedPoints();
         this.options = $.extend(this.options, options);
     };
-    this.load = function(text) {
-        var level = JSON.parse(text);
-        this.exportObjects = null;
-        this.exportObjects = new DefaultExportObject();
-        for (var i = 0; i < level[0].elements.length; i++) {
-            this.exportObjects[level[0].elements[i].type].push(level[0].elements[i]);
-        }
-        this.redraw();
-    };
+
     this.getClean = function() {
         this.points = new Array();
         this.exportObjects = new DefaultExportObject();
@@ -280,24 +212,21 @@ function Editor(canvas, options) {
     this.drawBackground = function() {
         this.context.drawImage(this.backgroundImage, 0, 0);
     };
-    this.zoom = function(clicks, positionX, positionY) {
+    this.zoom = function(clicks) {
         this.resetMove();
-        //this.context.translate(positionX, positionY);
         var factor = Math.pow(this.options.zoomFactor, clicks);
         this.zoomClickes += clicks;
         this.context.scale(factor, factor);
-        //this.context.translate(-positionX, -positionY );
         this.redraw();
     };
     this.resetZoom = function() {
         var factor = Math.pow(this.options.zoomFactor, this.zoomClickes * -1);
         this.context.scale(factor, factor);
         this.zoomClickes = 0;
-        //this.context.setTransform(1, 0, 0, 1, 0, 0);
         this.redraw();
     };
     this.getCoordinates = function(x, y) {
-        var factor = Math.pow(this.options.zoomFactor, this.zoomClickes);
+        var factor = this.zoomFactor();
         return {"x": Math.floor(1 / factor * x) + this.options.offsetX * -1, "y": Math.floor(1 / factor * y) + this.options.offsetY * -1};
     };
     this.move = function(x, y) {
@@ -310,7 +239,6 @@ function Editor(canvas, options) {
     this.resetMove = function() {
         this.clear();
         this.context.translate(this.options.offsetX * -1, this.options.offsetY * -1);
-        this.clear();
         this.options.offsetX = 0;
         this.options.offsetY = 0;
         this.redraw();
@@ -332,9 +260,7 @@ function Editor(canvas, options) {
         this.exportObjects.floor4 = $.grep(this.exportObjects.floor4, function(n, i) {
             return $.inArray(i, indexes) === -1;
         });
-
         this.redraw();
-
     };
     this.getSelectedPointsAsArrays = function() {
         var array = new Array();
@@ -347,14 +273,3 @@ function Editor(canvas, options) {
     return this;
 }
 ;
-
-
-function DefaultExportObject() {
-    return {
-        "wall": new Array(),
-        "window": new Array(),
-        "door": new Array(),
-        "floor3": new Array(),
-        "floor4": new Array()
-    };
-}
