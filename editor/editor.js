@@ -46,7 +46,7 @@ function Editor(canvas, options) {
     this.select = function(index) {
         if ($.inArray(index, this.selectedPoints) !== -1) {
             this.drawPoint(this.points[index], "new");
-            this.selectedPoints = removeFromArray(index, this.selectedPoints);
+            this.selectedPoints = Arrays.removeFromArray(index, this.selectedPoints);
             return;
         } else if (this.selectedPoints.length === this.options.maxSelect) {
             this.drawPoint(this.points[this.selectedPoints[0]], "new");
@@ -315,11 +315,11 @@ function Editor(canvas, options) {
         var indexes = new Array();
         for (var i = 0; i < this.exportObjects.floor4.length; i++) {
             if (exact) {
-                if (containsEqualItems(selectedPoints, this.exportObjects.floor4[i].points)) {
+                if (Arrays.containsEqualItems(selectedPoints, this.exportObjects.floor4[i].points)) {
                     indexes.push(i);
                 }
             } else {
-                if (countSameItems(selectedPoints, this.exportObjects.floor4[i].points) > 0) {
+                if (Arrays.countSameItems(selectedPoints, this.exportObjects.floor4[i].points) > 0) {
                     indexes.push(i);
                 }
             }
