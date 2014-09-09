@@ -1,12 +1,12 @@
 DefaultOptions = function() {
     return {"maxSelect": 4,
-        "floorColor": "#555555",
-        "wallColor": "#ff8888",
-        "wallWidth": 4,
-        "doorWidth": 2,
-        "doorColor": "#8888ff",
+        "floorColor": "#001F3F",
+        "wallColor": "#85144B",
+        "wallWidth": 6,
+        "doorWidth": 3,
+        "doorColor": "#01FF70",
         "windowWidth": 2,
-        "windowColor": "#88ff88",
+        "windowColor": "#FF851B",
         "zoomFactor": 1.1,
         "offsetX": 0,
         "offsetY": 0,
@@ -17,5 +17,5 @@ DefaultOptions = function() {
         "pointStrokeStyle": "#000",
         "selectedPointColor": "#FF4136",
         "selectedPointLineWidth": 3,
-        "selectedPointStrokeStyle": "#000"};
+        "selectedPointStrokeStyle": "#000000"};
 };

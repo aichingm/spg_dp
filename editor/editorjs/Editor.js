@@ -52,7 +52,6 @@ function Editor(canvas, options) {
         this.context.fillStyle = style.color;
         this.context.fill();
         this.context.lineWidth = style.lineWidth;
-        console.log(style)
         this.context.strokeStyle = style.strokeStyle;
         this.context.stroke();
         this.context.closePath();
