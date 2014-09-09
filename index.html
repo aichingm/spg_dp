@@ -11,51 +11,74 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
         <script>
-            // Set up the scene, camera, and renderer as global variables.
             var scene, camera, renderer;
 
+            function mmm_clear() {
+                var obj, i;
+                for (i = scene.children.length - 1; i >= 0; i--) {
+                    obj = scene.children[ i ];
+                    if (obj !== camera) {
+                        scene.remove(obj);
+                    }
+                }
+            }
+            // Set up the scene, camera, and renderer as global variables.
+            init();
+            animate();
 
-            $.getJSON("data.json", function(data) {
+            $(function() {
+                $(window).bind('storage', function(e) {
+                    if (e.originalEvent.key === "PieceofShit.exports") {
+                        draw(JSON.parse(e.originalEvent.newValue), true);
+                    }
+                });
+            });
 
-                init(data);
-                animate();
-
-            }).done(function() {
-                console.log("second success");
-            })
-                    .fail(function(jqXHR, status, error) {
-                        console.log([jqXHR, status, error]);
-                    })
-                    .always(function() {
-                        console.log("complete");
-                    });
-
-
+            //check if exportObjects are cached and if load them
+            if (typeof (Storage) !== "undefined") {
+                var exports = localStorage.getItem("PieceofShit.exports");
+                //check if they are valid
+                if (exports !== null && exports !== undefined && exports.length > 0) {
+                    //draw them
+                    draw(JSON.parse(exports), false);
+                }
+            }
+            /*$.getJSON("data.json", function(data) {
+             
+             init(data);
+             animate();
+             
+             }).done(function() {
+             console.log("second success");
+             })
+             .fail(function(jqXHR, status, error) {
+             console.log([jqXHR, status, error]);
+             })
+             .always(function() {
+             console.log("complete");
+             });
+             
+             */
 
 
 
 
 
             // Sets up the scene.
-            function init(data) {
-
+            function init() {
                 // Create the scene and set the scene size.
                 scene = new THREE.Scene();
                 var WIDTH = window.innerWidth,
                         HEIGHT = window.innerHeight;
-
                 // Create a renderer and add it to the DOM.
                 renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
                 renderer.setSize(WIDTH, HEIGHT);
                 document.body.appendChild(renderer.domElement);
-
                 // Create a camera, zoom it out from the model a bit, and add it to the scene.
                 camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 01, 200000);
                 camera.position.set(10000, 10000, 10000);
-
                 camera.lookAt(new THREE.Vector3(4000, 4000, 4000));
                 scene.add(camera);
-
                 // Create an event listener that resizes the renderer with the browser window.
                 window.addEventListener('resize', function() {
                     var WIDTH = window.innerWidth,
@@ -64,56 +87,12 @@
                     camera.aspect = WIDTH / HEIGHT;
                     camera.updateProjectionMatrix();
                 });
-
                 // Set the background color of the scene.
                 renderer.setClearColorHex(0x333F47, 1);
-
                 // Create a light, set its position, and add it to the scene.
                 var light = new THREE.PointLight(0xffffff);
                 light.position.set(-1000, 2000, 1000);
                 scene.add(light);
-
-                /*// Load in the mesh and add it to the scene.
-                 var loader = new THREE.JSONLoader();
-                 loader.load( "models/treehouse_logo.js", function(geometry){
-                 var material = new THREE.MeshLambertMaterial({color: 0x55B663});
-                 mesh = new THREE.Mesh(geometry, material);
-                 scene.add(mesh);
-                 });*/
-                $(data).each(function() {
-                    console.log(this);
-                    $(this.elements).each(function(floor){return function(floor) {
-                        console.log(this);
-                        if (this.type === "floor4") {
-                            var geometry = new THREE.Geometry;
-                            points = this.points;
-                            console.log(points);
-                            geometry.vertices.push(
-                                    new THREE.Vector3(points[0][0],floor.y, points[0][1]),
-                                    new THREE.Vector3(points[1][0],floor.y, points[1][1]),
-                                    new THREE.Vector3(points[2][0],floor.y, points[2][1]),
-                                    new THREE.Vector3(points[3][0],floor.y, points[3][1])
-                                    );
-
-                            geometry.faces.push(new THREE.Face3(0, 1, 2));
-                            geometry.faces.push(new THREE.Face3(0, 2, 3));
-
-                            geometry.computeBoundingSphere();
-
-                            var material = new THREE.MeshBasicMaterial({
-                                color: 0xAAAAAA, 
-                                opacity: 0.1,
-                                transparent: true,
-                                side: THREE.DoubleSide
-                            });
-                            mesh = new THREE.Mesh(geometry, material);
-                            scene.add(mesh);
-                        }
-
-                    };}(this));
-
-                });
-
                 controls = new THREE.OrbitControls(camera, renderer.domElement);
             }
 
@@ -124,6 +103,41 @@
                 // Render the scene.
                 renderer.render(scene, camera);
                 controls.update();
+            }
+
+            function draw(data, clear) {
+                if (clear === true) {
+                    mmm_clear();
+                }
+                $(data).each(function() {
+                    $(this.elements).each(function(floor) {
+                        return function(floor) {
+                            if (this.type === "floor4") {
+                                var geometry = new THREE.Geometry;
+                                points = this.points;
+                                geometry.vertices.push(
+                                        new THREE.Vector3(points[0][0], floor.y, points[0][1]),
+                                        new THREE.Vector3(points[1][0], floor.y, points[1][1]),
+                                        new THREE.Vector3(points[2][0], floor.y, points[2][1]),
+                                        new THREE.Vector3(points[3][0], floor.y, points[3][1])
+                                        );
+
+                                geometry.faces.push(new THREE.Face3(0, 1, 2));
+                                geometry.faces.push(new THREE.Face3(0, 2, 3));
+                                geometry.computeBoundingSphere();
+                                var material = new THREE.MeshBasicMaterial({
+                                    color: 0xAAAAAA,
+                                    opacity: 0.1,
+                                    transparent: true,
+                                    side: THREE.DoubleSide
+                                });
+                                mesh = new THREE.Mesh(geometry, material);
+                                scene.add(mesh);
+                            }
+                        };
+                    }(this));
+                });
+
             }
 
         </script>

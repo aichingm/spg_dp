@@ -43,6 +43,8 @@ function keys(editor, uioverlay) {
                 editor.delete(true);
             }else if (e.charCode === 88) { //x
                 editor.delete(false);
+            }else if (e.charCode === 118) { //v
+                window.open("../index.html");
             }
             
             

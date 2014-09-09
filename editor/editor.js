@@ -11,7 +11,9 @@ function Editor(canvas, options) {
         "zoomFactor": 1.1,
         "offsetX": 0,
         "offsetY": 0,
-        "autoSelect": false
+        "autoSelect": false,
+        "defaultFloorHeight": 50
+
     };
     this.options = $.extend(this.optionsDefault, options);
     this.canvas = canvas;
@@ -204,8 +206,11 @@ function Editor(canvas, options) {
         this.context.clearRect(this.options.offsetX * -1, this.options.offsetY * -1, canvas.width * 1 / Math.pow(this.options.zoomFactor, this.zoomClickes), canvas.height * 1 / Math.pow(this.options.zoomFactor, this.zoomClickes));
     };
     this.toString = function() {
+        var level = {
+            "floor": "ground0",
+            "y":this.options.defaultFloorHeight
+        };
         var objects = new Array();
-        objects.push();
         for (var i = 0; i < this.exportObjects.floor4.length; i++) {
             var floor = this.exportObjects.floor4[i];
             floor.type = "floor4";
@@ -232,8 +237,8 @@ function Editor(canvas, options) {
             door.type = "door";
             objects.push(door);
         }
-        //console.log(objects);
-        return JSON.stringify(objects);
+        level.elements = objects;
+        return JSON.stringify(new Array(level));
     };
     this.clearSelectedPoints = function() {
         for (var i = 0; i < this.selectedPoints.length; i++) {
@@ -247,11 +252,11 @@ function Editor(canvas, options) {
         this.options = $.extend(this.options, options);
     };
     this.load = function(text) {
-        var objects = JSON.parse(text);
+        var level = JSON.parse(text);
         this.exportObjects = null;
         this.exportObjects = new DefaultExportObject();
-        for (var i = 0; i < objects.length; i++) {
-            this.exportObjects[objects[i].type].push(objects[i]);
+        for (var i = 0; i < level[0].elements.length; i++) {
+            this.exportObjects[level[0].elements[i].type].push(level[0].elements[i]);
         }
         this.redraw();
     };
