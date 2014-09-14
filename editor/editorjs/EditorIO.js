@@ -14,14 +14,9 @@ EditorIO = new function() {
             "y": editor.options.defaultFloorHeight
         };
         var objects = new Array();
-        for (var i = 0; i < editor.exportObjects.floor4.length; i++) {
-            var floor = editor.exportObjects.floor4[i];
-            floor.type = "floor4";
-            objects.push(floor);
-        }
-        for (var i = 0; i < editor.exportObjects.floor3.length; i++) {
-            var floor = editor.exportObjects.floor3[i];
-            floor.type = "floor3";
+        for (var i = 0; i < editor.exportObjects.floor.length; i++) {
+            var floor = editor.exportObjects.floor[i];
+            floor.type = "floor";
             objects.push(floor);
         }
         for (var i = 0; i < editor.exportObjects.wall.length; i++) {

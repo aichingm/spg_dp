@@ -60,14 +60,10 @@ function Editor(canvas, options) {
         if (this.selectedPoints.length > 2) {
             var object = {"type": "floor" + this.selectedPoints.length};
             object.points = new Array();
-            for (i = 0; i < this.selectedPoints.length; i++) {
+            for (var i = 0; i < this.selectedPoints.length; i++) {
                 object.points.push(new Array(this.points[this.selectedPoints[i]].x, this.points[this.selectedPoints[i]].y));
             }
-            if (this.selectedPoints.length === 3) {
-                this.exportObjects.floor3.push(object);
-            } else if (this.selectedPoints.length === 4) {
-                this.exportObjects.floor4.push(object);
-            }
+            this.exportObjects.floor.push(object);
             this.drawFloor(object);
         }
     };
@@ -126,7 +122,7 @@ function Editor(canvas, options) {
         var points = new Array();
         for (var i = 0; i < this.exportObjects[name].length; i++) {
             var object = this.exportObjects[name][i];
-            if (object.type === "floor3" || object.type === "floor4") {
+            if (object.type === "floor") {
                 this.drawFloor(object);
             } else if (object.type === "wall") {
                 this.drawLine(object, new Styles.WallStyle(this.options));
@@ -145,8 +141,7 @@ function Editor(canvas, options) {
         if (this.backgroundImage !== null) {
             this.drawBackground();
         }
-        points = points.concat(this.drawArray("floor4"));
-        points = points.concat(this.drawArray("floor3"));
+        points = points.concat(this.drawArray("floor"));
         points = points.concat(this.drawArray("wall"));
         points = points.concat(this.drawArray("door"));
         points = points.concat(this.drawArray("window"));
@@ -219,6 +214,7 @@ function Editor(canvas, options) {
         this.redraw();
     };
     this.resetZoom = function() {
+        this.resetMove();
         var factor = Math.pow(this.options.zoomFactor, this.zoomClickes * -1);
         this.context.scale(factor, factor);
         this.zoomClickes = 0;
@@ -242,31 +238,102 @@ function Editor(canvas, options) {
         this.options.offsetY = 0;
         this.redraw();
     };
-    this.delete = function(exact) {
+    this.delete = function() {
         var selectedPoints = this.getSelectedPointsAsArrays();
         var indexes = new Array();
-        for (var i = 0; i < this.exportObjects.floor4.length; i++) {
-            if (exact) {
-                if (Arrays.containsEqualItems(selectedPoints, this.exportObjects.floor4[i].points)) {
-                    indexes.push(i);
-                }
-            } else {
-                if (Arrays.countSameItems(selectedPoints, this.exportObjects.floor4[i].points) > 0) {
-                    indexes.push(i);
-                }
+        for (var i = 0; i < this.exportObjects.floor.length; i++) {
+            if (Arrays.containsEqualItems(selectedPoints, this.exportObjects.floor[i].points)) {
+                indexes.push(i);
             }
         }
-        this.exportObjects.floor4 = $.grep(this.exportObjects.floor4, function(n, i) {
+        this.exportObjects.floor = $.grep(this.exportObjects.floor, function(n, i) {
+            return $.inArray(i, indexes) === -1;
+        });
+        indexes = new Array();
+        for (var i = 0; i < this.exportObjects.wall.length; i++) {
+            if (Arrays.containsEqualItems(selectedPoints, this.exportObjects.wall[i].points)) {
+                indexes.push(i);
+            }
+        }
+        this.exportObjects.wall = $.grep(this.exportObjects.wall, function(n, i) {
+            return $.inArray(i, indexes) === -1;
+        });
+        indexes = new Array();
+        for (var i = 0; i < this.exportObjects.door.length; i++) {
+            if (Arrays.containsEqualItems(selectedPoints, this.exportObjects.door[i].points)) {
+                indexes.push(i);
+            }
+        }
+        this.exportObjects.door = $.grep(this.exportObjects.door, function(n, i) {
+            return $.inArray(i, indexes) === -1;
+        });
+        indexes = new Array();
+        for (var i = 0; i < this.exportObjects.window.length; i++) {
+            if (Arrays.containsEqualItems(selectedPoints, this.exportObjects.window[i].points)) {
+                indexes.push(i);
+            }
+        }
+        this.exportObjects.window = $.grep(this.exportObjects.window, function(n, i) {
             return $.inArray(i, indexes) === -1;
         });
         this.redraw();
     };
+    this.deleteFuzzy = function(exact) {
+        var selectedPoints = this.getSelectedPointsAsArrays();
+        var indexes = new Array();
+        for (var i = 0; i < this.exportObjects.floor.length; i++) {
+            if (Arrays.countSameItems(selectedPoints, this.exportObjects.floor[i].points) > 0) {
+                indexes.push(i);
+            }
+        }
+        this.exportObjects.floor = $.grep(this.exportObjects.floor, function(n, i) {
+            return $.inArray(i, indexes) === -1;
+        });
+        indexes = new Array();
+        for (var i = 0; i < this.exportObjects.wall.length; i++) {
+            if (Arrays.countSameItems(selectedPoints, this.exportObjects.wall[i].points) > 0) {
+                indexes.push(i);
+            }
+        }
+        this.exportObjects.wall = $.grep(this.exportObjects.wall, function(n, i) {
+            return $.inArray(i, indexes) === -1;
+        });
+        indexes = new Array();
+        for (var i = 0; i < this.exportObjects.door.length; i++) {
+            if (Arrays.countSameItems(selectedPoints, this.exportObjects.door[i].points) > 0) {
+                indexes.push(i);
+            }
+        }
+        this.exportObjects.door = $.grep(this.exportObjects.door, function(n, i) {
+            return $.inArray(i, indexes) === -1;
+        });
+        indexes = new Array();
+        for (var i = 0; i < this.exportObjects.window.length; i++) {
+            if (Arrays.countSameItems(selectedPoints, this.exportObjects.window[i].points) > 0) {
+                indexes.push(i);
+            }
+        }
+        this.exportObjects.window = $.grep(this.exportObjects.window, function(n, i) {
+            return $.inArray(i, indexes) === -1;
+        });
+        this.redraw();
+    };
+
+
+
     this.getSelectedPointsAsArrays = function() {
         var array = new Array();
         for (var i = 0; i < this.selectedPoints.length; i++) {
             array.push(new Array(this.points[this.selectedPoints[i]].x, this.points[this.selectedPoints[i]].y));
         }
         return array;
+    };
+    this.movePoint = function(x, y) {
+        if (this.selectedPoints.length === 1) {
+
+
+
+        }
     };
 
     return this;

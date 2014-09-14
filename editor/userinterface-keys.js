@@ -40,9 +40,9 @@ function keys(editor, uioverlay) {
             } else if (e.charCode === 117) { //h
                 editor.setOptions({"autoSelect": !editor.options.autoSelect});
             }else if (e.charCode === 120) { //x
-                editor.delete(true);
-            }else if (e.charCode === 88) { //x
-                editor.delete(false);
+                editor.delete();
+            }else if (e.charCode === 88) { //X
+                editor.deleteFuzzy();
             }else if (e.charCode === 118) { //v
                 window.open("../index.html");
             }
