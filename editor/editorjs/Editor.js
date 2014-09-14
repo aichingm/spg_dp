@@ -67,34 +67,26 @@ function Editor(canvas, options) {
             this.drawFloor(object);
         }
     };
-    this.createWall = function() {
+    this.createLine = function(type) {
         if (this.selectedPoints.length === 2) {
-            var object = {"type": "wall"};
+            var object = {"type": type};
             object.points = new Array();
             object.points.push(new Array(this.points[this.selectedPoints[0]].x, this.points[this.selectedPoints[0]].y));
             object.points.push(new Array(this.points[this.selectedPoints[1]].x, this.points[this.selectedPoints[1]].y));
-            this.exportObjects.wall.push(object);
-            this.drawLine(object, new Styles.WallStyle(this.options));
-        }
-    };
-    this.createDoor = function() {
-        if (this.selectedPoints.length === 2) {
-            var object = {"type": "door"};
-            object.points = new Array();
-            object.points.push(new Array(this.points[this.selectedPoints[0]].x, this.points[this.selectedPoints[0]].y));
-            object.points.push(new Array(this.points[this.selectedPoints[1]].x, this.points[this.selectedPoints[1]].y));
-            this.exportObjects.door.push(object);
-            this.drawLine(object, new Styles.DoorStyle(this.options));
-        }
-    };
-    this.createWindow = function() {
-        if (this.selectedPoints.length === 2) {
-            var object = {"type": "window"};
-            object.points = new Array();
-            object.points.push(new Array(this.points[this.selectedPoints[0]].x, this.points[this.selectedPoints[0]].y));
-            object.points.push(new Array(this.points[this.selectedPoints[1]].x, this.points[this.selectedPoints[1]].y));
-            this.exportObjects.window.push(object);
-            this.drawLine(object, new Styles.WindowStyle(this.options));
+            this.exportObjects.lines.push(object);
+            var style;
+            switch (type) {
+                case "window":
+                    style = new Styles.WindowStyle(this.options);
+                    break;
+                case "door":
+                    style = new Styles.DoorStyle(this.options);
+                    break;
+                case "wall":
+                    style = new Styles.WallStyle(this.options);
+                    break;
+            }
+            this.drawLine(object, style);
         }
     };
     this.drawFloor = function(floor) {
@@ -142,9 +134,7 @@ function Editor(canvas, options) {
             this.drawBackground();
         }
         points = points.concat(this.drawArray("floor"));
-        points = points.concat(this.drawArray("wall"));
-        points = points.concat(this.drawArray("door"));
-        points = points.concat(this.drawArray("window"));
+        points = points.concat(this.drawArray("lines"));
         this.points = new Array();
         for (var i = 0; i < points.length; i++) {
             this.drawPoint(points[i], new Styles.PointStyle(this.options));
@@ -250,35 +240,17 @@ function Editor(canvas, options) {
             return $.inArray(i, indexes) === -1;
         });
         indexes = new Array();
-        for (var i = 0; i < this.exportObjects.wall.length; i++) {
-            if (Arrays.containsEqualItems(selectedPoints, this.exportObjects.wall[i].points)) {
+        for (var i = 0; i < this.exportObjects.lines.length; i++) {
+            if (Arrays.containsEqualItems(selectedPoints, this.exportObjects.lines[i].points)) {
                 indexes.push(i);
             }
         }
-        this.exportObjects.wall = $.grep(this.exportObjects.wall, function(n, i) {
-            return $.inArray(i, indexes) === -1;
-        });
-        indexes = new Array();
-        for (var i = 0; i < this.exportObjects.door.length; i++) {
-            if (Arrays.containsEqualItems(selectedPoints, this.exportObjects.door[i].points)) {
-                indexes.push(i);
-            }
-        }
-        this.exportObjects.door = $.grep(this.exportObjects.door, function(n, i) {
-            return $.inArray(i, indexes) === -1;
-        });
-        indexes = new Array();
-        for (var i = 0; i < this.exportObjects.window.length; i++) {
-            if (Arrays.containsEqualItems(selectedPoints, this.exportObjects.window[i].points)) {
-                indexes.push(i);
-            }
-        }
-        this.exportObjects.window = $.grep(this.exportObjects.window, function(n, i) {
+        this.exportObjects.lines = $.grep(this.exportObjects.lines, function(n, i) {
             return $.inArray(i, indexes) === -1;
         });
         this.redraw();
     };
-    this.deleteFuzzy = function(exact) {
+    this.deleteFuzzy = function() {
         var selectedPoints = this.getSelectedPointsAsArrays();
         var indexes = new Array();
         for (var i = 0; i < this.exportObjects.floor.length; i++) {
@@ -290,36 +262,16 @@ function Editor(canvas, options) {
             return $.inArray(i, indexes) === -1;
         });
         indexes = new Array();
-        for (var i = 0; i < this.exportObjects.wall.length; i++) {
-            if (Arrays.countSameItems(selectedPoints, this.exportObjects.wall[i].points) > 0) {
+        for (var i = 0; i < this.exportObjects.lines.length; i++) {
+            if (Arrays.countSameItems(selectedPoints, this.exportObjects.lines[i].points) > 0) {
                 indexes.push(i);
             }
         }
-        this.exportObjects.wall = $.grep(this.exportObjects.wall, function(n, i) {
-            return $.inArray(i, indexes) === -1;
-        });
-        indexes = new Array();
-        for (var i = 0; i < this.exportObjects.door.length; i++) {
-            if (Arrays.countSameItems(selectedPoints, this.exportObjects.door[i].points) > 0) {
-                indexes.push(i);
-            }
-        }
-        this.exportObjects.door = $.grep(this.exportObjects.door, function(n, i) {
-            return $.inArray(i, indexes) === -1;
-        });
-        indexes = new Array();
-        for (var i = 0; i < this.exportObjects.window.length; i++) {
-            if (Arrays.countSameItems(selectedPoints, this.exportObjects.window[i].points) > 0) {
-                indexes.push(i);
-            }
-        }
-        this.exportObjects.window = $.grep(this.exportObjects.window, function(n, i) {
+        this.exportObjects.lines = $.grep(this.exportObjects.lines, function(n, i) {
             return $.inArray(i, indexes) === -1;
         });
         this.redraw();
     };
-
-
 
     this.getSelectedPointsAsArrays = function() {
         var array = new Array();

@@ -4,11 +4,11 @@ function keys(editor, uioverlay) {
             console.log(e);
             //e.preventDefault();
             if (e.charCode === 119) {//w
-                editor.createWall();
+                editor.createLine("wall");
             } else if (e.charCode === 102) {//f
                 editor.createFloor();
             } else if (e.charCode === 100) {//d
-                editor.createDoor();
+                editor.createLine("door");
             } else if (e.charCode === 112) {//p
                 editor.redraw();
             } else if (e.charCode === 108) {//l
@@ -22,7 +22,7 @@ function keys(editor, uioverlay) {
                     editor.getClean();
                 }
             } else if (e.charCode === 115) {//s
-                editor.createWindow();
+                editor.createLine("window");
             } else if (e.charCode === 50) {//2
                 editor.setOptions({"maxSelect": 2});
             } else if (e.charCode === 52) {//4

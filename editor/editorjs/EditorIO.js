@@ -4,7 +4,11 @@ EditorIO = new function() {
         editor.exportObjects = null;
         editor.exportObjects = new DefaultExportObject();
         for (var i = 0; i < level[0].elements.length; i++) {
-            editor.exportObjects[level[0].elements[i].type].push(level[0].elements[i]);
+            if (level[0].elements[i].type === "floor") {
+                editor.exportObjects[level[0].elements[i].type].push(level[0].elements[i]);
+            } else {
+                editor.exportObjects.lines.push(level[0].elements[i]);
+            }
         }
         editor.redraw();
     };
@@ -19,21 +23,9 @@ EditorIO = new function() {
             floor.type = "floor";
             objects.push(floor);
         }
-        for (var i = 0; i < editor.exportObjects.wall.length; i++) {
-            var wall = editor.exportObjects.wall[i];
-            wall.type = "wall";
-            objects.push(wall);
-        }
-        for (var i = 0; i < editor.exportObjects.window.length; i++) {
-            var window = editor.exportObjects.window[i];
-            window.type = "window";
-            objects.push(window);
-        }
-
-        for (var i = 0; i < editor.exportObjects.door.length; i++) {
-            var door = editor.exportObjects.door[i];
-            door.type = "door";
-            objects.push(door);
+        for (var i = 0; i < editor.exportObjects.lines.length; i++) {
+            var line = editor.exportObjects.lines[i];
+            objects.push(line);
         }
         level.elements = objects;
         return JSON.stringify(new Array(level));
