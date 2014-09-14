@@ -7,7 +7,7 @@ function Editor(canvas, options) {
     this.selectedPoints = new Array();
     this.exportObjects = new DefaultExportObject();
     this.backgroundImage = null;
-    this.viewport = new Viewport(this.context, this.options);
+    this.viewport = new Viewport(this);
 
     /*   POINTS   */
     this.newPoint = function(x, y) {

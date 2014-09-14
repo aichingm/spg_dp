@@ -61,27 +61,27 @@ function keys(editor, uioverlay) {
         } else if ($(".showen").length === 0) {
             if (e.keyCode === 39) { //[->]
                 if (e.shiftKey === true) {
-                    editor.move(+10, 0);
+                    editor.viewport.move(+10, 0);
                 } else {
-                    editor.move(50, 0);
+                    editor.viewport.move(50, 0);
                 }
             } else if (e.keyCode === 37) { //[<-]
                 if (e.shiftKey === true) {
-                    editor.move(-10, 0);
+                    editor.viewport.move(-10, 0);
                 } else {
-                    editor.move(-50, 0);
+                    editor.viewport.move(-50, 0);
                 }
             } else if (e.keyCode === 38) { //[^]
                 if (e.shiftKey === true) {
-                    editor.move(0, -10);
+                    editor.viewport.move(0, -10);
                 } else {
-                    editor.move(0, -50);
+                    editor.viewport.move(0, -50);
                 }
             } else if (e.keyCode === 40) { //[v]
                 if (e.shiftKey === true) {
-                    editor.move(0, 10);
+                    editor.viewport.move(0, 10);
                 } else {
-                    editor.move(0, 50);
+                    editor.viewport.move(0, 50);
                 }
             }
         }

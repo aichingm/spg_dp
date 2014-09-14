@@ -36,7 +36,7 @@ $(document).ready(function() {
         evt = evt.originalEvent;
         var delta = evt.wheelDeltaY ? evt.wheelDeltaY / 40 : evt.detail ? -evt.detail : 0;
         if (delta) {
-            editor.zoom(delta, evt.clientX, evt.clientY);
+            editor.viewport.zoom(delta, evt.clientX, evt.clientY);
         }
         return evt.preventDefault() && false;
     });
