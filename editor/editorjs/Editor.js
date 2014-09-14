@@ -5,15 +5,13 @@ function Editor(canvas, options) {
     this.context = canvas.getContext('2d');
     this.points = new Array();
     this.selectedPoints = new Array();
-    this.zoomClickes = 0;
     this.exportObjects = new DefaultExportObject();
     this.backgroundImage = null;
+    this.viewport = new Viewport(this.context, this.options);
 
-    this.zoomFactor = function() {
-        return Math.pow(this.options.zoomFactor, this.zoomClickes);
-    };
+    /*   POINTS   */
     this.newPoint = function(x, y) {
-        var factor = this.zoomFactor();
+        var factor = this.getZoomFactor();
         this.points.push({"x": Math.floor(1 / factor * x) + this.options.offsetX * -1, "y": Math.floor(1 / factor * y) + this.options.offsetY * -1});
         if (this.options.autoSelect) {
             this.select(this.points.length - 1);
@@ -22,7 +20,7 @@ function Editor(canvas, options) {
         }
     };
     this.targetIsPoint = function(x, y) {
-        var factor = this.zoomFactor();
+        var factor = this.getZoomFactor();
         x = Math.floor(1 / factor * x);
         y = Math.floor(1 / factor * y);
         var fuzzyness = 10;
@@ -46,16 +44,22 @@ function Editor(canvas, options) {
         this.selectedPoints.push(index);
         this.drawPoint(this.points[index], new Styles.SelectedPointStyle(this.options));
     };
-    this.drawPoint = function(point, style) {
-        this.context.beginPath();
-        this.context.arc(point.x, point.y, 5, 0, 2 * Math.PI, false);
-        this.context.fillStyle = style.color;
-        this.context.fill();
-        this.context.lineWidth = style.lineWidth;
-        this.context.strokeStyle = style.strokeStyle;
-        this.context.stroke();
-        this.context.closePath();
+    this.clearSelectedPoints = function() {
+        debug.log("Do not use Editor.clearSelectedPoints you kann use Editor.redraw instead");
+        for (var i = 0; i < this.selectedPoints.length; i++) {
+            var index = this.selectedPoints[i];
+            this.drawPoint(this.points[index], new Styles.PointStyle(this.options));
+        }
+        this.selectedPoints = new Array();
     };
+    this.getSelectedPointsAsArrays = function() {
+        var array = new Array();
+        for (var i = 0; i < this.selectedPoints.length; i++) {
+            array.push(new Array(this.points[this.selectedPoints[i]].x, this.points[this.selectedPoints[i]].y));
+        }
+        return array;
+    };
+    /*   CREATE   */
     this.createFloor = function() {
         if (this.selectedPoints.length > 2) {
             var object = {"type": "floor" + this.selectedPoints.length};
@@ -89,6 +93,25 @@ function Editor(canvas, options) {
             this.drawLine(object, style);
         }
     };
+    this.delete = function(fuzzy) {
+        var selectedPoints = this.getSelectedPointsAsArrays();
+        var indices = new Array();
+        for (var i = 0; i < this.exportObjects.floor.length; i++) {
+            if (Arrays.containsEqualItems(selectedPoints, this.exportObjects.floor[i].points) || (fuzzy && Arrays.countSameItems(selectedPoints, this.exportObjects.floor[i].points) > 0)) {
+                indices.push(i);
+            }
+        }
+        this.exportObjects.floor = Arrays.deleteIndicesFromArray(this.exportObjects.floor, indices);
+        indices = new Array();
+        for (var i = 0; i < this.exportObjects.lines.length; i++) {
+            if (Arrays.containsEqualItems(selectedPoints, this.exportObjects.lines[i].points) || (fuzzy && Arrays.countSameItems(selectedPoints, this.exportObjects.lines[i].points) > 0)) {
+                indices.push(i);
+            }
+        }
+        this.exportObjects.lines = Arrays.deleteIndicesFromArray(this.exportObjects.lines, indices);
+        this.redraw();
+    };
+    /*   DRAW   */
     this.drawFloor = function(floor) {
         var points = floor.points;
         this.context.fillStyle = this.options.floorColor;
@@ -110,6 +133,16 @@ function Editor(canvas, options) {
         this.context.stroke();
         this.context.closePath();
     };
+    this.drawPoint = function(point, style) {
+        this.context.beginPath();
+        this.context.arc(point.x, point.y, 5, 0, 2 * Math.PI, false);
+        this.context.fillStyle = style.color;
+        this.context.fill();
+        this.context.lineWidth = style.lineWidth;
+        this.context.strokeStyle = style.strokeStyle;
+        this.context.stroke();
+        this.context.closePath();
+    };
     this.drawArray = function(name) {
         var points = new Array();
         for (var i = 0; i < this.exportObjects[name].length; i++) {
@@ -128,7 +161,7 @@ function Editor(canvas, options) {
         return points;
     };
     this.redraw = function() {
-        this.clear();
+        this.viewport.clear();
         var points = new Array();
         if (this.backgroundImage !== null) {
             this.drawBackground();
@@ -148,41 +181,23 @@ function Editor(canvas, options) {
         }
         return array;
     };
-    this.clear = function() {
-        var factor = this.zoomFactor();
-        this.context.clearRect(
-                this.options.offsetX * -1,
-                this.options.offsetY * -1,
-                canvas.width * 1 / factor,
-                canvas.height * 1 / factor);
-    };
-    this.toString = function() {
-        return EditorIO.toString(this);
-    };
-    this.load = function(text) {
-        return EditorIO.load(this, text);
-    };
-
-    this.clearSelectedPoints = function() {
-        debug.log("Do not use Editor.clearSelectedPoints you kann use Editor.redraw instead");
-        for (var i = 0; i < this.selectedPoints.length; i++) {
-            var index = this.selectedPoints[i];
-            this.drawPoint(this.points[index], new Styles.PointStyle(this.options));
+    this.movePoint = function(x, y) {
+        if (this.selectedPoints.length === 1) {
         }
-        this.selectedPoints = new Array();
     };
+    /*   OPTIONS   */
     this.setOptions = function(options) {
         this.clearSelectedPoints();
         this.options = $.extend(this.options, options);
     };
-
+    /*   RESET TO NEW   */
     this.getClean = function() {
         this.points = new Array();
         this.exportObjects = new DefaultExportObject();
         this.selectedPoints = new Array();
-        this.redraw();
-        this.clear();
+        this.viewport.clear();
     };
+    /*   BACKGROUND   */
     this.setBackground = function(data) {
         var img = new Image;
         img.onload = function(editor) {
@@ -196,98 +211,21 @@ function Editor(canvas, options) {
     this.drawBackground = function() {
         this.context.drawImage(this.backgroundImage, 0, 0);
     };
-    this.zoom = function(clicks) {
-        this.resetMove();
-        var factor = Math.pow(this.options.zoomFactor, clicks);
-        this.zoomClickes += clicks;
-        this.context.scale(factor, factor);
-        this.redraw();
-    };
-    this.resetZoom = function() {
-        this.resetMove();
-        var factor = Math.pow(this.options.zoomFactor, this.zoomClickes * -1);
-        this.context.scale(factor, factor);
-        this.zoomClickes = 0;
-        this.redraw();
+    /*   MISC   */
+    this.getZoomFactor = function() {
+        return this.viewport.zoomFactor();
     };
     this.getCoordinates = function(x, y) {
-        var factor = this.zoomFactor();
+        var factor = this.getZoomFactor();
         return {"x": Math.floor(1 / factor * x) + this.options.offsetX * -1, "y": Math.floor(1 / factor * y) + this.options.offsetY * -1};
     };
-    this.move = function(x, y) {
-        this.clear();
-        this.options.offsetX += x;
-        this.options.offsetY += y;
-        this.context.translate(x, y);
-        this.redraw();
+    /*   IMPORT/EXPORT   */
+    this.toString = function() {
+        return EditorIO.toString(this);
     };
-    this.resetMove = function() {
-        this.clear();
-        this.context.translate(this.options.offsetX * -1, this.options.offsetY * -1);
-        this.options.offsetX = 0;
-        this.options.offsetY = 0;
-        this.redraw();
+    this.load = function(text) {
+        return EditorIO.load(this, text);
     };
-    this.delete = function() {
-        var selectedPoints = this.getSelectedPointsAsArrays();
-        var indexes = new Array();
-        for (var i = 0; i < this.exportObjects.floor.length; i++) {
-            if (Arrays.containsEqualItems(selectedPoints, this.exportObjects.floor[i].points)) {
-                indexes.push(i);
-            }
-        }
-        this.exportObjects.floor = $.grep(this.exportObjects.floor, function(n, i) {
-            return $.inArray(i, indexes) === -1;
-        });
-        indexes = new Array();
-        for (var i = 0; i < this.exportObjects.lines.length; i++) {
-            if (Arrays.containsEqualItems(selectedPoints, this.exportObjects.lines[i].points)) {
-                indexes.push(i);
-            }
-        }
-        this.exportObjects.lines = $.grep(this.exportObjects.lines, function(n, i) {
-            return $.inArray(i, indexes) === -1;
-        });
-        this.redraw();
-    };
-    this.deleteFuzzy = function() {
-        var selectedPoints = this.getSelectedPointsAsArrays();
-        var indexes = new Array();
-        for (var i = 0; i < this.exportObjects.floor.length; i++) {
-            if (Arrays.countSameItems(selectedPoints, this.exportObjects.floor[i].points) > 0) {
-                indexes.push(i);
-            }
-        }
-        this.exportObjects.floor = $.grep(this.exportObjects.floor, function(n, i) {
-            return $.inArray(i, indexes) === -1;
-        });
-        indexes = new Array();
-        for (var i = 0; i < this.exportObjects.lines.length; i++) {
-            if (Arrays.countSameItems(selectedPoints, this.exportObjects.lines[i].points) > 0) {
-                indexes.push(i);
-            }
-        }
-        this.exportObjects.lines = $.grep(this.exportObjects.lines, function(n, i) {
-            return $.inArray(i, indexes) === -1;
-        });
-        this.redraw();
-    };
-
-    this.getSelectedPointsAsArrays = function() {
-        var array = new Array();
-        for (var i = 0; i < this.selectedPoints.length; i++) {
-            array.push(new Array(this.points[this.selectedPoints[i]].x, this.points[this.selectedPoints[i]].y));
-        }
-        return array;
-    };
-    this.movePoint = function(x, y) {
-        if (this.selectedPoints.length === 1) {
-
-
-
-        }
-    };
-
     return this;
 }
 ;

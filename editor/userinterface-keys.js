@@ -12,7 +12,7 @@ function keys(editor, uioverlay) {
             } else if (e.charCode === 112) {//p
                 editor.redraw();
             } else if (e.charCode === 108) {//l
-                editor.clear();
+                editor.viewport.clear();
             } else if (e.charCode === 101) {//e
                 uioverlay.open("#toString");
             } else if (e.charCode === 98) {//b
@@ -28,13 +28,13 @@ function keys(editor, uioverlay) {
             } else if (e.charCode === 52) {//4
                 editor.setOptions({"maxSelect": 4});
             } else if (e.charCode === 51) {//3
-                editor.resetZoom();
+                editor.viewport.resetZoom();
             } else if (e.charCode === 43) { //+
-                editor.zoom(3);
+                editor.viewport.zoom(3);
             } else if (e.charCode === 45) { //-
-                editor.zoom(-3);
+                editor.viewport.zoom(-3);
             } else if (e.charCode === 99) { //c
-                editor.resetMove();
+                editor.viewport.resetMove();
             } else if (e.charCode === 104) { //h
                 uioverlay.open("#help");
             } else if (e.charCode === 117) { //h
@@ -42,7 +42,7 @@ function keys(editor, uioverlay) {
             }else if (e.charCode === 120) { //x
                 editor.delete();
             }else if (e.charCode === 88) { //X
-                editor.deleteFuzzy();
+                editor.delete(true);
             }else if (e.charCode === 118) { //v
                 window.open("../index.html");
             }

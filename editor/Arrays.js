@@ -47,5 +47,10 @@ Arrays = new function() {
         }
         return count;
     };
+    this.deleteIndicesFromArray = function(array, indices) {
+        return $.grep(array, function(n, i) {
+            return $.inArray(i, indices) === -1;
+        });
+    };
     return this;
 };
