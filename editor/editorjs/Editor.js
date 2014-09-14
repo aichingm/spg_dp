@@ -59,6 +59,32 @@ function Editor(canvas, options) {
         }
         return array;
     };
+    this.pushPoints = function(array, object) {
+        for (i = 0; i < object.points.length; i++) {
+            array.push({"x": object.points[i][0], "y": object.points[i][1]});
+        }
+        return array;
+    };
+    this.movePoint = function(x, y) {
+        var factor = this.getZoomFactor();
+        if (this.selectedPoints.length === 1) {
+            for (var i = 0; i < this.exportObjects.floor.length; i++) {
+                for (var j = 0; j < this.exportObjects.floor[i].points.length; j++) {
+                    if (Arrays.equals(this.exportObjects.floor[i].points[j], this.getSelectedPointsAsArrays()[0])) {
+                        this.exportObjects.floor[i].points[j] = [Math.floor(1 / factor * x) + this.options.offsetX * -1,Math.floor(1 / factor * y) + this.options.offsetY * -1];
+                    }
+                }
+            }
+            for (var i = 0; i < this.exportObjects.lines.length; i++) {
+                for (var j = 0; j < this.exportObjects.lines[i].points.length; j++) {
+                    if (Arrays.equals(this.exportObjects.lines[i].points[j], this.getSelectedPointsAsArrays()[0])) {
+                        this.exportObjects.lines[i].points[j] = [Math.floor(1 / factor * x) + this.options.offsetX * -1,Math.floor(1 / factor * y) + this.options.offsetY * -1];
+                    }
+                }
+            }
+            this.redraw();
+        }
+    };
     /*   CREATE   */
     this.createFloor = function() {
         if (this.selectedPoints.length > 2) {
@@ -174,16 +200,6 @@ function Editor(canvas, options) {
             this.points.push(points[i]);
         }
         this.selectedPoints = new Array();
-    };
-    this.pushPoints = function(array, object) {
-        for (i = 0; i < object.points.length; i++) {
-            array.push({"x": object.points[i][0], "y": object.points[i][1]});
-        }
-        return array;
-    };
-    this.movePoint = function(x, y) {
-        if (this.selectedPoints.length === 1) {
-        }
     };
     /*   OPTIONS   */
     this.setOptions = function(options) {

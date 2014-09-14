@@ -1,6 +1,7 @@
 //setup globle variables
 var editor;
 var ouioverlay;
+var mode = "";
 //the name for the localstorage of the exports
 var editorExportKey = "PieceofShit.exports";
 $(document).ready(function() {
@@ -28,7 +29,13 @@ $(document).ready(function() {
             editor.select(isTarget);
         } else {
             //add a new point
-            editor.newPoint(e.pageX, e.pageY);
+            if (mode === "movePoint") {
+                editor.movePoint(e.pageX, e.pageY);
+                mode = "";
+                console.log("movePoint");
+            } else {
+                editor.newPoint(e.pageX, e.pageY);
+            }
         }
     });
     //setup the scoll listner to trigger the zoom function DOMMouseScroll
@@ -57,7 +64,7 @@ $(document).ready(function() {
     });
     //set up the closed listener for theui-overlay with the id backgroundImage
     $("#backgroundImage").on("closed", function() {
-        if ($('#backgroundImageInput').get(0).files[0] !== null && $('#backgroundImageInput').get(0).files[0] !== undefined){
+        if ($('#backgroundImageInput').get(0).files[0] !== null && $('#backgroundImageInput').get(0).files[0] !== undefined) {
             //create a new FileReader object
             var fr = new FileReader;
             //set an onLoaded function on the FileReader
