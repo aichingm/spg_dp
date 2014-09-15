@@ -12,7 +12,7 @@ function Editor(canvas, options) {
     /*   POINTS   */
     this.newPoint = function(x, y) {
         var factor = this.getZoomFactor();
-        this.points.push({"x": Math.floor(1 / factor * x) + this.options.offsetX * -1, "y": Math.floor(1 / factor * y) + this.options.offsetY * -1});
+        this.points.push({"x": Math.round(1 / factor * x) + this.options.offsetX * -1, "y": Math.round(1 / factor * y) + this.options.offsetY * -1});
         if (this.options.autoSelect) {
             this.select(this.points.length - 1);
         } else {
@@ -21,8 +21,8 @@ function Editor(canvas, options) {
     };
     this.targetIsPoint = function(x, y) {
         var factor = this.getZoomFactor();
-        x = Math.floor(1 / factor * x);
-        y = Math.floor(1 / factor * y);
+        x = Math.round(1 / factor * x);
+        y = Math.round(1 / factor * y);
         var fuzzyness = 10;
         for (i = 0; i < this.points.length; i++) {
             if ((this.points[i].x > x + this.options.offsetX * -1 - fuzzyness && this.points[i].x < x + this.options.offsetX * -1 + fuzzyness)
@@ -71,14 +71,14 @@ function Editor(canvas, options) {
             for (var i = 0; i < this.exportObjects.floor.length; i++) {
                 for (var j = 0; j < this.exportObjects.floor[i].points.length; j++) {
                     if (Arrays.equals(this.exportObjects.floor[i].points[j], this.getSelectedPointsAsArrays()[0])) {
-                        this.exportObjects.floor[i].points[j] = [Math.floor(1 / factor * x) + this.options.offsetX * -1,Math.floor(1 / factor * y) + this.options.offsetY * -1];
+                        this.exportObjects.floor[i].points[j] = [Math.round(1 / factor * x) + this.options.offsetX * -1,Math.round(1 / factor * y) + this.options.offsetY * -1];
                     }
                 }
             }
             for (var i = 0; i < this.exportObjects.lines.length; i++) {
                 for (var j = 0; j < this.exportObjects.lines[i].points.length; j++) {
                     if (Arrays.equals(this.exportObjects.lines[i].points[j], this.getSelectedPointsAsArrays()[0])) {
-                        this.exportObjects.lines[i].points[j] = [Math.floor(1 / factor * x) + this.options.offsetX * -1,Math.floor(1 / factor * y) + this.options.offsetY * -1];
+                        this.exportObjects.lines[i].points[j] = [Math.round(1 / factor * x) + this.options.offsetX * -1,Math.round(1 / factor * y) + this.options.offsetY * -1];
                     }
                 }
             }
@@ -233,7 +233,7 @@ function Editor(canvas, options) {
     };
     this.getCoordinates = function(x, y) {
         var factor = this.getZoomFactor();
-        return {"x": Math.floor(1 / factor * x) + this.options.offsetX * -1, "y": Math.floor(1 / factor * y) + this.options.offsetY * -1};
+        return {"x": Math.round(1 / factor * x) + this.options.offsetX * -1, "y": Math.round(1 / factor * y) + this.options.offsetY * -1};
     };
     /*   IMPORT/EXPORT   */
     this.toString = function() {
