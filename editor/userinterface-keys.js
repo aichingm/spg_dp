@@ -15,6 +15,8 @@ function keys(editor, uioverlay) {
                 editor.viewport.clear();
             } else if (e.charCode === 101) {//e
                 uioverlay.open("#toString");
+            } else if (e.charCode === 106) {//j
+                uioverlay.open("#floorManager");
             } else if (e.charCode === 98) {//b
                 uioverlay.open("#backgroundImage");
             } else if (e.charCode === 107) {//k

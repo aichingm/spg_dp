@@ -9,8 +9,7 @@
         <script src="debug.js"></script>
         
         <script src="editorjs/DefaultOptions.js"></script>
-        <script src="editorjs/DefaultExportOptions.js"></script>
-        <script src="editorjs/EditorIO.js"></script>
+        <script src="editorjs/ModelManager.js"></script>
         <script src="editorjs/Viewport.js"></script>
         <script src="editorjs/Styles.js"></script>
         <script src="editorjs/Editor.js"></script>
@@ -28,6 +27,11 @@
         </div>
         <div class="ui-overlay" id="backgroundImage">
             <input type="file" id="backgroundImageInput">
+            <button style="position: fixed;top: 10px;right: 10px;" class="close">&times;</button>
+        </div>
+        <div class="ui-overlay" id="floorManager">
+            <select id="floorManagerSelectFloor"></select>
+            <button id="floorManagerNewFloor">new</button>
             <button style="position: fixed;top: 10px;right: 10px;" class="close">&times;</button>
         </div>
         <div class="ui-overlay" id="help">
