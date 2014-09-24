@@ -1,7 +1,7 @@
 function keys(editor, uioverlay) {
     $(document).on("keypress", function(e) {
         if (uioverlay.hasOpen()) {
-            console.log(e);
+            Debug.log(e);
             //e.preventDefault();
             if (e.charCode === 119) {//w
                 editor.createLine("wall");
@@ -57,9 +57,6 @@ function keys(editor, uioverlay) {
         
     });
     $(document).keyup(function(e) {
-        //console.log("keyCode: " + e.keyCode);
-        //console.log("charCode: " + e.charCode);
-        //console.log(e);
         if (e.keyCode === 27 && $(".showen").length !== 0) { //[esc]
             uioverlay.close(".showen");
         } else if ($(".showen").length === 0) {

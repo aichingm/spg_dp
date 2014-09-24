@@ -1,4 +1,5 @@
 //setup globle variables
+Debug.setLogging(false);
 var editor;
 var ouioverlay;
 var mode = "";
@@ -32,7 +33,7 @@ $(document).ready(function () {
             if (mode === "movePoint") {
                 editor.movePoint(e.pageX, e.pageY);
                 mode = "";
-                console.log("movePoint");
+                Debug.log("movePoint");
             } else {
                 editor.newPoint(e.pageX, e.pageY);
             }

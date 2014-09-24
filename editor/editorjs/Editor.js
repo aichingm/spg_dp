@@ -160,7 +160,7 @@ function Editor(canvas, options) {
         var points = new Array();
         for (var i = 0; i < this._e().length; i++) {
             var object = this._e()[i];
-            console.log(object);
+            Debug.log(object);
             if (object.type === "floor") {
                 this.drawFloor(object);
             } else if (object.type === "wall") {

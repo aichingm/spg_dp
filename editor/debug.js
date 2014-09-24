@@ -1,7 +1,7 @@
-debug = new function() {
+Debug = new function() {
     this.doLogging = true;
     this.log = function(log) {
-        if (this.doLogging) {
+        if (this.doLogging && console && console.log) {
             console.log(log);
         }
     };
