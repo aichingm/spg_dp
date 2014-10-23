@@ -46,7 +46,7 @@ function Editor(canvas, options) {
         this.drawPoint(this.points[index], new Styles.SelectedPointStyle(this.options));
     };
     this.clearSelectedPoints = function () {
-        debug.log("Do not use Editor.clearSelectedPoints you kann use Editor.redraw instead");
+        Debug.log("Do not use Editor.clearSelectedPoints you kann use Editor.redraw instead");
         for (var i = 0; i < this.selectedPoints.length; i++) {
             var index = this.selectedPoints[i];
             this.drawPoint(this.points[index], new Styles.PointStyle(this.options));

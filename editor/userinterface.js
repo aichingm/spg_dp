@@ -102,4 +102,11 @@ $(document).ready(function () {
             editor.load(exports);
         }
     }
+    $(window).resize(function () {
+        var canvas = document.getElementById('canvas');
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        editor.redraw();
+    });
+
 });
