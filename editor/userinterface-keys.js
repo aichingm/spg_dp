@@ -1,8 +1,9 @@
 function keys(editor, uioverlay) {
-    $(document).on("keypress", function(e) {
+    $(document).on("keypress", function (e) {
         if (uioverlay.hasOpen()) {
             Debug.log(e);
             //e.preventDefault();
+            console.log(e.charCode)
             if (e.charCode === 119) {//w
                 editor.createLine("wall");
             } else if (e.charCode === 102) {//f
@@ -19,6 +20,8 @@ function keys(editor, uioverlay) {
                 uioverlay.open("#floorManager");
             } else if (e.charCode === 98) {//b
                 uioverlay.open("#backgroundImage");
+            } else if (e.charCode === 105) { //i
+                uioverlay.open("#interFloorObjects");
             } else if (e.charCode === 107) {//k
                 if (confirm("Löschen?")) {
                     editor.getClean();
@@ -41,22 +44,22 @@ function keys(editor, uioverlay) {
                 uioverlay.open("#help");
             } else if (e.charCode === 117) { //h
                 editor.setOptions({"autoSelect": !editor.options.autoSelect});
-            }else if (e.charCode === 120) { //x
+            } else if (e.charCode === 120) { //x
                 editor.delete();
-            }else if (e.charCode === 88) { //X
+            } else if (e.charCode === 88) { //X
                 editor.delete(true);
-            }else if (e.charCode === 118) { //v
+            } else if (e.charCode === 118) { //v
                 window.open("../index.html");
-            }else if (e.charCode === 113) { //q
+            } else if (e.charCode === 113) { //q
                 mode = "movePoint";
             }
-            
-            
+
+            //fix this change to some kind of model observer pattern with change listener
             localStorage.setItem(editorExportKey, editor.toString());
         }
-        
+
     });
-    $(document).keyup(function(e) {
+    $(document).keyup(function (e) {
         if (e.keyCode === 27 && $(".showen").length !== 0) { //[esc]
             uioverlay.close(".showen");
         } else if ($(".showen").length === 0) {

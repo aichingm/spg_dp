@@ -1,5 +1,5 @@
 //setup globle variables
-Debug.setLogging(false);
+Debug.setLogging(true);
 var editor;
 var ouioverlay;
 var mode = "";
@@ -23,11 +23,17 @@ $(document).ready(function () {
     keys(editor, uioverlay);
     //setup the click listener for the canvas
     $("#canvas").on("click", function (e) {
+
 //check if the clicked point is already a used point
         isTarget = editor.targetIsPoint(e.pageX, e.pageY);
         if (isTarget !== false) {
 //select the clicked point
-            editor.select(isTarget);
+            if (e.ctrlKey) {
+                editor.getInterFloorPoints().handle(editor.points[isTarget].x, editor.points[isTarget].y, editor.getSelectetFloorIndex());
+                Debug.log(editor.getInterFloorPoints().getPoints());
+            } else {
+                editor.select(isTarget);
+            }
         } else {
 //add a new point
             if (mode === "movePoint") {
@@ -63,24 +69,77 @@ $(document).ready(function () {
 //load the exportObjects to the editor
         editor.load($("#textarea").val());
     });
-    //setup the floor selection field
+    /* FLOOR MANAGER */
     $("#floorManager").on("showen", function () {
-        var list = editor.getModelManager().getFloorNames();
+        var list = editor.getModelManager().getFloors();
         $("#floorManagerSelectFloor").html("");
+        $("#floorManagerTable").html("");
         for (var i = 0; i < list.length; i++) {
-            $("#floorManagerSelectFloor").append("<option value=\"" + i + "\">" + list[i] + "</option>");
+            var selected = "";
+            if (editor.floorIndex === i) {
+                selected = "selected=\"selected\"";
+            }
+            $("#floorManagerSelectFloor").append("<option value=\"" + i + "\"" + selected + ">" + list[i].name + "</option>");
+            $("#floorManagerTable").append("<tr><td>" + list[i].name + "</td><td>" + list[i].elements.length + "</td><td>" + JSON.stringify(list[i].offset) + "</td><td>" + list[i].height + "</td><td><button class='delete' data-floor='" + i + "'>&times;</button></td><td><button class='copy' data-floor='" + i + "'>&copy;</button></td></tr>");
+
         }
+        $("#floorManagerSelectFloor").trigger("change");
+        $("#floorManagerTable tr td button.delete").click(function (e) {
+            editor.getModelManager().deleteFloor(e.currentTarget.dataset.floor);
+            $("#floorManager").trigger("showen");
+            localStorage.setItem(editorExportKey, editor.toString());
+
+        });
+        $("#floorManagerTable tr td button.copy").click(function (e) {
+            var floor = (JSON.parse(JSON.stringify(editor.getModelManager().getFloor(e.currentTarget.dataset.floor))));
+            floor.name = prompt("new floor name");
+            editor.getModelManager().setFloor(editor.getModelManager().model.floors.length, floor);
+            $("#floorManager").trigger("showen");
+            localStorage.setItem(editorExportKey, editor.toString());
+
+        });
+
     });
     //setup listeners for the floor select object and the new floor button
     $("#floorManagerNewFloor").click(function () {
-        editor.getModelManager().addFloor(prompt("name?"), prompt("hight?"), {"x": 0, "y": 0, "z": 0})
+        editor.getModelManager().addFloor(prompt("name?"), prompt("hight?"), {"x": 0, "y": 0, "z": 0});
         $("#floorManager").trigger("showen");
     });
     $("#floorManagerSelectFloor").on("change", function (e) {
         editor.selectFloor(e.target.selectedIndex);
     });
+    /* INTER FLOOR OBJECTS */
+    $("#interFloorObjects").on("showen", function () {
+        var list = editor.getInterFloorPoints().getPoints();
+        $("#interFloorPointsTable").html("");
+        for (var i = 0; i < list.length; i++) {
+            $("#interFloorPointsTable").append("<tr><td>" + editor.getModelManager().getFloor(list[i].floor).name + "</td><td>" + list[i].x + "</td><td>" + list[i].y + "</td><td><button class='delete' data-x='" + list[i].x + "' data-y='" + list[i].y + "' data-floor='" + list[i].floor + "'>&times;</button></td></tr>");
+        }
+        $("#interFloorPointsTable tr td button.delete").click(function (e) {
+            editor.getInterFloorPoints().unselect(e.currentTarget.dataset.x, e.currentTarget.dataset.y, e.currentTarget.dataset.floor);
+            $("#interFloorObjects").trigger("showen");
+        });
+        
+        
+        
+        
+    });
+     $("#interFloorObjectsClear").click(function () {
+        editor.getInterFloorPoints().clear();
+            $("#interFloorObjects").trigger("showen");  
+    });
+    $("#interFloorObjectsNewWall").click(function () {
+        editor.getModelManager().addInterFloorObject("wall", editor.getInterFloorPoints().getPoints());
+    });
+    $("#interFloorObjectsNewFloor").click(function () {
+        editor.getModelManager().addInterFloorObject("floor", editor.getInterFloorPoints().getPoints());
+    });
+
+
+
+
     //set up the closed listener for theui-overlay with the id backgroundImage
-    $("#backgroundImage").on("closed", function () {
+    $("#backgroundImageInput").on("change", function () {
         if ($('#backgroundImageInput').get(0).files[0] !== null && $('#backgroundImageInput').get(0).files[0] !== undefined) {
 //create a new FileReader object
             var fr = new FileReader;
@@ -108,5 +167,4 @@ $(document).ready(function () {
         canvas.width = window.innerWidth;
         editor.redraw();
     });
-
 });

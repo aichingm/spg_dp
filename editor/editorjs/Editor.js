@@ -9,8 +9,12 @@ function Editor(canvas, options) {
     this.viewport = new Viewport(this);
     this.modelManager = new ModelManager();
     this.floorIndex = 0;
+    this.interFloorPoints = new InterFloorSelection();
 
     /*   POINTS   */
+    this.getInterFloorPoints = function () {
+        return this.interFloorPoints;
+    };
     this.newPoint = function (x, y) {
         var factor = this.getZoomFactor();
         this.points.push({"x": Math.round(1 / factor * x) + this.options.offsetX * -1, "y": Math.round(1 / factor * y) + this.options.offsetY * -1});
@@ -45,6 +49,7 @@ function Editor(canvas, options) {
         this.selectedPoints.push(index);
         this.drawPoint(this.points[index], new Styles.SelectedPointStyle(this.options));
     };
+
     this.clearSelectedPoints = function () {
         Debug.log("Do not use Editor.clearSelectedPoints you kann use Editor.redraw instead");
         for (var i = 0; i < this.selectedPoints.length; i++) {
@@ -228,14 +233,14 @@ function Editor(canvas, options) {
      * Returns the current floor
      * @returns {Editor@pro;modelManager@call;getFloor}
      */
-    this._f = function(){
+    this._f = function () {
         return this.modelManager.getFloor(this.floorIndex);
     };
     /**
      * Returns all elements from the current floor
      * @returns {Editor.modelManager.getFloor.elements}
      */
-    this._e = function(){
+    this._e = function () {
         return this.modelManager.getFloor(this.floorIndex).elements;
     };
     /**
@@ -243,7 +248,7 @@ function Editor(canvas, options) {
      * @param {int} index
      * @returns {null}
      */
-    this.selectFloor = function(index){
+    this.selectFloor = function (index) {
         this.floorIndex = index;
         this.redraw();
     };
@@ -251,14 +256,14 @@ function Editor(canvas, options) {
      * Returns the ModelManager
      * @returns {ModelManager}
      */
-    this.getModelManager = function(){
+    this.getModelManager = function () {
         return this.modelManager;
     };
     /**
      * Returns the index of the currently selected floor
      * @returns {int|Number}
      */
-    this.getSelectetFloorIndex = function(){
+    this.getSelectetFloorIndex = function () {
         return this.floorIndex;
     };
     /*   IMPORT/EXPORT   */

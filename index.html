@@ -26,8 +26,8 @@
             init();
             animate();
 
-            $(function() {
-                $(window).bind('storage', function(e) {
+            $(function () {
+                $(window).bind('storage', function (e) {
                     if (e.originalEvent.key === "PieceofShit.exports") {
                         draw(JSON.parse(e.originalEvent.newValue), true);
                     }
@@ -71,16 +71,16 @@
                 var WIDTH = window.innerWidth,
                         HEIGHT = window.innerHeight;
                 // Create a renderer and add it to the DOM.
-                renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
+                renderer = new THREE.WebGLRenderer({antialias: true});
                 renderer.setSize(WIDTH, HEIGHT);
                 document.body.appendChild(renderer.domElement);
                 // Create a camera, zoom it out from the model a bit, and add it to the scene.
-                camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 01, 200000);
-                camera.position.set(10000, 10000, 10000);
-                camera.lookAt(new THREE.Vector3(4000, 4000, 4000));
+                camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 2000000000);
+                camera.position.set(1000, 1000, 1000);
+                camera.lookAt(new THREE.Vector3(0, 0, 0));
                 scene.add(camera);
                 // Create an event listener that resizes the renderer with the browser window.
-                window.addEventListener('resize', function() {
+                window.addEventListener('resize', function () {
                     var WIDTH = window.innerWidth,
                             HEIGHT = window.innerHeight;
                     renderer.setSize(WIDTH, HEIGHT);
@@ -88,11 +88,12 @@
                     camera.updateProjectionMatrix();
                 });
                 // Set the background color of the scene.
-                renderer.setClearColorHex(0x333F47, 1);
+                //renderer.setClearColorHex(0x333F47, 1);
+                renderer.setClearColor(0x333F47, 1);
                 // Create a light, set its position, and add it to the scene.
-                var light = new THREE.PointLight(0xffffff);
-                light.position.set(-1000, 2000, 1000);
-                scene.add(light);
+                //var light = new THREE.PointLight(0xffffff, 1000, 0);
+                //light.position.set(-1000, 2000, 1000);
+                //scene.add(light);
                 controls = new THREE.OrbitControls(camera, renderer.domElement);
             }
 
@@ -109,33 +110,136 @@
                 if (clear === true) {
                     mmm_clear();
                 }
-                $(data).each(function() {
-                    $(this.elements).each(function(floor) {
-                        return function(floor) {
-                            if (this.type === "floor") {
-                                var geometry = new THREE.Geometry;
-                                points = this.points;
-                                geometry.vertices.push(
-                                        new THREE.Vector3(points[0][0], floor.y, points[0][1]),
-                                        new THREE.Vector3(points[1][0], floor.y, points[1][1]),
-                                        new THREE.Vector3(points[2][0], floor.y, points[2][1]),
-                                        new THREE.Vector3(points[3][0], floor.y, points[3][1])
-                                        );
 
-                                geometry.faces.push(new THREE.Face3(0, 1, 2));
-                                geometry.faces.push(new THREE.Face3(0, 2, 3));
-                                geometry.computeBoundingSphere();
-                                var material = new THREE.MeshBasicMaterial({
-                                    color: 0xAAAAAA,
-                                    opacity: 0.1,
-                                    transparent: true,
-                                    side: THREE.DoubleSide
-                                });
-                                mesh = new THREE.Mesh(geometry, material);
-                                scene.add(mesh);
-                            }
-                        };
-                    }(this));
+                $(data).each(function () {
+                    $(this.floors).each(function () {
+                        //console.log(this);
+                        $(this.elements).each(function (floor) {
+                            return function () {
+                                console.log(floor);
+                                console.log(this);
+                                switch (this.type) {
+                                    case "floor":
+                                        var geometry = new THREE.Geometry();
+                                        if (this.points.length === 4) {
+                                            geometry.vertices.push(
+                                                    new THREE.Vector3(this.points[0][0], floor.offset.y, this.points[0][1]),
+                                                    new THREE.Vector3(this.points[1][0], floor.offset.y, this.points[1][1]),
+                                                    new THREE.Vector3(this.points[2][0], floor.offset.y, this.points[2][1]),
+                                                    new THREE.Vector3(this.points[3][0], floor.offset.y, this.points[3][1])
+                                                    );
+                                            geometry.faces.push(new THREE.Face3(0, 1, 2));
+                                            geometry.faces.push(new THREE.Face3(0, 2, 3));
+                                        } else if (this.points.length === 3) {
+                                            geometry.vertices.push(
+                                                    new THREE.Vector3(this.points[0][0], floor.offset.y, this.points[0][1]),
+                                                    new THREE.Vector3(this.points[1][0], floor.offset.y, this.points[1][1]),
+                                                    new THREE.Vector3(this.points[2][0], floor.offset.y, this.points[2][1])
+                                                    );
+                                            geometry.faces.push(new THREE.Face3(0, 1, 2));
+                                        }
+                                        geometry.computeBoundingSphere();
+                                        var material = new THREE.MeshBasicMaterial({
+                                            color: 0x555555,
+                                            side: THREE.DoubleSide
+                                        });
+                                        var mesh = new THREE.Mesh(geometry, material);
+                                        scene.add(mesh);
+                                        break;
+                                    case "wall":
+                                        console.log("it's a wall");
+                                        var geometry = new THREE.Geometry();
+                                        geometry.vertices.push(
+                                                new THREE.Vector3(this.points[0][0], floor.offset.y, this.points[0][1]),
+                                                new THREE.Vector3(this.points[0][0], floor.offset.y + floor.height, this.points[0][1]),
+                                                new THREE.Vector3(this.points[1][0], floor.offset.y + floor.height, this.points[1][1]),
+                                                new THREE.Vector3(this.points[1][0], floor.offset.y, this.points[1][1])
+                                                );
+                                        console.log(floor);
+                                        geometry.faces.push(new THREE.Face3(0, 1, 2));
+                                        geometry.faces.push(new THREE.Face3(0, 2, 3));
+
+                                        geometry.computeBoundingSphere();
+                                        var material = new THREE.MeshBasicMaterial({
+                                            color: 0xaaaaaa,
+                                            opacity: 0.5,
+                                            transparent: true,
+                                            side: THREE.DoubleSide,
+                                            blending: THREE.SubtractEquation
+                                        });
+                                        var mesh = new THREE.Mesh(geometry, material);
+                                        scene.add(mesh);
+                                        break;
+                                    case "door":
+                                        console.log("it's a door");
+                                        var geometryDoor = new THREE.Geometry();
+                                        geometryDoor.vertices.push(
+                                                new THREE.Vector3(this.points[0][0], floor.offset.y, this.points[0][1]),
+                                                new THREE.Vector3(this.points[0][0], floor.offset.y + (floor.height / 100 * 75), this.points[0][1]),
+                                                new THREE.Vector3(this.points[1][0], floor.offset.y + (floor.height / 100 * 75), this.points[1][1]),
+                                                new THREE.Vector3(this.points[1][0], floor.offset.y, this.points[1][1])
+                                                );
+                                        geometryDoor.faces.push(new THREE.Face3(0, 1, 2));
+                                        geometryDoor.faces.push(new THREE.Face3(0, 2, 3));
+                                        geometryDoor.computeBoundingSphere();
+                                        var materialDoor = new THREE.MeshBasicMaterial({
+                                            color: 0xee00ee,
+                                            opacity: 0.5,
+                                            transparent: true,
+                                            side: THREE.DoubleSide,
+                                            blending: THREE.SubtractiveBlending
+                                        });
+                                        var meshDoor = new THREE.Mesh(geometryDoor, materialDoor);
+                                        scene.add(meshDoor);
+
+                                        var geometryOverDoor = new THREE.Geometry();
+                                        geometryOverDoor.vertices.push(
+                                                new THREE.Vector3(this.points[0][0], floor.offset.y + (floor.height / 100 * 75), this.points[0][1]),
+                                                new THREE.Vector3(this.points[0][0], floor.offset.y + floor.height, this.points[0][1]),
+                                                new THREE.Vector3(this.points[1][0], floor.offset.y + floor.height, this.points[1][1]),
+                                                new THREE.Vector3(this.points[1][0], floor.offset.y + (floor.height / 100 * 75), this.points[1][1])
+                                                );
+                                        geometryOverDoor.faces.push(new THREE.Face3(0, 1, 2));
+                                        geometryOverDoor.faces.push(new THREE.Face3(0, 2, 3));
+                                        geometryOverDoor.computeBoundingSphere();
+                                        var materialOverDoor = new THREE.MeshBasicMaterial({
+                                            color: 0xaaaaaa,
+                                            opacity: 0.5,
+                                            transparent: true,
+                                            side: THREE.DoubleSide,
+                                            blending: THREE.SubtractEquation
+                                        });
+                                        var meshOverDoor = new THREE.Mesh(geometryOverDoor, materialOverDoor);
+                                        scene.add(meshOverDoor);
+                                        break;
+                                    case "window":
+                                        console.log("it's a window");
+                                        var geometryWindow = new THREE.Geometry();
+                                        geometryWindow.vertices.push(
+                                                new THREE.Vector3(this.points[0][0], floor.offset.y+(floor.height / 100 * 25), this.points[0][1]),
+                                                new THREE.Vector3(this.points[0][0], floor.offset.y + (floor.height / 100 * 75), this.points[0][1]),
+                                                new THREE.Vector3(this.points[1][0], floor.offset.y + (floor.height / 100 * 75), this.points[1][1]),
+                                                new THREE.Vector3(this.points[1][0], floor.offset.y+(floor.height / 100 * 25), this.points[1][1])
+                                                );
+                                        geometryWindow.faces.push(new THREE.Face3(0, 1, 2));
+                                        geometryWindow.faces.push(new THREE.Face3(0, 2, 3));
+                                        geometryWindow.computeBoundingSphere();
+                                        var materialWindow = new THREE.MeshBasicMaterial({
+                                            color: 0x0030ee,
+                                            opacity: 0.5,
+                                            transparent: true,
+                                            side: THREE.DoubleSide,
+                                            blending: THREE.SubtractiveBlending
+                                        });
+                                        var meshWindow = new THREE.Mesh(geometryWindow, materialWindow);
+                                        scene.add(meshWindow);
+                                        break;
+                                }
+                            };
+
+                        }(this));
+
+                    });
                 });
 
             }

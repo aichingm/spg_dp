@@ -9,6 +9,7 @@
         <script src="debug.js"></script>
 
         <script src="editorjs/DefaultOptions.js"></script>
+        <script src="editorjs/InterFloorSelection.js"></script>
         <script src="editorjs/ModelManager.js"></script>
         <script src="editorjs/Viewport.js"></script>
         <script src="editorjs/Styles.js"></script>
@@ -30,229 +31,23 @@
             <button class="close">&times;</button>
         </div>
         <div class="ui-overlay" id="floorManager">
-            <select id="floorManagerSelectFloor"></select>
+            <h2>select working floor</h2>
+            <select id="floorManagerSelectFloor"></select><br>
+            <h2>create a new floor</h2>
             <button id="floorManagerNewFloor">new</button>
+            <h2>floors</h2>
+            <table border="1" ><thead><tr><td>name</td><td>number of objects</td><td>offset</td><td>height</td><td>delete</td><td>copy</td></tr></thead><tbody id="floorManagerTable"></tbody></table>
+            <button style="" class="close">&times;</button>
+        </div>
+        <div class="ui-overlay" id="interFloorObjects">
+            <table border="1" ><thead><tr><td>floor</td><td>x</td><td>y</td><td>height</td></tr></thead><tbody id="interFloorPointsTable"></tbody></table><br>
+            <button id="interFloorObjectsClear">clear</button>
+            <button id="interFloorObjectsNewWall">create wall</button>
+            <button id="interFloorObjectsNewFloor">create floor</button>
             <button style="" class="close">&times;</button>
         </div>
         <div class="ui-overlay" id="help">
-            <table>
-                <tr>
-                    <td>
-                        w
-                    </td>
-                    <td>
-                        select 2 points to draw a wall
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        s
-                    </td>
-                    <td>
-                        select 2 points to draw a window
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        d
-                    </td>
-                    <td>
-                        select 2 points to draw a door
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        f
-                    </td>
-                    <td>
-                        select 3 or 4 points to draw a floor
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        p
-                    </td>
-                    <td>
-                        redraw
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        l
-                    </td>
-                    <td>
-                        clear the screen
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        k
-                    </td>
-                    <td>
-                        delete data
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        -&gt; (arrow)
-                    </td>
-                    <td>
-                        move to 50px right 
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        &lt;- (arrow)
-                    </td>
-                    <td>
-                        move to 50px left 
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        ^ (arrow)
-                    </td>
-                    <td>
-                        move to 50px up 
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        v (arrow)
-                    </td>
-                    <td>
-                        move to 50px down 
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        c
-                    </td>
-                    <td>
-                        move to center 
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        e
-                    </td>
-                    <td>
-                        open export/import 
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        2
-                    </td>
-                    <td>
-                        set max. selected items to 2
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        4
-                    </td>
-                    <td>
-                        set max. selected items to 4
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        3
-                    </td>
-                    <td>
-                        reset zoom
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        b
-                    </td>
-                    <td>
-                        open background image loader
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        +
-                    </td>
-                    <td>
-                        zoom in
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        -
-                    </td>
-                    <td>
-                        zoom out
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        h
-                    </td>
-                    <td>
-                        show help
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        [esc]
-                    </td>
-                    <td>
-                        close overlay window
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        u
-                    </td>
-                    <td>
-                        toggle auto select for new points
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        x
-                    </td>
-                    <td>
-                        delete all elements with the exact selected points
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        X
-                    </td>
-                    <td>
-                        delete all elements which have at least one of the selected points
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        v
-                    </td>
-                    <td>
-                        view in model viewer
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        q
-                    </td>
-                    <td>
-                        move a point: select a point, hit [q] and click on the new location, after the click the you will be back in the normal point mode
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        j
-                    </td>
-                    <td>
-                        create a new floor or jump around between existing ones
-                    </td>
-                </tr>
-            </table>
+            <iframe src="help.html" style="height: 100%; width: 99%"></iframe>
             <button class="close">&times;</button>
         </div>
         <div id="cords" style="position: fixed;bottom: 0;left: 0;"></div>
