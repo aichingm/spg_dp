@@ -102,7 +102,7 @@ $(document).ready(function () {
     });
     //setup listeners for the floor select object and the new floor button
     $("#floorManagerNewFloor").click(function () {
-        editor.getModelManager().addFloor(prompt("name?"), prompt("hight?"), {"x": 0, "y": 0, "z": 0});
+        editor.getModelManager().addFloor(prompt("name?"), parseInt(prompt("height?")), {"x": 0, "y": 0, "z": 0});
         $("#floorManager").trigger("showen");
     });
     $("#floorManagerSelectFloor").on("change", function (e) {
