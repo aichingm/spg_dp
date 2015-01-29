@@ -2,7 +2,8 @@
 Debug.setLogging(true);
 var editor;
 var ouioverlay;
-var mode = "";
+var uiProps = new ValuesObserver();
+uiProps.set("mode", "points");
 //the name for the localstorage of the exports
 var editorExportKey = "PieceofShit.exports";
 $(document).ready(function () {
@@ -36,9 +37,9 @@ $(document).ready(function () {
             }
         } else {
 //add a new point
-            if (mode === "movePoint") {
+            if (uiProps.equals("mode", "movePoint")) {
                 editor.movePoint(e.pageX, e.pageY);
-                mode = "";
+                uiProps.set("mode", "points");
                 Debug.log("movePoint");
             } else {
                 editor.newPoint(e.pageX, e.pageY);

@@ -51,7 +51,7 @@ function keys(editor, uioverlay) {
             } else if (e.charCode === 118) { //v
                 window.open("../index.html");
             } else if (e.charCode === 113) { //q
-                mode = "movePoint";
+                uiProps.set("mode", "movePoint");
             }
 
             //fix this change to some kind of model observer pattern with change listener
