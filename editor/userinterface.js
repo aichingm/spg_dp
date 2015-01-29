@@ -80,15 +80,38 @@ $(document).ready(function () {
                 selected = "selected=\"selected\"";
             }
             $("#floorManagerSelectFloor").append("<option value=\"" + i + "\"" + selected + ">" + list[i].name + "</option>");
-            $("#floorManagerTable").append("<tr><td>" + list[i].name + "</td><td>" + list[i].elements.length + "</td><td>" + JSON.stringify(list[i].offset) + "</td><td>" + list[i].height + "</td><td><button class='delete' data-floor='" + i + "'>&times;</button></td><td><button class='copy' data-floor='" + i + "'>&copy;</button></td></tr>");
+            $("#floorManagerTable").append("<tr><td>" + list[i].name + "</td>"
+                    + "<td>" + list[i].elements.length + "</td>"
+                    + "<td><input class='offsetChanger' data-floorid='" + i + "' data-dimension='x' type='number' value='" + list[i].offset.x + "'></</td>"
+                    + "<td><input class='offsetChanger' data-floorid='" + i + "' data-dimension='y' type='number' value='" + list[i].offset.y + "'></</td>"
+                    + "<td><input class='offsetChanger' data-floorid='" + i + "' data-dimension='z' type='number' value='" + list[i].offset.z + "'></</td>"
+                    + "<td>" + list[i].height + "</td><td><button class='delete' data-floor='" + i + "'>&times;</button></td>"
+                    + "<td><button class='copy' data-floor='" + i + "'>&copy;</button></td></tr>");
 
         }
+
         $("#floorManagerSelectFloor").trigger("change");
         $("#floorManagerTable tr td button.delete").click(function (e) {
             editor.getModelManager().deleteFloor(e.currentTarget.dataset.floor);
             $("#floorManager").trigger("showen");
             localStorage.setItem(editorExportKey, editor.toString());
 
+        });
+        $("#floorManagerTable tr td input.offsetChanger").on("change", function (e) {
+            var val = parseInt($(this).val());
+            var floor = editor.getModelManager().getFloor(e.currentTarget.dataset.floorid);
+            switch (e.currentTarget.dataset.dimension) {
+                case "x":
+                    floor.offset.x = val;
+                    break;
+                case "y":
+                    floor.offset.y = val;
+                    break;
+                case "z":
+                    floor.offset.z = val;
+                    break;
+            }
+            localStorage.setItem(editorExportKey, editor.toString());
         });
         $("#floorManagerTable tr td button.copy").click(function (e) {
             var floor = (JSON.parse(JSON.stringify(editor.getModelManager().getFloor(e.currentTarget.dataset.floor))));
@@ -119,14 +142,14 @@ $(document).ready(function () {
             editor.getInterFloorPoints().unselect(e.currentTarget.dataset.x, e.currentTarget.dataset.y, e.currentTarget.dataset.floor);
             $("#interFloorObjects").trigger("showen");
         });
-        
-        
-        
-        
+
+
+
+
     });
-     $("#interFloorObjectsClear").click(function () {
+    $("#interFloorObjectsClear").click(function () {
         editor.getInterFloorPoints().clear();
-            $("#interFloorObjects").trigger("showen");  
+        $("#interFloorObjects").trigger("showen");
     });
     $("#interFloorObjectsNewWall").click(function () {
         editor.getModelManager().addInterFloorObject("wall", editor.getInterFloorPoints().getPoints());

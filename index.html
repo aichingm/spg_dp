@@ -43,27 +43,7 @@
                     draw(JSON.parse(exports), false);
                 }
             }
-            /*$.getJSON("data.json", function(data) {
-             
-             init(data);
-             animate();
-             
-             }).done(function() {
-             console.log("second success");
-             })
-             .fail(function(jqXHR, status, error) {
-             console.log([jqXHR, status, error]);
-             })
-             .always(function() {
-             console.log("complete");
-             });
-             
-             */
-
-
-
-
-
+            
             // Sets up the scene.
             function init() {
                 // Create the scene and set the scene size.
@@ -129,6 +109,8 @@
                                                     new THREE.Vector3(this.points[2][0], floor.offset.y, this.points[2][1]),
                                                     new THREE.Vector3(this.points[3][0], floor.offset.y, this.points[3][1])
                                                     );
+                                            //every geometry must be built out of triangles the parameter are the points used to create the triangle
+                                            //a square is made out of 2 triangles remeber to keep the correct order of the points!
                                             geometry.faces.push(new THREE.Face3(0, 1, 2));
                                             geometry.faces.push(new THREE.Face3(0, 2, 3));
                                         } else if (this.points.length === 3) {
