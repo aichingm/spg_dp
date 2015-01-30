@@ -112,7 +112,4 @@ function ModelManager() {
     };
     this.init();
     return this;
-}
-;
-
-
+};

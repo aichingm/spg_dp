@@ -57,14 +57,18 @@ function keys(editor, uioverlay) {
             }  else if (e.charCode === 122) { //z
                 editor.getPointsManager().setPoints(editor.getModelManager().getAllPointsOnFloor(editor.getFloorIndex()));
                 editor.getDrawer().redraw();
+            }else if (e.charCode === 110) { //n
+                if (uiProps.equals("mouseMode", "connectPathPoints")) {
+                    uiProps.set("mouseMode", "points");
+                } else {
+                    uiProps.set("mouseMode", "connectPathPoints");
+                }
             } else if (e.charCode === 228) { //ä
                 if (uiProps.equals("mouseMode", "setPathPoint")) {
                     uiProps.set("mouseMode", "points");
                 } else {
                     uiProps.set("mouseMode", "setPathPoint");
-
                 }
-                ;
             }
 
             //fix this change to some kind of model observer pattern with change listener
