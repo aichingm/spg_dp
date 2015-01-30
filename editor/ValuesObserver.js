@@ -6,7 +6,7 @@ ValuesObserver = function () {
 
     this.set = function (key, value) {
         this.keyValue[key] = value;
-        this.trigger("change", [key, value, event]);
+        this.trigger(key, [key, value, event]);
     };
     this.get = function (key) {
         return this.keyValue[key];
@@ -16,17 +16,17 @@ ValuesObserver = function () {
     };
 
 
-    this.on = function (event, func) {
-        if (this.events[event] === undefined) {
-            this.events[event] = new Array();
+    this.on = function (key, func) {
+        if (this.events[key] === undefined) {
+            this.events[key] = new Array();
         }
-        this.events[event].push(func);
+        this.events[key].push(func);
     };
 
-    this.trigger = function (event, args) {
-        if (this.events[event] !== undefined) {
-            for (var i = 0; i < this.events[event].length; i++) {
-                var of = this.events[event][i];
+    this.trigger = function (key, args) {
+        if (this.events[key] !== undefined) {
+            for (var i = 0; i < this.events[key].length; i++) {
+                var of = this.events[key][i];
                 if (typeof of === "function") {
                     var dump = of.apply(this, args);
                 }

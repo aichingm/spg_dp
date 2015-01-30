@@ -9,13 +9,15 @@
         <script src="debug.js"></script>
 
         <script src="editorjs/DefaultOptions.js"></script>
+        <script src="editorjs/Drawer.js"></script>
         <script src="ValuesObserver.js"></script>
-        <script src="editorjs/InterFloorSelection.js"></script>
+        <script src="editorjs/PointsManager.js"></script>
         <script src="editorjs/ModelManager.js"></script>
         <script src="editorjs/Viewport.js"></script>
         <script src="editorjs/Styles.js"></script>
         <script src="editorjs/Editor.js"></script>
         <script src="ui-overlay.js"></script>
+        <script src="uiProps.js"></script>
         <script src="userinterface.js"></script>
         <script src="userinterface-keys.js"></script>
 
@@ -46,11 +48,13 @@
             <button id="interFloorObjectsNewWall">create wall</button>
             <button id="interFloorObjectsNewFloor">create floor</button>
             <button style="" class="close">&times;</button>
+            <h1>NOT IMPLEMENTED</h1>
         </div>
         <div class="ui-overlay" id="help">
             <iframe src="help.html" style="height: 100%; width: 99%"></iframe>
             <button class="close">&times;</button>
         </div>
         <div id="cords" style="position: fixed;bottom: 0;left: 0;"></div>
+        <div id="mouseMode" style="position: fixed;bottom: 0;right: 0;"></div>
     </body>
 </html>

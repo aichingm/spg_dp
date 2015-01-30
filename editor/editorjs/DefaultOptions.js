@@ -17,5 +17,7 @@ DefaultOptions = function() {
         "pointStrokeStyle": "#000",
         "selectedPointColor": "#FF4136",
         "selectedPointLineWidth": 3,
+        "pointRadius":5,
+        "pathPointRadius":15,
         "selectedPointStrokeStyle": "#000000"};
 };
