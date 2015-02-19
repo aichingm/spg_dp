@@ -3,8 +3,8 @@ function ModelManager() {
     //this.model = {"floors": [], "interFloorObjects": {"floors": [], "walls": []}, "paths": []};
     //this.model.floors.push({"name": "default floor", "elements": [], "pathPoints": [], "offset": {"x": 0, "y": 0, "z": 0}, "height": 200});
     this.init = function () {
-        this.model = {"floors": [], "interFloorObjects": {"floors": [], "walls": []}, "paths": []};
-        this.model.floors.push({"name": "default floor", "elements": [], "pathPoints": [], "offset": {"x": 0, "y": 0, "z": 0}, "height": 200});
+        this.model = {"floors": []};
+        this.model.floors.push({"name": "default floor", "elements": [], "offset": {"x": 0, "y": 0, "z": 0}, "height": 200});
     };
 
 
@@ -61,6 +61,13 @@ function ModelManager() {
 
     this.toString = function () {
         return JSON.stringify(this.model);
+    };
+    this.save = function () {
+        return this.model;
+    };
+    this.load = function (data) {
+        this.model = data;
+
     };
 
     this.getAllPointsOnFloorAsArray = function (index) {

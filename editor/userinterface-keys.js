@@ -78,7 +78,7 @@ function keys(editor, uioverlay) {
             }
 
             //fix this change to some kind of model observer pattern with change listener
-            localStorage.setItem(editorExportKey, editor.toString());
+            storage.save();
         }
 
     });

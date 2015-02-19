@@ -3,12 +3,12 @@ Debug.setLogging(true);
 var editor;
 var ouioverlay;
 var uiProps;
-var interFloorObjects;
+var interFloorSelection;
+var storage = new Storage();
 
-//the name for the localstorage of the exports
-var editorExportKey = "PieceofShit.exports";
+
 $(document).ready(function () {
-    interFloorObjects = new InterFloorSelection();
+    interFloorSelection = new InterFloorSelection();
 //the canvas to which the editor will be attached
     var canvas = document.getElementById('canvas');
     //the canvas's context
@@ -40,7 +40,7 @@ $(document).ready(function () {
                 //editor.getInterFloorPoints().handle(editor.points[isTarget].x, editor.points[isTarget].y, editor.getSelectetFloorIndex());
                 // Debug.log(editor.getInterFloorPoints().getPoints());
             } else if (uiProps.equals("mouseMode", "interFloorSelectionMode")) {
-                interFloorObjects.add(e.pageX, e.pageY, editor.getFloorIndex());
+                interFloorSelection.add(e.pageX, e.pageY, editor.getFloorIndex());
             }
             else {
                 editor.getPointsManager().toggle(target.x, target.y);
@@ -115,8 +115,7 @@ $(document).ready(function () {
         $("#floorManagerTable tr td button.delete").click(function (e) {
             editor.getModelManager().deleteFloor(e.currentTarget.dataset.floor);
             $("#floorManager").trigger("showen");
-            localStorage.setItem(editorExportKey, editor.toString());
-
+            storage.save();
         });
         $("#floorManagerTable tr td input.offsetChanger").on("change", function (e) {
             var val = parseInt($(this).val());
@@ -132,15 +131,14 @@ $(document).ready(function () {
                     floor.offset.z = val;
                     break;
             }
-            localStorage.setItem(editorExportKey, editor.toString());
+            storage.save();
         });
         $("#floorManagerTable tr td button.copy").click(function (e) {
             var floor = (JSON.parse(JSON.stringify(editor.getModelManager().getFloor(e.currentTarget.dataset.floor))));
             floor.name = prompt("new floor name");
             editor.getModelManager().setFloor(editor.getModelManager().model.floors.length, floor);
             $("#floorManager").trigger("showen");
-            localStorage.setItem(editorExportKey, editor.toString());
-
+            storage.save();
         });
 
     });
@@ -154,29 +152,50 @@ $(document).ready(function () {
     });
     /* INTER FLOOR OBJECTS */
     $("#interFloorObjects").on("showen", function () {
-        var list = interFloorObjects.points;
+        var list = interFloorSelection.points;
         $("#interFloorPointsTable").html("");
         for (var i = 0; i < list.length; i++) {
-            $("#interFloorPointsTable").append("<tr><td>" + editor.getModelManager().getFloor(list[i].floorIndex).name + "</td><td>" + list[i].x + "</td><td>" + list[i].y + "</td><td><button class='delete' data-x='" + list[i].x + "' data-y='" + list[i].y + "' data-floor='" + list[i].floor + "'>&times;</button></td></tr>");
+            $("#interFloorPointsTable").append("<tr><td>" + editor.getModelManager().getFloor(list[i].floorIndex).name + "</td><td>" + list[i].x + "</td><td>" + list[i].y + "</td><td><button class='delete' data-x='" + list[i].x + "' data-y='" + list[i].y + "' data-floorindex='" + list[i].floorIndex + "'>&times;</button></td></tr>");
         }
         $("#interFloorPointsTable tr td button.delete").click(function (e) {
-            editor.getInterFloorPoints().unselect(e.currentTarget.dataset.x, e.currentTarget.dataset.y, e.currentTarget.dataset.floor);
+            interFloorSelection.removeByValue(e.currentTarget.dataset.x, e.currentTarget.dataset.y, e.currentTarget.dataset.floorindex);
             $("#interFloorObjects").trigger("showen");
         });
 
 
 
+        var objectLlist = editor.getInterFloorObjects().getObjects();
+        ;
+        $("#interFloorPointsObjectsTable").html("");
+        for (var i = 0; i < objectLlist.length; i++) {
+            $("#interFloorPointsObjectsTable").append("<tr><td>" + JSON.stringify(objectLlist[i]) + "</td><td><button class='delete' data-index='" + i + "'>&times;</button></td></tr>");
+        }
+        $("#interFloorPointsObjectsTable tr td button.delete").click(function (e) {
+            editor.getInterFloorObjects().remove(e.currentTarget.dataset.index);
+            storage.save();
+            $("#interFloorObjects").trigger("showen");
+        });
 
     });
     $("#interFloorObjectsClear").click(function () {
-        editor.getInterFloorPoints().clear();
+        interFloorSelection.clear();
         $("#interFloorObjects").trigger("showen");
     });
     $("#interFloorObjectsNewWall").click(function () {
-        editor.getModelManager().addInterFloorObject("wall", editor.getInterFloorPoints().getPoints());
+        if (interFloorSelection.getPoints().length === 2) {
+            editor.getInterFloorObjects().add("wall", interFloorSelection.getPoints());
+            storage.save();
+            $("#interFloorObjects").trigger("showen");
+        }
+
     });
     $("#interFloorObjectsNewFloor").click(function () {
-        editor.getModelManager().addInterFloorObject("floor", editor.getInterFloorPoints().getPoints());
+        if (interFloorSelection.getPoints().length === 3 || interFloorSelection.getPoints().length === 4) {
+            editor.getInterFloorObjects().add("floor", interFloorSelection.getPoints());
+            storage.save();
+            $("#interFloorObjects").trigger("showen");
+        }
+
     });
 
 
@@ -196,16 +215,8 @@ $(document).ready(function () {
             fr.readAsDataURL($('#backgroundImageInput').get(0).files[0]);
         }
     });
-    //check if exportObjects are cached and if load them
-    if (typeof (Storage) !== "undefined") {
-        var exports = localStorage.getItem(editorExportKey);
-        //check if they are valid
-        if (exports !== null && exports !== undefined && exports.length > 0) {
-            //load them
-            editor.load(exports);
-            editor.getDrawer().redraw(editor.floorIndex);
-        }
-    }
+    //load from localstorage
+    storage.load();
     $(window).resize(function () {
         var canvas = document.getElementById('canvas');
         canvas.height = window.innerHeight;

@@ -8,7 +8,9 @@
         <script src="Arrays.js"></script>
         <script src="debug.js"></script>
 
+        <script src="editorjs/Storage.js"></script>
         <script src="editorjs/InterFloorSelection.js"></script>
+        <script src="editorjs/InterFloorObjects.js"></script>
         <script src="editorjs/DefaultOptions.js"></script>
         <script src="editorjs/Drawer.js"></script>
         <script src="ValuesObserver.js"></script>
@@ -49,7 +51,7 @@
             <button id="interFloorObjectsNewWall">create wall</button>
             <button id="interFloorObjectsNewFloor">create floor</button>
             <button style="" class="close">&times;</button>
-            <h1>NOT IMPLEMENTED</h1>
+            <table border="1"><thead><tr><td>object</td><td>delete</td></thead><tbody id="interFloorPointsObjectsTable"></tbody></table>
         </div>
         <div class="ui-overlay" id="help">
             <iframe src="help.html" style="height: 100%; width: 99%"></iframe>

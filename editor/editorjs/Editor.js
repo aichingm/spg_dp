@@ -5,6 +5,9 @@ function Editor(canvas, options) {
     this.modelManager = new ModelManager();
     this.pointsManager = new PointsManager();
     this.drawer = new Drawer(canvas, this.modelManager, this.pointsManager);
+    
+    
+    this.interFloorObjects = new InterFloorObjects();
 
     /*   POINTS   */
 
@@ -95,6 +98,7 @@ function Editor(canvas, options) {
     this.getClean = function () {
         this.modelManager.init();
         this.pointsManager.clear();
+        this.interFloorObjects.clear();
         this.drawer.getViewport().clear();
         this.floorIndex = 0;
     };
@@ -123,6 +127,9 @@ function Editor(canvas, options) {
      */
     this.getPointsManager = function () {
         return this.pointsManager;
+    };
+    this.getInterFloorObjects = function () {
+        return this.interFloorObjects;
     };
     this.getModelManager = function () {
         return this.modelManager;
@@ -153,12 +160,15 @@ function Editor(canvas, options) {
     };
     /*   IMPORT/EXPORT   */
     this.toString = function () {
-        return this.modelManager.toString();
+        var data = {"modelManager":this.modelManager.save(), "interFloorObjects":this.interFloorObjects.save(), "paths":{}};
+        return JSON.stringify(data);
     };
     this.load = function (text) {
-        this.modelManager.fromString(text);
+        var data = JSON.parse(text);
+        this.modelManager.load(data.modelManager);
+        this.interFloorObjects.load(data.interFloorObjects);
         this.pointsManager.setPoints(this.modelManager.getAllPointsOnFloor(this.floorIndex));
     };
     return this;
 }
-;
+;   
