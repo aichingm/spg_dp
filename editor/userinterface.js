@@ -3,10 +3,12 @@ Debug.setLogging(true);
 var editor;
 var ouioverlay;
 var uiProps;
+var interFloorObjects;
 
 //the name for the localstorage of the exports
 var editorExportKey = "PieceofShit.exports";
 $(document).ready(function () {
+    interFloorObjects = new InterFloorSelection();
 //the canvas to which the editor will be attached
     var canvas = document.getElementById('canvas');
     //the canvas's context
@@ -37,7 +39,10 @@ $(document).ready(function () {
             if (e.ctrlKey) {
                 //editor.getInterFloorPoints().handle(editor.points[isTarget].x, editor.points[isTarget].y, editor.getSelectetFloorIndex());
                 // Debug.log(editor.getInterFloorPoints().getPoints());
-            } else {
+            } else if (uiProps.equals("mouseMode", "interFloorSelectionMode")) {
+                interFloorObjects.add(e.pageX, e.pageY, editor.getFloorIndex());
+            }
+            else {
                 editor.getPointsManager().toggle(target.x, target.y);
             }
         } else {
@@ -48,7 +53,9 @@ $(document).ready(function () {
                 Debug.log("movePoint");
             } else if (uiProps.equals("mouseMode", "setPathPoint")) {
                 editor.createPathPoint(e.pageX, e.pageY);
+            } else if (uiProps.equals("mouseMode", "interFloorSelectionMode")) {
             } else {
+                console.log(uiProps.get("mouseMode"))
                 editor.newPoint(e.pageX, e.pageY);
             }
         }
@@ -146,31 +153,31 @@ $(document).ready(function () {
         editor.setFloorIndex(e.target.selectedIndex);
     });
     /* INTER FLOOR OBJECTS */
-    /*$("#interFloorObjects").on("showen", function () {
-     var list = editor.getInterFloorPoints().getPoints();
-     $("#interFloorPointsTable").html("");
-     for (var i = 0; i < list.length; i++) {
-     $("#interFloorPointsTable").append("<tr><td>" + editor.getModelManager().getFloor(list[i].floor).name + "</td><td>" + list[i].x + "</td><td>" + list[i].y + "</td><td><button class='delete' data-x='" + list[i].x + "' data-y='" + list[i].y + "' data-floor='" + list[i].floor + "'>&times;</button></td></tr>");
-     }
-     $("#interFloorPointsTable tr td button.delete").click(function (e) {
-     editor.getInterFloorPoints().unselect(e.currentTarget.dataset.x, e.currentTarget.dataset.y, e.currentTarget.dataset.floor);
-     $("#interFloorObjects").trigger("showen");
-     });
-     
-     
-     
-     
-     });
-     $("#interFloorObjectsClear").click(function () {
-     editor.getInterFloorPoints().clear();
-     $("#interFloorObjects").trigger("showen");
-     });
-     $("#interFloorObjectsNewWall").click(function () {
-     editor.getModelManager().addInterFloorObject("wall", editor.getInterFloorPoints().getPoints());
-     });
-     $("#interFloorObjectsNewFloor").click(function () {
-     editor.getModelManager().addInterFloorObject("floor", editor.getInterFloorPoints().getPoints());
-     });*/
+    $("#interFloorObjects").on("showen", function () {
+        var list = interFloorObjects.points;
+        $("#interFloorPointsTable").html("");
+        for (var i = 0; i < list.length; i++) {
+            $("#interFloorPointsTable").append("<tr><td>" + editor.getModelManager().getFloor(list[i].floorIndex).name + "</td><td>" + list[i].x + "</td><td>" + list[i].y + "</td><td><button class='delete' data-x='" + list[i].x + "' data-y='" + list[i].y + "' data-floor='" + list[i].floor + "'>&times;</button></td></tr>");
+        }
+        $("#interFloorPointsTable tr td button.delete").click(function (e) {
+            editor.getInterFloorPoints().unselect(e.currentTarget.dataset.x, e.currentTarget.dataset.y, e.currentTarget.dataset.floor);
+            $("#interFloorObjects").trigger("showen");
+        });
+
+
+
+
+    });
+    $("#interFloorObjectsClear").click(function () {
+        editor.getInterFloorPoints().clear();
+        $("#interFloorObjects").trigger("showen");
+    });
+    $("#interFloorObjectsNewWall").click(function () {
+        editor.getModelManager().addInterFloorObject("wall", editor.getInterFloorPoints().getPoints());
+    });
+    $("#interFloorObjectsNewFloor").click(function () {
+        editor.getModelManager().addInterFloorObject("floor", editor.getInterFloorPoints().getPoints());
+    });
 
 
 

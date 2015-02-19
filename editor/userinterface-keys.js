@@ -22,6 +22,12 @@ function keys(editor, uioverlay) {
                 uioverlay.open("#backgroundImage");
             } else if (e.charCode === 105) { //i
                 uioverlay.open("#interFloorObjects");
+            } else if (e.charCode === 73) {// I
+                if (uiProps.equals("mouseMode", "interFloorSelectionMode")) {
+                    uiProps.set("mouseMode", "points");
+                } else {
+                    uiProps.set("mouseMode", "interFloorSelectionMode");
+                }
             } else if (e.charCode === 107) {//k
                 if (confirm("Löschen?")) {
                     editor.getClean();
@@ -39,7 +45,7 @@ function keys(editor, uioverlay) {
             } else if (e.charCode === 45) { //-
                 editor.getViewport().zoom(-3);
             } else if (e.charCode === 99) { //c
-                editor.getViewport().resetMove(); 
+                editor.getViewport().resetMove();
             } else if (e.charCode === 104) { //h
                 uioverlay.open("#help");
             } else if (e.charCode === 117) { //u
@@ -54,10 +60,10 @@ function keys(editor, uioverlay) {
                 uiProps.set("mouseMode", "movePoint");
             } else if (e.charCode === 116) { //t
                 editor.getPointsManager().clearSelectedPoints();
-            }  else if (e.charCode === 122) { //z
+            } else if (e.charCode === 122) { //z
                 editor.getPointsManager().setPoints(editor.getModelManager().getAllPointsOnFloor(editor.getFloorIndex()));
                 editor.getDrawer().redraw();
-            }else if (e.charCode === 110) { //n
+            } else if (e.charCode === 110) { //n
                 if (uiProps.equals("mouseMode", "connectPathPoints")) {
                     uiProps.set("mouseMode", "points");
                 } else {
