@@ -40,7 +40,7 @@ $(document).ready(function () {
                 //editor.getInterFloorPoints().handle(editor.points[isTarget].x, editor.points[isTarget].y, editor.getSelectetFloorIndex());
                 // Debug.log(editor.getInterFloorPoints().getPoints());
             } else if (uiProps.equals("mouseMode", "interFloorSelectionMode")) {
-                interFloorSelection.add(e.pageX, e.pageY, editor.getFloorIndex());
+                interFloorSelection.add(target.x, target.y, editor.getFloorIndex());
             }
             else {
                 editor.getPointsManager().toggle(target.x, target.y);
