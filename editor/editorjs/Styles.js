@@ -1,5 +1,6 @@
 FloorStyle = {
-    "color": "#001F3F"
+    "color": "rgba(30,30,30,0.750)"
+    //"alpha": 50
 };
 WallStyle = {
     "width": 6,
