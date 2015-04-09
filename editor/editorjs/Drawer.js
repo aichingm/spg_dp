@@ -1,10 +1,11 @@
-function Drawer(canvas, modelManager, pointsManager) {
+function Drawer(canvas, modelManager, pointsManager, paths) {
 
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
 
     this.modelManager = modelManager;
 
+    this.paths = paths;
     this.pointsManager = pointsManager;
     this.pointsManager.setDrawer(this);
 
@@ -19,6 +20,7 @@ function Drawer(canvas, modelManager, pointsManager) {
     this.pathPointStyle = PathPointStyle;
     this.selectedPointStyle = SelectedPointStyle;
     this.pointStyle = PointStyle;
+    this.vertexPointStyle = VertexPointStyle;
 
     this.selectedFloorIndex = 0;
 
@@ -52,9 +54,11 @@ function Drawer(canvas, modelManager, pointsManager) {
         this.context.arc(point.x, point.y, style.pointRadius, 0, 2 * Math.PI, false);
         this.context.fillStyle = style.color;
         this.context.fill();
-        this.context.lineWidth = style.lineWidth;
-        this.context.strokeStyle = style.strokeStyle;
-        this.context.stroke();
+        if (style.lineWidth !== undefined) {
+            this.context.lineWidth = style.lineWidth;
+            this.context.strokeStyle = style.strokeStyle;
+            this.context.stroke();
+        }
         this.context.closePath();
     };
     /**
@@ -92,6 +96,10 @@ function Drawer(canvas, modelManager, pointsManager) {
         for (var i = 0; i < points.length; i++) {
             this.drawPoint(points[i], this.selectedPointStyle);
         }
+        for (var i = 0; i < this.paths.vertices.length; i++) {
+            this.drawPoint(this.paths.vertices[i], this.vertexPointStyle);
+        }
+
         //return points;
     };
 

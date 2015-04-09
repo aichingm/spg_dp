@@ -8,6 +8,7 @@
         <script src="Arrays.js"></script>
         <script src="debug.js"></script>
 
+        <script src="editorjs/EdgeSelection.js"></script>
         <script src="editorjs/Storage.js"></script>
         <script src="editorjs/Paths.js"></script>
         <script src="editorjs/InterFloorSelection.js"></script>
@@ -54,6 +55,11 @@
             <button style="" class="close">&times;</button>
             <table border="1"><thead><tr><td>object</td><td>delete</td></thead><tbody id="interFloorPointsObjectsTable"></tbody></table>
         </div>
+        <div class="ui-overlay" id="PathPoints">
+            <table border="1" ><thead><tr><td>Name</td><td>x</td><td>y</td><td>Floor Index</td><td>Public</td><td>Internal Name</td><td>Description</td></tr></thead><tbody id="PathPointsPointsTable"></tbody></table><br>
+            <table border="1"><thead><tr><td>from</td><td>to</td></thead><tbody id="PathPointsEdgesTable"></tbody></table>
+            <button style="" class="close">&times;</button>
+        </div>
         <div class="ui-overlay" id="newPathPoint">
             Name: <input type="text" name="name" /><br />
             Public: <input type="checkbox" name="public" /><br />
@@ -64,6 +70,20 @@
             <br />
             <button id="newPathPointCancel">cancel</button>
             <button id="newPathPointOk">ok</button>
+            <button style="" class="close">&times;</button>
+        </div>
+        <div class="ui-overlay" id="newPathEdge">
+            Name: <input type="text" name="name" /><br />
+            Public: <input type="checkbox" name="public" /><br />
+            Internal name: <input type="text" name="internalName" /><small> (falls leer wird der Name übernommen)</small><br />
+            Description: <input type="text" name="description" /><br />
+            <input type="hidden" name="Ax" /><br />
+            <input type="hidden" name="Ay" /><br />
+            <input type="hidden" name="Bx" /><br />
+            <input type="hidden" name="By" /><br />
+            <br />
+            <button id="newPathEdgeCancel">cancel</button>
+            <button id="newPathEdgeOk">ok</button>
             <button style="" class="close">&times;</button>
         </div>
         <div class="ui-overlay" id="help">

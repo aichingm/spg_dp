@@ -32,9 +32,9 @@ function PointsManager(options) {
                 console.log("unselecting");
                 this.unselect(selectedIndex);
             }
-            console.log( this.points.length)
+            console.log( this.points.length);
             this.points.splice(removeIndex, 1);
-            console.log( this.points.length)
+            console.log( this.points.length);
         }
         //TODO tell the drawer on which coordinates the redraw is needed
         this.getDrawer().redraw();

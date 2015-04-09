@@ -61,23 +61,31 @@ function keys(editor, uioverlay) {
             } else if (e.charCode === 116) { //t
                 editor.getPointsManager().clearSelectedPoints();
             } else if (e.charCode === 122) { //z
-                editor.getPointsManager().setPoints(editor.getModelManager().getAllPointsOnFloor(editor.getFloorIndex()));
-                editor.getDrawer().redraw();
-            } else if (e.charCode === 110) { //n
-                if (uiProps.equals("mouseMode", "connectPathPoints")) {
-                    uiProps.set("mouseMode", "points");
+                if (uiProps.equals("mouseMode", "edges")) {
+                    editor.getEdgeSelection().clear();
+
                 } else {
-                    uiProps.set("mouseMode", "connectPathPoints");
+                    editor.getPointsManager().setPoints(editor.getModelManager().getAllPointsOnFloor(editor.getFloorIndex()));
                 }
+                editor.getDrawer().redraw();
             } else if (e.charCode === 228) { //ä
                 if (uiProps.equals("mouseMode", "PathPoints")) {
                     uiProps.set("mouseMode", "points");
                 } else {
                     uiProps.set("mouseMode", "PathPoints");
                 }
+            } else if (e.charCode === 196) { //Ä
+                uioverlay.open("#PathPoints");
+            } else if (e.charCode === 246) { //ö
+                editor.getEdgeSelection().clear();
+                if (uiProps.equals("mouseMode", "edges")) {
+                    uiProps.set("mouseMode", "points");
+                } else {
+                    uiProps.set("mouseMode", "edges");
+                }
             }
 
-            //fix this change to some kind of model observer pattern with change listener
+//fix this change to some kind of model observer pattern with change listener
             storage.save();
         }
 
@@ -113,6 +121,5 @@ function keys(editor, uioverlay) {
             }
         }
         e.preventDefault();
-
     });
 }

@@ -1,6 +1,5 @@
 FloorStyle = {
     "color": "rgba(30,30,30,0.750)"
-    //"alpha": 50
 };
 WallStyle = {
     "width": 6,
@@ -32,4 +31,8 @@ PointStyle = {
     "lineWidth": 3,
     "strokeStyle": "#000",
     "pointRadius": 5
+};
+VertexPointStyle = {
+    "color": "rgba(236,247,30,0.75)",
+    "pointRadius": 10
 };

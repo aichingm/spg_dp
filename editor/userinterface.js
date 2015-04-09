@@ -33,33 +33,45 @@ $(document).ready(function () {
     $("#canvas").on("click", function (e) {
 
 //check if the clicked point is already a used point
-        target = editor.targetIsPoint(e.pageX, e.pageY);
-        if (target !== false && !uiProps.equals("mouseMode", "PathPoints")) {
-//select the clicked point
-            if (e.ctrlKey) {
-                //editor.getInterFloorPoints().handle(editor.points[isTarget].x, editor.points[isTarget].y, editor.getSelectetFloorIndex());
-                // Debug.log(editor.getInterFloorPoints().getPoints());
-            } else if (uiProps.equals("mouseMode", "interFloorSelectionMode")) {
-                interFloorSelection.add(target.x, target.y, editor.getFloorIndex());
-            }
-            else {
-                editor.getPointsManager().toggle(target.x, target.y);
-            }
-        } else {
-//add a new point
-            if (uiProps.equals("mouseMode", "movePoint")) {
+        if (uiProps.equals("mouseMode", "movePoint")) {
+            target = editor.targetIsPoint(e.pageX, e.pageY);
+            if (target === false) {
                 editor.movePoint(e.pageX, e.pageY);
                 uiProps.set("mouseMode", "points");
-                Debug.log("movePoint");
-            } else if (uiProps.equals("mouseMode", "PathPoints")) {
-                //editor.createPathPoint(e.pageX, e.pageY);
-                $("#newPathPoint input[name='x']").val(e.pageX + editor.getViewport().offsetX);
-                $("#newPathPoint input[name='y']").val(e.pageY + editor.getViewport().offsetY);
+            }
+        } else if (uiProps.equals("mouseMode", "PathPoints")) {
+            var target = editor.targetIsPathPoint(e.pageX, e.pageY);
+            if (target === false) {
+		var xy = editor.getCoordinates(e.pageX,e.pageY);
+                $("#newPathPoint input[name='x']").val(xy.x);
+                $("#newPathPoint input[name='y']").val(xy.y);
                 uioverlay.open("#newPathPoint");
-            } else if (uiProps.equals("mouseMode", "interFloorSelectionMode")) {
             } else {
-                console.log(uiProps.get("mouseMode"));
+                alert(JSON.stringify(target));
+            }
+        } else if (uiProps.equals("mouseMode", "interFloorSelectionMode")) {
+            target = editor.targetIsPoint(e.pageX, e.pageY);
+            if (target !== false) {
+                interFloorSelection.add(target.x, target.y, editor.getFloorIndex());
+            }
+        } else if (uiProps.equals("mouseMode", "edges")) {
+            target = editor.targetIsPathPoint(e.pageX, e.pageY);
+            if (target !== false) {
+                editor.getEdgeSelection().select(target);
+                if (editor.getEdgeSelection().isReady()) {
+                    $("#newPathEdge input[name='Ax']").val(editor.getEdgeSelection().pointA.x);
+                    $("#newPathEdge input[name='Bx']").val(editor.getEdgeSelection().pointA.y);
+                    $("#newPathEdge input[name='Ay']").val(editor.getEdgeSelection().pointB.x);
+                    $("#newPathEdge input[name='By']").val(editor.getEdgeSelection().pointB.y);
+                    uioverlay.open("#newPathEdge");
+                }
+            }
+        } else {
+            target = editor.targetIsPoint(e.pageX, e.pageY);
+            if (target === false) {
                 editor.newPoint(e.pageX, e.pageY);
+            } else {
+                editor.getPointsManager().toggle(target.x, target.y);
             }
         }
     });
@@ -207,43 +219,153 @@ $(document).ready(function () {
         $("#newPathPoint input[name='name']").val("");
         $("#newPathPoint input[name='name']").focus();
         $("#newPathPoint input[name='public']").attr("checked", true);
-        $("#newPathPoint input[name='public']").val(1);
+//        $("#newPathPoint input[name='public']").val(1);
         $("#newPathPoint input[name='internalName']").val("");
         $("#newPathPoint input[name='description']").val("");
+    });
+    $("#newPathPoint").on("closed", function () {
+        console.log("fuck fuck");
     });
     $("#newPathPointOk").click(function () {
         //do shizzle
         console.log("doing shizzle");
         var point = {};
         point.name = $("#newPathPoint input[name='name']").val();
-        point.public = $("#newPathPoint input[name='name']").val();
-        point.internalName = $("#newPathPoint input[name='name']").val();
+console.log($("#newPathPoint input[name='public']").is(":checked"));
+        point.public = $("#newPathPoint input[name='public']").is(":checked");
+        point.internalName = $("#newPathPoint input[name='internalName']").val();
         point.internalName = point.internalName !== "" ? point.internalName : point.name;
-        point.description = $("#newPathPoint input[name='name']").val();
+        point.description = $("#newPathPoint input[name='description']").val();
         point.floorIndex = editor.getFloorIndex();
         point.x = parseInt($("#newPathPoint input[name='x']").val());
         point.y = parseInt($("#newPathPoint input[name='y']").val());
         editor.getPaths().addPoint(point);
-
-
-
-
-
+        editor.getDrawer().drawPoint(point, VertexPointStyle);
+        storage.save();
         uioverlay.close(".showen");
     });
     $("#newPathPointCancel").click(function () {
         uioverlay.close(".showen");
     });
-    $("#newPathPoint  input[name='public']").on("keypress", function (e) {
+    $("#newPathPoint input[name='public']").on("keypress", function (e) {
         if (e.charCode === 32 && $("#newPathPoint  input[name='public']").is(":focus")) {//[space]
             this.checked = !this.checked;
         }
     });
-    $(document).on("keypress", function (e) {
+    $("#newPathPoint").on("keypress", function (e) {
         if (e.charCode === 13 && $("#newPathPoint").hasClass("showen")) {//[enter]
             $("#newPathPointOk").trigger("click");
         }
     });
+
+
+
+
+
+    $("#PathPoints").on("showen", function () {
+        $("#PathPointsPointsTable").html("");
+        var list = editor.getPaths().vertices;
+        for (var i = 0; i < list.length; i++) {
+            $("#PathPointsPointsTable").append("<tr><td>" + list[i].name + "</td>"
+                    + "<td>" + list[i].x + "</td>"
+                    + "<td>" + list[i].y + "</td>"
+                    + "<td>" + list[i].floorIndex + "</td>"
+                    + "<td>" + list[i].public + "</td>"
+                    + "<td>" + list[i].internalName + "</td>"
+                    + "<td>" + list[i].description + "</td>"
+                    //+ "<td><button class='delete' data-floor='" + i + "'>&times;</button></td>"
+                    );
+        }
+    });
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+ $("#newPathEdge").on("showen", function () {
+        $("#newPathPoint input[name='name']").val("");
+        $("#newPathPoint input[name='name']").focus();
+        $("#newPathPoint input[name='public']").attr("checked", true);
+        $("#newPathPoint input[name='public']").val(1);
+        $("#newPathPoint input[name='internalName']").val("");
+        $("#newPathPoint input[name='description']").val("");
+    });
+    $("#newPathEdge").on("closed", function () {
+        console.log("fuck fuck");
+    });
+    $("#newPathEdge").click(function () {
+        //do shizzle
+        console.log("doing shizzle");
+        var point = {};
+        point.name = $("#newPathPoint input[name='name']").val();
+        point.public = $("#newPathPoint input[name='public']").val();
+        point.internalName = $("#newPathPoint input[name='internalName']").val();
+        point.internalName = point.internalName !== "" ? point.internalName : point.name;
+        point.description = $("#newPathPoint input[name='description']").val();
+        point.floorIndex = editor.getFloorIndex();
+        point.x = parseInt($("#newPathPoint input[name='x']").val());
+        point.y = parseInt($("#newPathPoint input[name='y']").val());
+        editor.getPaths().addPoint(point);
+        editor.getDrawer().drawPoint(point, VertexPointStyle);
+        storage.save();
+        uioverlay.close(".showen");
+    });
+    $("#newPathEdge").click(function () {
+        uioverlay.close(".showen");
+    });
+    $("#newPathPoint input[name='public']").on("keypress", function (e) {
+        if (e.charCode === 32 && $("#newPathEdge  input[name='public']").is(":focus")) {//[space]
+            this.checked = !this.checked;
+        }
+    });
+    $("#newPathEdge").on("keypress", function (e) {
+        if (e.charCode === 13 && $("#newPathEdge").hasClass("showen")) {//[enter]
+            $("#newPathEdgeOk").trigger("click");
+        }
+    });
+
+*/
+
+
+
+    $("#PathPoints").on("showen", function () {
+        $("#PathPointsPointsTable").html("");
+        var list = editor.getPaths().vertices;
+        for (var i = 0; i < list.length; i++) {
+            $("#PathPointsPointsTable").append("<tr><td>" + list[i].name + "</td>"
+                    + "<td>" + list[i].x + "</td>"
+                    + "<td>" + list[i].y + "</td>"
+                    + "<td>" + list[i].floorIndex + "</td>"
+                    + "<td>" + list[i].public + "</td>"
+                    + "<td>" + list[i].internalName + "</td>"
+                    + "<td>" + list[i].description + "</td>"
+                    //+ "<td><button class='delete' data-floor='" + i + "'>&times;</button></td>"
+                    );
+        }
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
