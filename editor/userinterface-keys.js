@@ -70,10 +70,10 @@ function keys(editor, uioverlay) {
                     uiProps.set("mouseMode", "connectPathPoints");
                 }
             } else if (e.charCode === 228) { //ä
-                if (uiProps.equals("mouseMode", "setPathPoint")) {
+                if (uiProps.equals("mouseMode", "PathPoints")) {
                     uiProps.set("mouseMode", "points");
                 } else {
-                    uiProps.set("mouseMode", "setPathPoint");
+                    uiProps.set("mouseMode", "PathPoints");
                 }
             }
 

@@ -5,7 +5,7 @@ function Editor(canvas, options) {
     this.modelManager = new ModelManager();
     this.pointsManager = new PointsManager();
     this.drawer = new Drawer(canvas, this.modelManager, this.pointsManager);
-    
+    this.paths = new Paths();
     
     this.interFloorObjects = new InterFloorObjects();
 
@@ -49,13 +49,13 @@ function Editor(canvas, options) {
             this.getModelManager().getFloorElements(this.floorIndex).push(object);
             this.getDrawer().drawFloor(object, FloorStyle);
         }
-    };/*
+    };
      this.createPathPoint = function (x, y) {
      var object = {"x": x, "y": y, "connections": []};
      this.modelManager.paths.push(object);
      console.log(object);
      this.drawPoint(object, Styles.PathStyle(this.options));
-     };*/
+     };
     this.createLine = function (type) {
         var selectedPoints = this.pointsManager.getSelectedPoints();
         if (selectedPoints.length === 2) {
@@ -104,6 +104,19 @@ function Editor(canvas, options) {
     };
     /*   MISC   */
     this.targetIsPoint = function (x, y) {
+        var factor = this.drawer.getViewport().getZoomFactor();
+        x = Math.round(1 / factor * x) + this.drawer.getViewport().offsetX;
+        y = Math.round(1 / factor * y) + this.drawer.getViewport().offsetY;
+        for (var i = 0; i < this.pointsManager.getPoints().length; i++) {
+            var X = this.pointsManager.getPoints()[i].x;
+            var Y = this.pointsManager.getPoints()[i].y;
+            if(Math.sqrt( (X-=x)*X + (Y-=y)*Y ) < 10){
+                return this.pointsManager.getPoints()[i];
+            }
+        }
+        return false;
+    };
+    this.targetIsPointOld = function (x, y) {
         var factor = this.drawer.getViewport().getZoomFactor();
         x = Math.round(1 / factor * x);
         y = Math.round(1 / factor * y);

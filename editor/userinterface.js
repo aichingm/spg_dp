@@ -34,7 +34,7 @@ $(document).ready(function () {
 
 //check if the clicked point is already a used point
         target = editor.targetIsPoint(e.pageX, e.pageY);
-        if (target !== false) {
+        if (target !== false && !uiProps.equals("mouseMode", "PathPoints")) {
 //select the clicked point
             if (e.ctrlKey) {
                 //editor.getInterFloorPoints().handle(editor.points[isTarget].x, editor.points[isTarget].y, editor.getSelectetFloorIndex());
@@ -51,11 +51,14 @@ $(document).ready(function () {
                 editor.movePoint(e.pageX, e.pageY);
                 uiProps.set("mouseMode", "points");
                 Debug.log("movePoint");
-            } else if (uiProps.equals("mouseMode", "setPathPoint")) {
-                editor.createPathPoint(e.pageX, e.pageY);
+            } else if (uiProps.equals("mouseMode", "PathPoints")) {
+                //editor.createPathPoint(e.pageX, e.pageY);
+                $("#newPathPoint input[name='x']").val(e.pageX + editor.getViewport().offsetX);
+                $("#newPathPoint input[name='y']").val(e.pageY + editor.getViewport().offsetY);
+                uioverlay.open("#newPathPoint");
             } else if (uiProps.equals("mouseMode", "interFloorSelectionMode")) {
             } else {
-                console.log(uiProps.get("mouseMode"))
+                console.log(uiProps.get("mouseMode"));
                 editor.newPoint(e.pageX, e.pageY);
             }
         }
@@ -196,6 +199,50 @@ $(document).ready(function () {
             $("#interFloorObjects").trigger("showen");
         }
 
+    });
+
+    //new pathpoint dialog
+
+    $("#newPathPoint").on("showen", function () {
+        $("#newPathPoint input[name='name']").val("");
+        $("#newPathPoint input[name='name']").focus();
+        $("#newPathPoint input[name='public']").attr("checked", true);
+        $("#newPathPoint input[name='public']").val(1);
+        $("#newPathPoint input[name='internalName']").val("");
+        $("#newPathPoint input[name='description']").val("");
+    });
+    $("#newPathPointOk").click(function () {
+        //do shizzle
+        console.log("doing shizzle");
+        var point = {};
+        point.name = $("#newPathPoint input[name='name']").val();
+        point.public = $("#newPathPoint input[name='name']").val();
+        point.internalName = $("#newPathPoint input[name='name']").val();
+        point.internalName = point.internalName !== "" ? point.internalName : point.name;
+        point.description = $("#newPathPoint input[name='name']").val();
+        point.floorIndex = editor.getFloorIndex();
+        point.x = parseInt($("#newPathPoint input[name='x']").val());
+        point.y = parseInt($("#newPathPoint input[name='y']").val());
+        editor.getPaths().addPoint(point);
+
+
+
+
+
+        uioverlay.close(".showen");
+    });
+    $("#newPathPointCancel").click(function () {
+        uioverlay.close(".showen");
+    });
+    $("#newPathPoint  input[name='public']").on("keypress", function (e) {
+        if (e.charCode === 32 && $("#newPathPoint  input[name='public']").is(":focus")) {//[space]
+            this.checked = !this.checked;
+        }
+    });
+    $(document).on("keypress", function (e) {
+        if (e.charCode === 13 && $("#newPathPoint").hasClass("showen")) {//[enter]
+            $("#newPathPointOk").trigger("click");
+        }
     });
 
 

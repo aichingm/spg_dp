@@ -9,6 +9,7 @@
         <script src="debug.js"></script>
 
         <script src="editorjs/Storage.js"></script>
+        <script src="editorjs/Paths.js"></script>
         <script src="editorjs/InterFloorSelection.js"></script>
         <script src="editorjs/InterFloorObjects.js"></script>
         <script src="editorjs/DefaultOptions.js"></script>
@@ -52,6 +53,18 @@
             <button id="interFloorObjectsNewFloor">create floor</button>
             <button style="" class="close">&times;</button>
             <table border="1"><thead><tr><td>object</td><td>delete</td></thead><tbody id="interFloorPointsObjectsTable"></tbody></table>
+        </div>
+        <div class="ui-overlay" id="newPathPoint">
+            Name: <input type="text" name="name" /><br />
+            Public: <input type="checkbox" name="public" /><br />
+            Internal name: <input type="text" name="internalName" /><small> (falls leer wird der Name übernommen)</small><br />
+            Description: <input type="text" name="description" /><br />
+            <input type="hidden" name="x" /><br />
+            <input type="hidden" name="y" /><br />
+            <br />
+            <button id="newPathPointCancel">cancel</button>
+            <button id="newPathPointOk">ok</button>
+            <button style="" class="close">&times;</button>
         </div>
         <div class="ui-overlay" id="help">
             <iframe src="help.html" style="height: 100%; width: 99%"></iframe>
