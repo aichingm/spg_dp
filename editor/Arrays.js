@@ -10,12 +10,16 @@ Arrays = new function () {
             if (a.length !== b.length) {
                 return false;
             }
+            var flag = true;
             for (var i = 0; i < a.length; i++) {
                 if (a[i] === b[i] || typeof a[i] === "object" && this.equals(a[i], b[i])) {
-                    return true;
+                    flag = true;
+                }else{
+                    flag = false;
+                    break;
                 }
             }
-            return false;
+            return flag;
         } else if (typeof a === "object" && typeof b === "object") {
             var aProps = Object.getOwnPropertyNames(a);
             var bProps = Object.getOwnPropertyNames(b);
@@ -42,7 +46,7 @@ Arrays = new function () {
         for (var i = 0; i < array1.length; i++) {
             var isIn = false;
             for (var j = 0; j < array1.length; j++) {
-                if (array1[i] === array2[j] || typeof array1[i] === "object" && this.equals(array1[i], array2[j])) {
+                if (array1[i] === array2[j] || (typeof array1[i] === "object") && this.equals(array1[i], array2[j])) {
                     isIn = true;
                     break;
                 }
@@ -73,6 +77,7 @@ Arrays = new function () {
         return count;
     };
     this.deleteIndicesFromArray = function (array, indices) {
+        console.log(indices);
         return $.grep(array, function (n, i) {
             return $.inArray(i, indices) === -1;
         });
