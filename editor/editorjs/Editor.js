@@ -7,7 +7,7 @@ function Editor(canvas, options) {
     this.paths = new Paths();
     this.edgeSelection = new EdgeSelection();
     this.drawer = new Drawer(canvas, this.modelManager, this.pointsManager, this.paths);
-    
+
     this.interFloorObjects = new InterFloorObjects();
 
     /*   POINTS   */
@@ -51,12 +51,11 @@ function Editor(canvas, options) {
             this.getDrawer().drawFloor(object, FloorStyle);
         }
     };
-     this.createPathPoint = function (x, y) {
-     var object = {"x": x, "y": y, "connections": []};
-     this.modelManager.paths.push(object);
-     console.log(object);
-     this.drawPoint(object, Styles.PathStyle(this.options));
-     };
+    this.createPathPoint = function (x, y) {
+        var object = {"x": x, "y": y, "connections": []};
+        this.modelManager.paths.push(object);
+        this.drawPoint(object, Styles.PathStyle(this.options));
+    };
     this.createLine = function (type) {
         var selectedPoints = this.pointsManager.getSelectedPoints();
         if (selectedPoints.length === 2) {
@@ -105,26 +104,24 @@ function Editor(canvas, options) {
     };
     /*   MISC   */
     this.targetIsPoint = function (x, y) {
-        var factor = this.drawer.getViewport().getZoomFactor();
-        x = Math.round(1 / factor * x) + this.drawer.getViewport().offsetX;
-        y = Math.round(1 / factor * y) + this.drawer.getViewport().offsetY;
+        var xy = this.getCoordinates(x, y);
         for (var i = 0; i < this.pointsManager.getPoints().length; i++) {
             var X = this.pointsManager.getPoints()[i].x;
             var Y = this.pointsManager.getPoints()[i].y;
-            if(Math.sqrt( (X-=x)*X + (Y-=y)*Y ) < 8){
+            var d = Math.sqrt((X -= xy.x) * X + (Y -= xy.y) * Y) < 8;
+            if (d === true) {
                 return this.pointsManager.getPoints()[i];
             }
         }
         return false;
     };
     this.targetIsPathPoint = function (x, y) {
-        var factor = this.drawer.getViewport().getZoomFactor();
-        x = Math.round(1 / factor * x) + this.drawer.getViewport().offsetX;
-        y = Math.round(1 / factor * y) + this.drawer.getViewport().offsetY;
+        var xy = this.getCoordinates(x, y);
         for (var i = 0; i < this.paths.vertices.length; i++) {
             var X = this.paths.vertices[i].x;
             var Y = this.paths.vertices[i].y;
-            if(Math.sqrt( (X-=x)*X + (Y-=y)*Y ) < 10){
+            var d = Math.sqrt((X -= xy.x) * X + (Y -= xy.y) * Y) < 10;
+            if (d === true) {
                 return this.paths.vertices[i];
             }
         }
@@ -176,7 +173,7 @@ function Editor(canvas, options) {
     };
     /*   IMPORT/EXPORT   */
     this.toString = function () {
-        var data = {"modelManager":this.modelManager.save(), "interFloorObjects":this.interFloorObjects.save(), "paths":this.paths.save()};
+        var data = {"modelManager": this.modelManager.save(), "interFloorObjects": this.interFloorObjects.save(), "paths": this.paths.save()};
         return JSON.stringify(data);
     };
     this.load = function (text) {
@@ -188,4 +185,4 @@ function Editor(canvas, options) {
     };
     return this;
 }
-;   
+;
