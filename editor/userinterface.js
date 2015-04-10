@@ -16,7 +16,7 @@ $(document).ready(function () {
     //set the canvas to use all available space
     context.canvas.width = window.innerWidth;
     context.canvas.height = window.innerHeight;
-    // create the editor (no option passed)
+    // create the editor 
     editor = new Editor(canvas, {});
 
 
