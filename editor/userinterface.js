@@ -5,6 +5,7 @@ var ouioverlay;
 var uiProps;
 var interFloorSelection;
 var storage = new Storage();
+var wasMove = false;
 
 
 $(document).ready(function () {
@@ -31,7 +32,10 @@ $(document).ready(function () {
     keys(editor, uioverlay);
     //setup the click listener for the canvas
     $("#canvas").on("click", function (e) {
-
+        if(wasMove){
+            wasMove = false;
+            return;
+        }
 //check if the clicked point is already a used point
         if (uiProps.equals("mouseMode", "movePoint")) {
             target = editor.targetIsPoint(e.pageX, e.pageY);
@@ -75,6 +79,15 @@ $(document).ready(function () {
                 editor.getPointsManager().toggle(target.x, target.y);
             }
         }
+        console.log(e);
+    });
+    $("#canvas").mousemove(function(e){
+        if(e.which === 1){
+            wasMove = true;
+            console.log(e.originalEvent.movementX,e.originalEvent.movementY);
+            editor.getViewport().move(e.originalEvent.movementX,e.originalEvent.movementY);
+        }
+        
     });
     //setup the scoll listner to trigger the zoom function DOMMouseScroll
     $("#canvas").on('DOMMouseScroll mousewheel', function (evt) {
