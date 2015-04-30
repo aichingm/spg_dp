@@ -97,7 +97,9 @@ function Drawer(canvas, modelManager, pointsManager, paths) {
             this.drawPoint(points[i], this.selectedPointStyle);
         }
         for (var i = 0; i < this.paths.vertices.length; i++) {
-            this.drawPoint(this.paths.vertices[i], this.vertexPointStyle);
+            if(this.paths.vertices[i].floorIndex === this.selectedFloorIndex){
+               this.drawPoint(this.paths.vertices[i], this.vertexPointStyle);
+            }
         }
 
         //return points;
