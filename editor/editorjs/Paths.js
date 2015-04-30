@@ -7,6 +7,8 @@ function Paths() {
         Ay: 1,
         Bx: 1,
         By: 1,
+        Afloor: 0
+        Bfloor: 1
         "metric": [100,200], //a->b, b->a
         "public": true,
         "accessible": true,
@@ -25,6 +27,9 @@ function Paths() {
 
     this.addPoint = function (vertex) {
         this.vertices.push(vertex);
+    };
+    this.addEdge = function (edge) {
+        this.edges.push(edge);
     };
     this.removePointIndex = function (index) {
         this.vertices.splice(index, 1);

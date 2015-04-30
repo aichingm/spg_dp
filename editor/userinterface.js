@@ -42,7 +42,7 @@ $(document).ready(function () {
         } else if (uiProps.equals("mouseMode", "PathPoints")) {
             var target = editor.targetIsPathPoint(e.pageX, e.pageY);
             if (target === false) {
-		var xy = editor.getCoordinates(e.pageX,e.pageY);
+                var xy = editor.getCoordinates(e.pageX, e.pageY);
                 $("#newPathPoint input[name='x']").val(xy.x);
                 $("#newPathPoint input[name='y']").val(xy.y);
                 uioverlay.open("#newPathPoint");
@@ -58,6 +58,7 @@ $(document).ready(function () {
             target = editor.targetIsPathPoint(e.pageX, e.pageY);
             if (target !== false) {
                 editor.getEdgeSelection().select(target);
+                editor.getDrawer().redraw();
                 if (editor.getEdgeSelection().isReady()) {
                     $("#newPathEdge input[name='Ax']").val(editor.getEdgeSelection().pointA.x);
                     $("#newPathEdge input[name='Bx']").val(editor.getEdgeSelection().pointA.y);
@@ -240,7 +241,8 @@ $(document).ready(function () {
         point.floorIndex = editor.getFloorIndex();
         point.x = parseInt($("#newPathPoint input[name='x']").val());
         point.y = parseInt($("#newPathPoint input[name='y']").val());
-        point.categories = $("#newPathPoint input[name='categories']").val().split(",");
+        var cats = $("#newPathPoint input[name='categories']").val();
+        point.categories = cats !== ""?cats.split(","):[];
         editor.getPaths().addPoint(point);
         editor.getDrawer().drawPoint(point, VertexPointStyle);
         storage.save();
@@ -268,21 +270,21 @@ $(document).ready(function () {
         $("#PathPointsPointsTable").html("");
         var list = editor.getPaths().vertices;
         for (var i = 0; i < list.length; i++) {
-            $("#PathPointsPointsTable").append("<tr id=\"PathPointsPointsTableRow_"+i+"\">"
+            $("#PathPointsPointsTable").append("<tr id=\"PathPointsPointsTableRow_" + i + "\">"
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"name\" value=\"" + list[i].name + "\"></td>"
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"x\" value=\"" + list[i].x + "\"></td>"
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"y\" value=\"" + list[i].y + "\"></td>"
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"floorIndex\" value=\"" + list[i].floorIndex + "\"></td>"
-                    + "<td><input style=\"width:80px;\" type=\"text\" name=\"public\" value=\"" + (list[i].public?"1":"0") + "\"></td>"
+                    + "<td><input style=\"width:80px;\" type=\"text\" name=\"public\" value=\"" + (list[i].public ? "1" : "0") + "\"></td>"
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"internalName\" value=\"" + list[i].internalName + "\"></td>"
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"description\" value=\"" + list[i].description + "\"></td>"
-                    + "<td><input style=\"width:80px;\" type=\"text\" name=\"categories\" value=\"" + (list[i].categories==undefined?"":list[i].categories.join(",")) + "\"></td>"
-                    + "<td><button>Save</button><input type=\"hidden\" name=\"id\" value=\""+i+"\"></></td>"
+                    + "<td><input style=\"width:80px;\" type=\"text\" name=\"categories\" value=\"" + (list[i].categories == undefined ? "" : list[i].categories.join(",")) + "\"></td>"
+                    + "<td><button>Save</button><input type=\"hidden\" name=\"id\" value=\"" + i + "\"></></td>"
                     + "</tr>"
                     //+ "<td><button class='delete' data-floor='" + i + "'>&times;</button></td>"
                     );
         }
-        $("#PathPointsPointsTable tr td button").click(function(e){
+        $("#PathPointsPointsTable tr td button").click(function (e) {
             console.log(e);
             var tr = $(e.currentTarget).parent().parent();
             var id = parseInt($(e.currentTarget).parent().find("input").val());
@@ -292,10 +294,11 @@ $(document).ready(function () {
             vertex.x = parseInt($(tr).find("td input[name='x']").val());
             vertex.y = parseInt($(tr).find("td input[name='y']").val());
             vertex.floorIndex = parseInt($(tr).find("td input[name='floorIndex']").val());
-            vertex.public = parseInt($(tr).find("td input[name='public']").val())==1;
+            vertex.public = parseInt($(tr).find("td input[name='public']").val()) == 1;
             vertex.internalName = $(tr).find("td input[name='internalName']").val();
             vertex.description = $(tr).find("td input[name='description']").val();
-            vertex.categories = $(tr).find("td input[name='categories']").val().split(",");
+            var cats = $(tr).find("td input[name='categories']").val();
+            vertex.categories = cats !== ""?cats.split(","):[];
             storage.save();
         });
     });
@@ -305,46 +308,49 @@ $(document).ready(function () {
 
 
 
+//########################################################
+//########################################################
+//########################################################
+//#################### New Path Edge #####################
+//########################################################
+//########################################################
+//########################################################
 
-
-
-
-
-/*
-
- $("#newPathEdge").on("showen", function () {
-        $("#newPathPoint input[name='name']").val("");
+    $("#newPathEdge").on("showen", function () {
+        $("#newPathPoint input[name='AB']").val("");
         $("#newPathPoint input[name='name']").focus();
-        $("#newPathPoint input[name='public']").attr("checked", true);
-        $("#newPathPoint input[name='public']").val(1);
-        $("#newPathPoint input[name='internalName']").val("");
-        $("#newPathPoint input[name='description']").val("");
+        $("#newPathPoint input[name='BA']").val("");
     });
     $("#newPathEdge").on("closed", function () {
-        console.log("fuck fuck");
+        console.log("fuck fuck edge");
     });
-    $("#newPathEdge").click(function () {
+    $("#newPathEdge #newPathEdgeOk").click(function () {
         //do shizzle
-        console.log("doing shizzle");
-        var point = {};
-        point.name = $("#newPathPoint input[name='name']").val();
-        point.public = $("#newPathPoint input[name='public']").val();
-        point.internalName = $("#newPathPoint input[name='internalName']").val();
-        point.internalName = point.internalName !== "" ? point.internalName : point.name;
-        point.description = $("#newPathPoint input[name='description']").val();
-        point.floorIndex = editor.getFloorIndex();
-        point.x = parseInt($("#newPathPoint input[name='x']").val());
-        point.y = parseInt($("#newPathPoint input[name='y']").val());
-        editor.getPaths().addPoint(point);
-        editor.getDrawer().drawPoint(point, VertexPointStyle);
+        console.log("doing edgy shizzle");
+        var edge = {};
+        edge.Ax = editor.getEdgeSelection().pointA.x;
+        edge.Ay = editor.getEdgeSelection().pointA.y;
+        edge.Bx = editor.getEdgeSelection().pointB.x;
+        edge.By = editor.getEdgeSelection().pointB.y;
+        edge.Afloor = editor.getEdgeSelection().pointA.floorIndex;
+        edge.Bfloor = editor.getEdgeSelection().pointA.floorIndex;
+        var AB = parseInt($("#newPathEdge input[name='AB']").val());
+        var BA = $("#newPathEdge input[name='BA']").val();
+        BA = BA === "" ? AB : parseInt(BA);
+        edge.metric = [AB, BA];
+        edge.public = $("#newPathEdge input[name='public']").is(":checked");
+        edge.accessible = $("#newPathEdge input[name='accessible']").is(":checked");
+        edge.internalDescription = $("#newPathEdge input[name='internalDescription']").val();
+        editor.getPaths().addEdge(edge);
+        editor.getDrawer().redraw();
         storage.save();
         uioverlay.close(".showen");
     });
-    $("#newPathEdge").click(function () {
+    $("#newPathEdge .close").click(function () {
         uioverlay.close(".showen");
     });
     $("#newPathPoint input[name='public']").on("keypress", function (e) {
-        if (e.charCode === 32 && $("#newPathEdge  input[name='public']").is(":focus")) {//[space]
+        if (e.charCode === 32 && $("#newPathEdge  input[name='public'], #newPathEdge input[name='accessible']").is(":focus")) {//[space]
             this.checked = !this.checked;
         }
     });
@@ -354,25 +360,27 @@ $(document).ready(function () {
         }
     });
 
-*/
 
 
 
-    /*$("#PathPoints").on("showen", function () {
-        $("#PathPointsPointsTable").html("");
-        var list = editor.getPaths().vertices;
+
+
+    $("#PathEdges").on("showen", function () {
+        $("#PathPointsEdgesTable").html("");
+        var list = editor.getPaths().edges;
         for (var i = 0; i < list.length; i++) {
-            $("#PathPointsPointsTable").append("<tr><td>" + list[i].name + "</td>"
-                    + "<td>" + list[i].x + "</td>"
-                    + "<td>" + list[i].y + "</td>"
-                    + "<td>" + list[i].floorIndex + "</td>"
+            $("#PathPointsEdgesTable").append("<tr>"
+                    + "<td>" + list[i].Ax + ", " + list[i].Ay + ", " + list[i].Afloor + ", </td>"
+                    + "<td>" + list[i].Bx + ", " + list[i].By + ", " + list[i].Bfloor + ", </td>"
+                    + "<td>" + list[i].metric[0] + "</td>"
+                    + "<td>" + list[i].metric[1] + "</td>"
                     + "<td>" + list[i].public + "</td>"
-                    + "<td>" + list[i].internalName + "</td>"
-                    + "<td>" + list[i].description + "</td>"
-                    //+ "<td><button class='delete' data-floor='" + i + "'>&times;</button></td>"
+                    + "<td>" + list[i].accessible + "</td>"
+                    + "<td>" + list[i].internalDescription + "</td>"
+                    + "</tr>"
                     );
         }
-    });*/
+    });
 
 
 

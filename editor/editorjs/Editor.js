@@ -6,7 +6,7 @@ function Editor(canvas, options) {
     this.pointsManager = new PointsManager();
     this.paths = new Paths();
     this.edgeSelection = new EdgeSelection();
-    this.drawer = new Drawer(canvas, this.modelManager, this.pointsManager, this.paths);
+    this.drawer = new Drawer(canvas, this.modelManager, this.pointsManager, this.paths, this.edgeSelection);
 
     this.interFloorObjects = new InterFloorObjects();
 
@@ -121,7 +121,7 @@ function Editor(canvas, options) {
             var X = this.paths.vertices[i].x;
             var Y = this.paths.vertices[i].y;
             var d = Math.sqrt((X -= xy.x) * X + (Y -= xy.y) * Y) < 10;
-            if (d === true) {
+            if (d === true && this.paths.vertices[i].floorIndex === this.getFloorIndex()) {
                 return this.paths.vertices[i];
             }
         }

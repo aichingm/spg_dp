@@ -59,11 +59,16 @@ function keys(editor, uioverlay) {
             } else if (e.charCode === 113) { //q
                 uiProps.set("mouseMode", "movePoint");
             } else if (e.charCode === 116) { //t
-                editor.getPointsManager().clearSelectedPoints();
+                if (uiProps.equals("mouseMode", "edges")) {
+                    editor.getEdgeSelection().clear();
+                    editor.getDrawer().redraw();
+                } else {
+                    editor.getPointsManager().clearSelectedPoints();
+                }
             } else if (e.charCode === 122) { //z
                 if (uiProps.equals("mouseMode", "edges")) {
                     editor.getEdgeSelection().clear();
-
+                    editor.getDrawer().redraw();
                 } else {
                     editor.getPointsManager().setPoints(editor.getModelManager().getAllPointsOnFloor(editor.getFloorIndex()));
                 }
@@ -76,6 +81,8 @@ function keys(editor, uioverlay) {
                 }
             } else if (e.charCode === 196) { //Ä
                 uioverlay.open("#PathPoints");
+            } else if (e.charCode === 214) { //Ö
+                uioverlay.open("#PathEdges");
             } else if (e.charCode === 246) { //ö
                 editor.getEdgeSelection().clear();
                 if (uiProps.equals("mouseMode", "edges")) {

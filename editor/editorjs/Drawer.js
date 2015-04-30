@@ -1,4 +1,4 @@
-function Drawer(canvas, modelManager, pointsManager, paths) {
+function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection) {
 
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
@@ -6,6 +6,7 @@ function Drawer(canvas, modelManager, pointsManager, paths) {
     this.modelManager = modelManager;
 
     this.paths = paths;
+    this.edgeSelection = edgeSelection;
     this.pointsManager = pointsManager;
     this.pointsManager.setDrawer(this);
 
@@ -21,6 +22,9 @@ function Drawer(canvas, modelManager, pointsManager, paths) {
     this.selectedPointStyle = SelectedPointStyle;
     this.pointStyle = PointStyle;
     this.vertexPointStyle = VertexPointStyle;
+    this.vertexSelectedPointAStyle = VertexSelectedPointAStyle;
+    this.vertexSelectedPointBStyle = VertexSelectedPointBStyle;
+    this.pathstyle = PathSyle;
 
     this.selectedFloorIndex = 0;
 
@@ -97,10 +101,26 @@ function Drawer(canvas, modelManager, pointsManager, paths) {
             this.drawPoint(points[i], this.selectedPointStyle);
         }
         for (var i = 0; i < this.paths.vertices.length; i++) {
-            if(this.paths.vertices[i].floorIndex === this.selectedFloorIndex){
-               this.drawPoint(this.paths.vertices[i], this.vertexPointStyle);
+            if (this.paths.vertices[i].floorIndex === this.selectedFloorIndex) {
+                this.drawPoint(this.paths.vertices[i], this.vertexPointStyle);
             }
         }
+        if (this.edgeSelection.pointA && this.selectedFloorIndex === this.edgeSelection.pointA.floorIndex) {
+            this.drawPoint(this.edgeSelection.pointA, this.vertexSelectedPointAStyle);
+        }
+        if (this.edgeSelection.pointB && this.selectedFloorIndex === this.edgeSelection.pointB.floorIndex) {
+            this.drawPoint(this.edgeSelection.pointB, this.vertexSelectedPointBStyle);
+        }
+        for (var i = 0; i < this.paths.edges.length; i++) {
+            if (this.paths.edges[i].Afloor === this.selectedFloorIndex && this.paths.edges[i].Bfloor === this.selectedFloorIndex) {
+                var e = this.paths.edges[i];
+                console.log(e.Ax,e.Ay,e.Bx,e.By)
+                this.drawLine({"points":[[e.Ax,e.Ay],[e.Bx,e.By]]}, this.pathstyle);
+            }
+        }
+        
+        
+
 
         //return points;
     };

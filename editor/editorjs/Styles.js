@@ -5,6 +5,10 @@ WallStyle = {
     "width": 6,
     "color": "#85144B"
 };
+PathSyle = {
+    "width": 2,
+    "color": "#FF3399"
+};
 WindowStyle = {
     "width": 2,
     "color": "#FF851B"
@@ -34,5 +38,13 @@ PointStyle = {
 };
 VertexPointStyle = {
     "color": "rgba(236,247,30,0.75)",
+    "pointRadius": 10
+};
+VertexSelectedPointAStyle = {
+    "color": "rgba(0, 0, 204, 1)",
+    "pointRadius": 10
+};
+VertexSelectedPointBStyle = {
+    "color": "rgba(0, 204, 0,1)",
     "pointRadius": 10
 };
