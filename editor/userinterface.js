@@ -222,6 +222,7 @@ $(document).ready(function () {
 //        $("#newPathPoint input[name='public']").val(1);
         $("#newPathPoint input[name='internalName']").val("");
         $("#newPathPoint input[name='description']").val("");
+        $("#newPathPoint input[name='categories']").val("");
     });
     $("#newPathPoint").on("closed", function () {
         console.log("fuck fuck");
@@ -231,7 +232,7 @@ $(document).ready(function () {
         console.log("doing shizzle");
         var point = {};
         point.name = $("#newPathPoint input[name='name']").val();
-console.log($("#newPathPoint input[name='public']").is(":checked"));
+        console.log($("#newPathPoint input[name='public']").is(":checked"));
         point.public = $("#newPathPoint input[name='public']").is(":checked");
         point.internalName = $("#newPathPoint input[name='internalName']").val();
         point.internalName = point.internalName !== "" ? point.internalName : point.name;
@@ -239,6 +240,7 @@ console.log($("#newPathPoint input[name='public']").is(":checked"));
         point.floorIndex = editor.getFloorIndex();
         point.x = parseInt($("#newPathPoint input[name='x']").val());
         point.y = parseInt($("#newPathPoint input[name='y']").val());
+        point.categories = $("#newPathPoint input[name='categories']").val().split(",");
         editor.getPaths().addPoint(point);
         editor.getDrawer().drawPoint(point, VertexPointStyle);
         storage.save();
@@ -266,16 +268,36 @@ console.log($("#newPathPoint input[name='public']").is(":checked"));
         $("#PathPointsPointsTable").html("");
         var list = editor.getPaths().vertices;
         for (var i = 0; i < list.length; i++) {
-            $("#PathPointsPointsTable").append("<tr><td>" + list[i].name + "</td>"
-                    + "<td>" + list[i].x + "</td>"
-                    + "<td>" + list[i].y + "</td>"
-                    + "<td>" + list[i].floorIndex + "</td>"
-                    + "<td>" + list[i].public + "</td>"
-                    + "<td>" + list[i].internalName + "</td>"
-                    + "<td>" + list[i].description + "</td>"
+            $("#PathPointsPointsTable").append("<tr id=\"PathPointsPointsTableRow_"+i+"\">"
+                    + "<td><input style=\"width:80px;\" type=\"text\" name=\"name\" value=\"" + list[i].name + "\"></td>"
+                    + "<td><input style=\"width:80px;\" type=\"text\" name=\"x\" value=\"" + list[i].x + "\"></td>"
+                    + "<td><input style=\"width:80px;\" type=\"text\" name=\"y\" value=\"" + list[i].y + "\"></td>"
+                    + "<td><input style=\"width:80px;\" type=\"text\" name=\"floorIndex\" value=\"" + list[i].floorIndex + "\"></td>"
+                    + "<td><input style=\"width:80px;\" type=\"text\" name=\"public\" value=\"" + (list[i].public?"1":"0") + "\"></td>"
+                    + "<td><input style=\"width:80px;\" type=\"text\" name=\"internalName\" value=\"" + list[i].internalName + "\"></td>"
+                    + "<td><input style=\"width:80px;\" type=\"text\" name=\"description\" value=\"" + list[i].description + "\"></td>"
+                    + "<td><input style=\"width:80px;\" type=\"text\" name=\"categories\" value=\"" + (list[i].categories==undefined?"":list[i].categories.join(",")) + "\"></td>"
+                    + "<td><button>Save</button><input type=\"hidden\" name=\"id\" value=\""+i+"\"></></td>"
+                    + "</tr>"
                     //+ "<td><button class='delete' data-floor='" + i + "'>&times;</button></td>"
                     );
         }
+        $("#PathPointsPointsTable tr td button").click(function(e){
+            console.log(e);
+            var tr = $(e.currentTarget).parent().parent();
+            var id = parseInt($(e.currentTarget).parent().find("input").val());
+            console.log(id);
+            var vertex = editor.getPaths().vertices[id];
+            vertex.name = $(tr).find("td input[name='name']").val();
+            vertex.x = parseInt($(tr).find("td input[name='x']").val());
+            vertex.y = parseInt($(tr).find("td input[name='y']").val());
+            vertex.floorIndex = parseInt($(tr).find("td input[name='floorIndex']").val());
+            vertex.public = parseInt($(tr).find("td input[name='public']").val())==1;
+            vertex.internalName = $(tr).find("td input[name='internalName']").val();
+            vertex.description = $(tr).find("td input[name='description']").val();
+            vertex.categories = $(tr).find("td input[name='categories']").val().split(",");
+            storage.save();
+        });
     });
 
 
@@ -336,7 +358,7 @@ console.log($("#newPathPoint input[name='public']").is(":checked"));
 
 
 
-    $("#PathPoints").on("showen", function () {
+    /*$("#PathPoints").on("showen", function () {
         $("#PathPointsPointsTable").html("");
         var list = editor.getPaths().vertices;
         for (var i = 0; i < list.length; i++) {
@@ -350,7 +372,7 @@ console.log($("#newPathPoint input[name='public']").is(":checked"));
                     //+ "<td><button class='delete' data-floor='" + i + "'>&times;</button></td>"
                     );
         }
-    });
+    });*/
 
 
 

@@ -57,7 +57,7 @@
             <table border="1"><thead><tr><td>object</td><td>delete</td></thead><tbody id="interFloorPointsObjectsTable"></tbody></table>
         </div>
         <div class="ui-overlay" id="PathPoints">
-            <table border="1" ><thead><tr><td>Name</td><td>x</td><td>y</td><td>Floor Index</td><td>Public</td><td>Internal Name</td><td>Description</td></tr></thead><tbody id="PathPointsPointsTable"></tbody></table><br>
+            <table border="1" ><thead><tr><td>Name</td><td>x</td><td>y</td><td>Floor Index</td><td>Public (1/0)</td><td>Internal Name</td><td>Description</td><td>Categories</td><td>Save</td></tr></thead><tbody id="PathPointsPointsTable"></tbody></table><br>
             <table border="1"><thead><tr><td>from</td><td>to</td></thead><tbody id="PathPointsEdgesTable"></tbody></table>
             <button style="" class="close">&times;</button>
         </div>
@@ -66,6 +66,7 @@
             Public: <input type="checkbox" name="public" /><br />
             Internal name: <input type="text" name="internalName" /><small> (falls leer wird der Name übernommen)</small><br />
             Description: <input type="text" name="description" /><br />
+            Categories (separated by ,) <input type="text" name="categories" /><br />
             <input type="hidden" name="x" /><br />
             <input type="hidden" name="y" /><br />
             <br />
