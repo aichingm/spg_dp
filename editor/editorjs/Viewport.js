@@ -20,10 +20,14 @@ function Viewport(height, width, context, drawer) {
         return Math.pow(this.zoomFactor, this.zoomClickes);
     };
     this.zoom = function (clicks) {
+        var oldX = this.offsetX;
+        var oldY = this.offsetY;
         this.resetMove();
+
         var factor = Math.pow(this.zoomFactor, clicks);
         this.zoomClickes += clicks;
         this.context.scale(factor, factor);
+        this.move(oldX, oldY);
         this.drawer.redraw();
     };
     this.resetZoom = function () {
