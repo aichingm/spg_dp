@@ -27,6 +27,7 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection) {
     this.pathstyle = PathSyle;
 
     this.selectedFloorIndex = 0;
+    this.drawingParts = ["wall", "floor", "door", "window", "pathpoints", "pathedges","points"];
 
     /*   DRAW   */
     this.drawFloor = function (floor, style) {
@@ -74,52 +75,59 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection) {
         //var points = new Array();
         for (var i = 0; i < modelManager.getFloorElements(this.selectedFloorIndex).length; i++) {
             var object = modelManager.getFloorElements(this.selectedFloorIndex)[i];
-            if (object.type === "floor") {
+            if (object.type === "floor" && Arrays.boolInArray("floor", this.drawingParts)) {
                 this.drawFloor(object, this.floorStyle);
-            } else if (object.type === "wall") {
+            } else if (object.type === "wall" && Arrays.boolInArray("wall", this.drawingParts)) {
                 this.drawLine(object, this.wallStyle);
-            } else if (object.type === "door") {
+            } else if (object.type === "door" && Arrays.boolInArray("door", this.drawingParts)) {
                 this.drawLine(object, this.doorStyle);
-            } else if (object.type === "window") {
+            } else if (object.type === "window" && Arrays.boolInArray("window", this.drawingParts)) {
                 this.drawLine(object, this.windowStyle);
             }
             //this.pushPoints(points, object);
         }
-        if (modelManager.getFloor(this.selectedFloorIndex).pathPoints !== undefined) {
+        if (modelManager.getFloor(this.selectedFloorIndex).pathPoints !== undefined && Arrays.boolInArray("pathpoints", this.drawingParts)) {
             for (var i = 0; i < modelManager.getFloor(this.selectedFloorIndex).pathPoints.length; i++) {
                 var object = modelManager.paths[i];
                 this.drawPoint(object, this.pathPointStyle);
                 //this.pushPoints(points, {points: {"x": object.x, "y": object.y}});
             }
         }
-        var points = this.pointsManager.getPoints();
-        for (var i = 0; i < points.length; i++) {
-            this.drawPoint(points[i], this.pointStyle);
-        }
-        points = this.pointsManager.getSelectedPoints();
-        for (var i = 0; i < points.length; i++) {
-            this.drawPoint(points[i], this.selectedPointStyle);
-        }
-        for (var i = 0; i < this.paths.vertices.length; i++) {
-            if (this.paths.vertices[i].floorIndex === this.selectedFloorIndex) {
-                this.drawPoint(this.paths.vertices[i], this.vertexPointStyle);
+        if (Arrays.boolInArray("points", this.drawingParts)) {
+            var points = this.pointsManager.getPoints();
+            for (var i = 0; i < points.length; i++) {
+                this.drawPoint(points[i], this.pointStyle);
+            }
+            points = this.pointsManager.getSelectedPoints();
+            for (var i = 0; i < points.length; i++) {
+                this.drawPoint(points[i], this.selectedPointStyle);
             }
         }
-        if (this.edgeSelection.pointA && this.selectedFloorIndex === this.edgeSelection.pointA.floorIndex) {
-            this.drawPoint(this.edgeSelection.pointA, this.vertexSelectedPointAStyle);
-        }
-        if (this.edgeSelection.pointB && this.selectedFloorIndex === this.edgeSelection.pointB.floorIndex) {
-            this.drawPoint(this.edgeSelection.pointB, this.vertexSelectedPointBStyle);
-        }
-        for (var i = 0; i < this.paths.edges.length; i++) {
-            if (this.paths.edges[i].Afloor === this.selectedFloorIndex && this.paths.edges[i].Bfloor === this.selectedFloorIndex) {
-                var e = this.paths.edges[i];
-                console.log(e.Ax,e.Ay,e.Bx,e.By)
-                this.drawLine({"points":[[e.Ax,e.Ay],[e.Bx,e.By]]}, this.pathstyle);
+        if (Arrays.boolInArray("pathpoints", this.drawingParts)) {
+
+            for (var i = 0; i < this.paths.vertices.length; i++) {
+                if (this.paths.vertices[i].floorIndex === this.selectedFloorIndex) {
+                    this.drawPoint(this.paths.vertices[i], this.vertexPointStyle);
+                }
+            }
+            if (this.edgeSelection.pointA && this.selectedFloorIndex === this.edgeSelection.pointA.floorIndex) {
+                this.drawPoint(this.edgeSelection.pointA, this.vertexSelectedPointAStyle);
+            }
+            if (this.edgeSelection.pointB && this.selectedFloorIndex === this.edgeSelection.pointB.floorIndex) {
+                this.drawPoint(this.edgeSelection.pointB, this.vertexSelectedPointBStyle);
             }
         }
-        
-        
+        if (Arrays.boolInArray("pathedges", this.drawingParts)) {
+            for (var i = 0; i < this.paths.edges.length; i++) {
+                if (this.paths.edges[i].Afloor === this.selectedFloorIndex && this.paths.edges[i].Bfloor === this.selectedFloorIndex) {
+                    var e = this.paths.edges[i];
+                    console.log(e.Ax, e.Ay, e.Bx, e.By)
+                    this.drawLine({"points": [[e.Ax, e.Ay], [e.Bx, e.By]]}, this.pathstyle);
+                }
+            }
+        }
+
+
 
 
         //return points;
@@ -161,6 +169,9 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection) {
      */
     this.setSelectedFloorIndex = function (index) {
         this.selectedFloorIndex = index;
+    };
+    this.setDrawingParts = function (s) {
+        this.drawingParts = s;
     };
     /*
      * GETTERS

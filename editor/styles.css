@@ -18,3 +18,48 @@ html,body{
 .close{
     position: fixed;top: 10px;right: 10px;
 }
+#bottomLeft{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    float: left;
+}
+#bottomLeft div{
+    float: left;
+    margin-right: 5px;
+}
+#settings{
+    position: fixed;
+    top: 0;
+    bottom:0;
+    right: -200px;
+    background-color: #6571be;
+    width: 200px;
+    box-shadow: -0px 0px 7px 0px rgba(0,0,0,0.6);
+    font-weight: lighter;
+
+}
+.settingsLine{
+    width: 190px;
+    padding: 5px  5px 10px 5px;
+    color: #ebecf4;
+    font-variant:small-caps;
+    font-size: 18px;
+
+}
+.settingsLineH1{
+    font-size: 24px;
+}
+.settingsLine *{
+    width:190px;
+}
+
+
+.gradientAB{
+    background: linear-gradient( to right, #00CB00, #0000CB);
+}
+.gradientBA{
+    background: linear-gradient( to left, #00CB00, #0000CB);;
+}
+
+

@@ -24,6 +24,7 @@
         <script src="editorjs/Editor.js"></script>
         <script src="ui-overlay.js"></script>
         <script src="uiProps.js"></script>
+        <script src="Settings.js"></script>
         <script src="userinterface.js"></script>
         <script src="userinterface-keys.js"></script>
 
@@ -79,8 +80,8 @@
         </div>
         <div class="ui-overlay" id="newPathEdge">
             <br />
-            <span style="background: linear-gradient( to right, #00CB00, #0000CB);">Metric A->B: </span><input type="text" name="AB" value="100"/><br />
-            <span style="background: linear-gradient( to left, #00CB00, #0000CB);">Metric B->A: </span><input type="text" name="BA" /><small> (falls leer wird A->B übernommen)</small><br />
+            <span class="gradientAB">Metric A->B: </span><input type="text" name="AB" value="100"/><br />
+            <span class="gradientBA" >Metric B->A: </span><input type="text" name="BA" /><small> (falls leer wird A->B übernommen)</small><br />
             Public: <input type="checkbox" name="public" checked="checked"/><br />
             Accessible <input type="checkbox" name="accessible" checked="checked"/><br />
             Internal description: <input type="text" name="internalDescription" /><br />
@@ -94,7 +95,47 @@
             <iframe src="help.html" style="height: 100%; width: 99%"></iframe>
             <button class="close">&times;</button>
         </div>
-        <div id="cords" style="position: fixed;bottom: 0;left: 0;"></div>
-        <div id="mouseMode" style="position: fixed;bottom: 0;right: 0;"></div>
+        <div id="bottomLeft">
+            <div id="cords"></div>
+            <div id="mouseMode"></div>
+        </div>
+        <div id="settings">
+            <div class="settingsLine settingsLineH1">
+                Settings
+            </div>
+            <div class="settingsLine">
+                Draw<br>
+                <select multiple="" size="7" id="settingsDrawingParts">
+                    <option selected="selected" value="wall">Walls</option>
+                    <option selected="selected" value="floor">Floors</option>
+                    <option selected="selected" value="door">Doors</option>
+                    <option selected="selected" value="window">Windows</option>
+                    <option selected="selected" value="pathpoints">Path Points</option>
+                    <option selected="selected" value="pathedges">Path Edges</option>
+                    <option selected="selected" value="points">Points</option>
+                </select>
+            </div>
+            <div class="settingsLine">
+                Mouse Mode<br>
+                <select id="settingsMouseMode">
+                    <option value="points">Draw</option>
+                    <option value="PathPoints">Path Points</option>
+                    <option value="edges">Edges</option>
+                    <option value="interFloorSelectionMode">Interfloor Objects</option>
+                </select>
+            </div>
+            <div class="settingsLine">
+                Max. Selected Points<br>
+                <select id="settingsMaxSelected">
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
+            <div class="settingsLine">
+                Auto Select New Points<br>
+                <input type="checkbox" id="settingsAutoSelect" >
+            </div>
+        </div>
     </body>
 </html>

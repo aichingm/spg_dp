@@ -14,7 +14,7 @@ Arrays = new function () {
             for (var i = 0; i < a.length; i++) {
                 if (a[i] === b[i] || typeof a[i] === "object" && this.equals(a[i], b[i])) {
                     flag = true;
-                }else{
+                } else {
                     flag = false;
                     break;
                 }
@@ -82,5 +82,9 @@ Arrays = new function () {
             return $.inArray(i, indices) === -1;
         });
     };
+    this.boolInArray = function (value, array) {
+        return $.inArray(value, array) !== -1;
+    };
+
     return this;
 };

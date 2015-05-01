@@ -90,6 +90,20 @@ function keys(editor, uioverlay) {
                 } else {
                     uiProps.set("mouseMode", "edges");
                 }
+            } else if (e.charCode === 46) {
+                if ($("#settings").hasClass("isIn")) {
+                    $("#settings").removeClass("isIn");
+                    $("#settings").animate({
+                        right: "-200px"
+                    }, 500);
+                } else {
+                    $("#settings").addClass("isIn");
+                    $("#settings").animate({
+                        right: "0px"
+                    }, 500);
+                }
+
+
             }
 
 //fix this change to some kind of model observer pattern with change listener
