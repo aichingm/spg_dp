@@ -395,24 +395,12 @@ $(document).ready(function () {
                     );
         }
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    $(".ui-overlay .controls .transparent").mouseenter(function () {
+        $(".ui-overlay").css("opacity", "0.2");
+    });
+    $(".ui-overlay .controls .transparent").mouseleave(function () {
+        $(".ui-overlay").css("opacity", "1");
+    });
 
     //set up the closed listener for the ui-overlay with the id backgroundImage
     $("#backgroundImageInput").on("change", function () {

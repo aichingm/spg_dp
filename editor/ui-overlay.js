@@ -68,13 +68,13 @@ function UiOverlay(options) {
      */
     this.enableAutoClose = function () {
         //setup an onClick listner for all childen, of all element with the class options.uiOverlayClass, which have the class options.closeClass
-        $("." + this.options.uiOverlayClass + ".controles ." + this.options.closeClass).click(function (uioverlay) {
+        $("." + this.options.uiOverlayClass + ".controls ." + this.options.closeClass).click(function (uioverlay) {
             return function () {
                 //close the ui-overlay
                 uioverlay.close($(this).parent().parent(), uioverlay.options.closedEvent);
             };
         }(this));
-        $("." + this.options.uiOverlayClass + ".controles ." + this.options.applyClass).click(function (uioverlay) {
+        $("." + this.options.uiOverlayClass + ".controls ." + this.options.applyClass).click(function (uioverlay) {
             return function () {
                 //close the ui-overlay
                 uioverlay.close($(this).parent().parent(), uioverlay.options.closedApplyEvent);
