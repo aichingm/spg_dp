@@ -36,11 +36,11 @@ function Paths() {
         var oldY = this.vertices[index].y;
         var oldFloor = this.vertices[index].floorIndex;
         for (var i = 0; i < this.edges.length; i++) {
-            if (this.edges[i].Ax === oldX && this.edges[i].Ax === oldX && this.edges[i].Afloor === oldFloor) {
+            if (this.edges[i].Ax === oldX && this.edges[i].Ay === oldY && this.edges[i].Afloor === oldFloor) {
                 this.edges[i].Ax = newX;
                 this.edges[i].Ay = newY;
                 this.edges[i].Afloor = newFloor;
-            } else if (this.edges[i].Bx === oldX && this.edges[i].Bx === oldX && this.edges[i].Bfloor === oldFloor) {
+            } else if (this.edges[i].Bx === oldX && this.edges[i].By === oldY && this.edges[i].Bfloor === oldFloor) {
                 this.edges[i].Bx = newX;
                 this.edges[i].By = newY;
                 this.edges[i].Bfloor = newFloor;
@@ -51,7 +51,18 @@ function Paths() {
         this.vertices[index].floorIndex = newFloor;
 
     };
-    this.removePointIndex = function (index) {
+    this.removeVertex = function (index) {
+        var x = this.vertices[index].x;
+        var y = this.vertices[index].y;
+        var floor = this.vertices[index].floorIndex;
+        for (var i = 0; i < this.edges.length; i++) {
+            if (this.edges[i].Ax === x && this.edges[i].Ay === y && this.edges[i].Afloor === floor
+                    ||
+                    this.edges[i].Bx === x && this.edges[i].By === y && this.edges[i].Bfloor === floor
+                    ) {
+                this.edges.splice(i, 1);
+            }
+        }
         this.vertices.splice(index, 1);
     };
     this.save = function () {

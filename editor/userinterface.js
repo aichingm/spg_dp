@@ -242,9 +242,12 @@ $(document).ready(function () {
         $("#newPathPoint input[name='description']").val("");
         $("#newPathPoint input[name='categories']").val("");
     });
-    $("#newPathPoint").on("closed", function () {
+    /*$("#newPathPoint").on("closed", function () {
         console.log("fuck fuck");
     });
+     $("#newPathPoint").on("closed-apply", function () {
+        console.log("fuck fuck apply");
+    });*/
     $("#newPathPointOk").click(function () {
         //do shizzle
         console.log("doing shizzle");
@@ -263,10 +266,6 @@ $(document).ready(function () {
         editor.getPaths().addPoint(point);
         editor.getDrawer().drawPoint(point, VertexPointStyle);
         storage.save();
-        uioverlay.close(".showen");
-    });
-    $("#newPathPointCancel").click(function () {
-        uioverlay.close(".showen");
     });
     $("#newPathPoint input[name='public']").on("keypress", function (e) {
         if (e.charCode === 32 && $("#newPathPoint  input[name='public']").is(":focus")) {//[space]
@@ -296,16 +295,14 @@ $(document).ready(function () {
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"internalName\" value=\"" + list[i].internalName + "\"></td>"
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"description\" value=\"" + list[i].description + "\"></td>"
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"categories\" value=\"" + (list[i].categories === undefined ? "" : list[i].categories.join(",")) + "\"></td>"
-                    + "<td><button>Save</button><input type=\"hidden\" name=\"id\" value=\"" + i + "\"></></td>"
+                    + "<td><button class=\"center save\">Save</button><td><button class=\"center delete\">&#10007;</button><input type=\"hidden\" name=\"id\" value=\"" + i + "\"></></td>"
                     + "</tr>"
                     //+ "<td><button class='delete' data-floor='" + i + "'>&times;</button></td>"
                     );
         }
-        $("#PathPointsPointsTable tr td button").click(function (e) {
-            console.log(e);
+        $("#PathPointsPointsTable tr td button.save").click(function (e) {
             var tr = $(e.currentTarget).parent().parent();
             var id = parseInt($(e.currentTarget).parent().find("input").val());
-            console.log(id);
             var vertex = editor.getPaths().vertices[id];
             vertex.name = $(tr).find("td input[name='name']").val();
             editor.getPaths().moveVertex(id, 
@@ -318,6 +315,13 @@ $(document).ready(function () {
             var cats = $(tr).find("td input[name='categories']").val();
             vertex.categories = cats !== "" ? cats.split(",") : [];
             storage.save();
+            editor.getDrawer().redraw();
+        });
+        $("#PathPointsPointsTable tr td button.delete").click(function (e) {
+            var id = parseInt($(e.currentTarget).parent().find("input").val());
+            editor.getPaths().removeVertex(id);
+            storage.save();
+            $("#PathPoints").trigger("showen");
             editor.getDrawer().redraw();
         });
     });
@@ -363,10 +367,6 @@ $(document).ready(function () {
         editor.getPaths().addEdge(edge);
         editor.getDrawer().redraw();
         storage.save();
-        uioverlay.close(".showen");
-    });
-    $("#newPathEdge .close").click(function () {
-        uioverlay.close(".showen");
     });
     $("#newPathPoint input[name='public']").on("keypress", function (e) {
         if (e.charCode === 32 && $("#newPathEdge  input[name='public'], #newPathEdge input[name='accessible']").is(":focus")) {//[space]
