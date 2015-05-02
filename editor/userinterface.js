@@ -32,7 +32,7 @@ $(document).ready(function () {
     keys(editor, uioverlay);
     //setup the click listener for the canvas
     $("#canvas").on("click", function (e) {
-        if(wasMove){
+        if (wasMove) {
             wasMove = false;
             return;
         }
@@ -81,13 +81,13 @@ $(document).ready(function () {
         }
         console.log(e);
     });
-    $("#canvas").mousemove(function(e){
-        if(e.which === 1){
+    $("#canvas").mousemove(function (e) {
+        if (e.which === 1) {
             wasMove = true;
-            console.log(e.originalEvent.movementX,e.originalEvent.movementY);
-            editor.getViewport().move(e.originalEvent.movementX,e.originalEvent.movementY);
+            console.log(e.originalEvent.movementX, e.originalEvent.movementY);
+            editor.getViewport().move(e.originalEvent.movementX, e.originalEvent.movementY);
         }
-        
+
     });
     //setup the scoll listner to trigger the zoom function DOMMouseScroll
     $("#canvas").on('DOMMouseScroll mousewheel', function (evt) {
@@ -114,10 +114,11 @@ $(document).ready(function () {
 //convert the exportOjects to string and display them
         $("#textarea").val(editor.toString());
     });
-    //setup the listener for the closed event on the oi-overlay with the id toString
-    $("#toString").on("closed", function () {
+    //setup the listener for the closed-apply event on the oi-overlay with the id toString
+    $("#toString").on("closed-apply", function () {
 //load the exportObjects to the editor
         editor.load($("#textarea").val());
+        editor.getDrawer().redraw();
     });
     /* FLOOR MANAGER */
     $("#floorManager").on("showen", function () {
@@ -197,7 +198,7 @@ $(document).ready(function () {
         ;
         $("#interFloorPointsObjectsTable").html("");
         for (var i = 0; i < objectLlist.length; i++) {
-            $("#interFloorPointsObjectsTable").append("<tr><td>" + JSON.stringify(objectLlist[i]) + "</td><td><button class='delete' data-index='" + i + "'>&times;</button></td></tr>");
+            $("#interFloorPointsObjectsTable").append("<tr><td>" + JSON.stringify(objectLlist[i]) + "</td><td class=\"center\"><button class='delete' data-index='" + i + "'>&times;</button></td></tr>");
         }
         $("#interFloorPointsObjectsTable tr td button.delete").click(function (e) {
             editor.getInterFloorObjects().remove(e.currentTarget.dataset.index);
@@ -255,7 +256,7 @@ $(document).ready(function () {
         point.x = parseInt($("#newPathPoint input[name='x']").val());
         point.y = parseInt($("#newPathPoint input[name='y']").val());
         var cats = $("#newPathPoint input[name='categories']").val();
-        point.categories = cats !== ""?cats.split(","):[];
+        point.categories = cats !== "" ? cats.split(",") : [];
         editor.getPaths().addPoint(point);
         editor.getDrawer().drawPoint(point, VertexPointStyle);
         storage.save();
@@ -311,7 +312,7 @@ $(document).ready(function () {
             vertex.internalName = $(tr).find("td input[name='internalName']").val();
             vertex.description = $(tr).find("td input[name='description']").val();
             var cats = $(tr).find("td input[name='categories']").val();
-            vertex.categories = cats !== ""?cats.split(","):[];
+            vertex.categories = cats !== "" ? cats.split(",") : [];
             storage.save();
         });
     });

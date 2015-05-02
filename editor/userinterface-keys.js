@@ -90,7 +90,7 @@ function keys(editor, uioverlay) {
                 } else {
                     uiProps.set("mouseMode", "edges");
                 }
-            } else if (e.charCode === 46) {
+            } else if (e.charCode === 46) { //.
                 if ($("#settings").hasClass("isIn")) {
                     $("#settings").removeClass("isIn");
                     $("#settings").animate({
@@ -114,7 +114,7 @@ function keys(editor, uioverlay) {
     $(document).keyup(function (e) {
         if (e.keyCode === 27 && $(".showen").length !== 0) { //[esc]
             uioverlay.close(".showen");
-        } else if ($(".showen").length === 0) {
+        } else if ($(".showen").length === 0 && !$("#settings").hasClass("isIn")) {
             if (e.keyCode === 39) { //[->]
                 if (e.shiftKey === true) {
                     editor.getViewport().move(+10, 0);

@@ -6,23 +6,43 @@ html,body{
 
 .ui-overlay{
     position: fixed;
-    top:10px;
-    right: 10px;
-    left: 10px;
-    bottom: 10px;
+    top:0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
     display: none; 
-    background-color: #cccccc;
-    opacity: 0.7;
+    background-color: #6571be;
     overflow: auto;
+    padding: 15px;
+    z-index: 3;
 }
-.close{
-    position: fixed;top: 10px;right: 10px;
+.ui-overlay h1{
+    margin-top: 0;
+    color: #ebecf4;
+    font-variant:small-caps;
+    font-size: 24px;
 }
+.ui-overlay h2{
+    margin-top: 0;
+    color: #ebecf4;
+    font-variant:small-caps;
+    font-size: 18px;
+}
+.ui-overlay textarea{
+    width: calc(100% - 35px);
+    height: calc(100% - 100px);
+}
+.ui-overlay .controles{
+    position: absolute;top: 10px;right: 45px;
+}
+
+
 #bottomLeft{
     position: fixed;
     bottom: 0;
     left: 0;
     float: left;
+    z-index: 2;
 }
 #bottomLeft div{
     float: left;
@@ -63,3 +83,97 @@ html,body{
 }
 
 
+/***************************BUTTONS IN OVERLAY*****************/
+
+.ui-overlay  button{
+    border: 0 none;
+    border-radius: 2px 2px 2px 2px;
+    color: #ebecf4;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Arial,sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 20px;
+    margin-bottom: 0;
+    padding: 7px 10px;
+    text-transform: none;
+    font-variant:small-caps;
+    transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
+}
+.ui-overlay .controles button.cancel {
+    background: none repeat scroll 0 0 #E0645C;
+}
+.ui-overlay .controles button.cancel:hover {
+    /*background: none repeat scroll 0 0 #999999;*/
+    background: none repeat scroll 0 0 #444444;
+}
+.ui-overlay .controles button.apply {
+    background: none repeat scroll 0 0 #46b98a;
+}
+.ui-overlay .controles button.apply:hover {
+    background: none repeat scroll 0 0 #444444;
+}
+
+.ui-overlay button {
+    background: none repeat scroll 0 0 #2DB6CF;
+}
+.ui-overlay button:hover {
+    background: none repeat scroll 0 0 #444444;
+}
+
+/******** OVERLAY INPUTS ************/
+.ui-overlay  input, .ui-overlay  select{
+    border: 0 none;
+    border-radius: 2px 2px 2px 2px;
+    color: #444444;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Arial,sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 20px;
+    margin-bottom: 0;
+    padding: 7px 10px;
+    text-transform: none;
+    font-variant:small-caps;
+    transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
+}
+
+
+/******** OVERLAY TABLES ************/
+
+.ui-overlay table {
+    font-family: sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: auto;
+    width: calc(100% - 26px);
+    border: none;
+    margin: 0;
+    margin-left: -2px;
+    padding: 0;
+}
+.ui-overlay table thead tr td {
+    /*background-color: rgb(112, 196, 105);*/
+    background-color:#444444;
+
+    font-weight: normal;
+    color: #ebecf4;
+    padding: 5px 5px;
+    text-align: center;
+}
+.ui-overlay table td {
+    /*background-color: rgb(238, 238, 238);*/
+    background-color:#999999;
+    padding: 5px 5px;
+    /*color: rgb(111, 111, 111);*/
+    color: #ebecf4;
+}
+.ui-overlay table td.center {
+    font-weight: normal;
+    text-align: center;
+}
