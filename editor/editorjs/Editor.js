@@ -40,6 +40,18 @@ function Editor(canvas, options) {
             this.drawer.redraw();
         }
     };
+    this.moveVertex = function (vertex, x, y) {
+        console.log(vertex);
+        var factor = this.drawer.getViewport().getZoomFactor();
+        var X = Math.round(1 / factor * x) + this.drawer.getViewport().offsetX * -1;
+        var Y = Math.round(1 / factor * y) + this.drawer.getViewport().offsetY * -1;
+        var index = this.getPaths().getIndex(vertex);
+        console.log(index)
+        if (index !== -1) {
+            this.getPaths().moveVertex(index, X, Y, vertex.floorIndex);
+            this.drawer.redraw();
+        }
+    };
     /*   CREATE   */
     this.createFloor = function () {
         var selectedPoints = this.pointsManager.getSelectedPoints();

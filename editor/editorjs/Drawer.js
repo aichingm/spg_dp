@@ -22,12 +22,13 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection) {
     this.selectedPointStyle = SelectedPointStyle;
     this.pointStyle = PointStyle;
     this.vertexPointStyle = VertexPointStyle;
+    this.vertexSelectedPointStyle = VertexSelectedPointStyle;
     this.vertexSelectedPointAStyle = VertexSelectedPointAStyle;
     this.vertexSelectedPointBStyle = VertexSelectedPointBStyle;
     this.pathstyle = PathSyle;
 
     this.selectedFloorIndex = 0;
-    this.drawingParts = ["wall", "floor", "door", "window", "pathpoints", "pathedges","points"];
+    this.drawingParts = ["wall", "floor", "door", "window", "pathpoints", "pathedges", "points"];
 
     /*   DRAW   */
     this.drawFloor = function (floor, style) {
@@ -116,7 +117,10 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection) {
             if (this.edgeSelection.pointB && this.selectedFloorIndex === this.edgeSelection.pointB.floorIndex) {
                 this.drawPoint(this.edgeSelection.pointB, this.vertexSelectedPointBStyle);
             }
-        }
+            if (this.paths.selectedVertex !== undefined) {
+                this.drawPoint(this.paths.selectedVertex, this.vertexSelectedPointStyle);
+            }
+        }   
         if (Arrays.boolInArray("pathedges", this.drawingParts)) {
             for (var i = 0; i < this.paths.edges.length; i++) {
                 if (this.paths.edges[i].Afloor === this.selectedFloorIndex && this.paths.edges[i].Bfloor === this.selectedFloorIndex) {

@@ -45,6 +45,19 @@ $(document).ready(function () {
             } else {
                 editor.getPointsManager().toggle(target.x, target.y);
             }
+        }else if (uiProps.equals("mouseMode", "movePathPoint")) {
+            var target = editor.targetIsPathPoint(e.pageX, e.pageY);
+            if (target === false) {
+                editor.moveVertex(editor.getPaths().selectedVertex, e.pageX, e.pageY);
+                storage.save();
+            } else {
+                if(editor.getPaths().selectedVertex === target){
+                    editor.getPaths().selectedVertex = undefined;
+                }else{
+                    editor.getPaths().selectedVertex = target;
+                }
+                editor.getDrawer().redraw();
+            }
         } else if (uiProps.equals("mouseMode", "PathPoints")) {
             var target = editor.targetIsPathPoint(e.pageX, e.pageY);
             if (target === false) {
@@ -308,15 +321,17 @@ $(document).ready(function () {
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"internalName\" value=\"" + list[i].internalName + "\"></td>"
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"description\" value=\"" + list[i].description + "\"></td>"
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"categories\" value=\"" + (list[i].categories === undefined ? "" : list[i].categories.join(",")) + "\"></td>"
-                    + "<td class=\"center\"><button class=\"save\">Save</button><td class=\"center\"><button class=\"delete\">&#10007;</button><input type=\"hidden\" name=\"id\" value=\"" + i + "\"></></td>"
+                    + "<td class=\"center\"><button class=\"save\">Save</button><td class=\"center\"><button class=\"delete\">&#10007;</button></td>"
+                    + "<input type=\"hidden\" name=\"id\" value=\"" + i + "\">"
                     + "</tr>"
                     //+ "<td><button class='delete' data-floor='" + i + "'>&times;</button></td>"
                     );
         }
         $("#PathPointsPointsTable tr td button.save").click(function (e) {
             var tr = $(e.currentTarget).parent().parent();
-            var id = parseInt($(e.currentTarget).parent().find("input").val());
+            var id = parseInt($(e.currentTarget).parent().parent().find("input[name='id']").val());
             var vertex = editor.getPaths().vertices[id];
+            console.log(vertex);
             vertex.name = $(tr).find("td input[name='name']").val();
             editor.getPaths().moveVertex(id,
                     parseInt($(tr).find("td input[name='x']").val()),
@@ -331,7 +346,7 @@ $(document).ready(function () {
             editor.getDrawer().redraw();
         });
         $("#PathPointsPointsTable tr td button.delete").click(function (e) {
-            var id = parseInt($(e.currentTarget).parent().find("input").val());
+            var id = parseInt($(e.currentTarget).parent().parent().find("input[name='id']").val());
             editor.getPaths().removeVertex(id);
             storage.save();
             $("#PathPoints").trigger("showen");

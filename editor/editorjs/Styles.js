@@ -40,6 +40,12 @@ VertexPointStyle = {
     "color": "rgba(236,247,30,0.75)",
     "pointRadius": 10
 };
+VertexSelectedPointStyle = {
+    "color": "rgba(236,247,30,0.75)",
+    "pointRadius": 10,
+    "lineWidth": 3,
+    "strokeStyle": "#000"
+};
 VertexSelectedPointAStyle = {
     "color": "rgba(0, 0, 204, 1)",
     "pointRadius": 10

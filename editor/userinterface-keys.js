@@ -6,7 +6,7 @@ function keys(editor, uioverlay) {
             console.log(e.charCode);
             if (e.charCode === 119) {//w
                 editor.createLine("wall");
-            }else if (e.charCode === 87) {//W
+            } else if (e.charCode === 87) {//W
                 uiProps.set("mouseMode", "autoWall");
             } else if (e.charCode === 102) {//f
                 editor.createFloor();
@@ -59,7 +59,17 @@ function keys(editor, uioverlay) {
             } else if (e.charCode === 118) { //v
                 window.open("../index.html");
             } else if (e.charCode === 113) { //q
-                uiProps.set("mouseMode", "movePoint");
+                if (uiProps.equals("mouseMode", "movePoint")) {
+                    uiProps.set("mouseMode", "points");
+                } else {
+                    uiProps.set("mouseMode", "movePoint");
+                }
+            } else if (e.charCode === 81) { //Q
+                if (uiProps.equals("mouseMode", "movePathPoint")) {
+                    uiProps.set("mouseMode", "points");
+                } else {
+                    uiProps.set("mouseMode", "movePathPoint");
+                }
             } else if (e.charCode === 116) { //t
                 if (uiProps.equals("mouseMode", "edges")) {
                     editor.getEdgeSelection().clear();
