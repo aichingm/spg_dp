@@ -95,12 +95,12 @@ function keys(editor, uioverlay) {
                     $("#settings").removeClass("isIn");
                     $("#settings").animate({
                         right: "-200px"
-                    }, 500);
+                    }, 200);
                 } else {
                     $("#settings").addClass("isIn");
                     $("#settings").animate({
                         right: "0px"
-                    }, 500);
+                    }, 200);
                 }
 
 
