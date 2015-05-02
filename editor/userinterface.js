@@ -41,7 +41,10 @@ $(document).ready(function () {
             target = editor.targetIsPoint(e.pageX, e.pageY);
             if (target === false) {
                 editor.movePoint(e.pageX, e.pageY);
-                uiProps.set("mouseMode", "points");
+                //uiProps.set("mouseMode", "points");
+                editor.getPointsManager().clearSelectedPoints();
+            } else {
+                editor.getPointsManager().toggle(target.x, target.y);
             }
         } else if (uiProps.equals("mouseMode", "PathPoints")) {
             var target = editor.targetIsPathPoint(e.pageX, e.pageY);
