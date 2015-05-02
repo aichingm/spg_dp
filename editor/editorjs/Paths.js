@@ -65,6 +65,11 @@ function Paths() {
         }
         this.vertices.splice(index, 1);
     };
+    this.removeEdge = function (index) {
+        if(this.edges.length > index && index > -1){
+            this.edges.splice(index, 1);
+        }
+    };
     this.save = function () {
         return {"vertices": this.vertices, "edges": this.edges};
     };

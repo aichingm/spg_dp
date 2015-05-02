@@ -139,8 +139,8 @@ $(document).ready(function () {
                     + "<td><input class='offsetChanger' data-floorid='" + i + "' data-dimension='x' type='number' value='" + list[i].offset.x + "'></</td>"
                     + "<td><input class='offsetChanger' data-floorid='" + i + "' data-dimension='y' type='number' value='" + list[i].offset.y + "'></</td>"
                     + "<td><input class='offsetChanger' data-floorid='" + i + "' data-dimension='z' type='number' value='" + list[i].offset.z + "'></</td>"
-                    + "<td>" + list[i].height + "</td><td><button class='delete' data-floor='" + i + "'>&times;</button></td>"
-                    + "<td><button class='copy' data-floor='" + i + "'>&copy;</button></td></tr>");
+                    + "<td>" + list[i].height + "</td><td class=\"center\"><button class='delete' data-floor='" + i + "'>&times;</button></td>"
+                    + "<td class=\"center\"><button class='copy' data-floor='" + i + "'>&copy;</button></td></tr>");
 
         }
 
@@ -243,11 +243,11 @@ $(document).ready(function () {
         $("#newPathPoint input[name='categories']").val("");
     });
     /*$("#newPathPoint").on("closed", function () {
-        console.log("fuck fuck");
-    });
+     console.log("fuck fuck");
+     });
      $("#newPathPoint").on("closed-apply", function () {
-        console.log("fuck fuck apply");
-    });*/
+     console.log("fuck fuck apply");
+     });*/
     $("#newPathPointOk").click(function () {
         //do shizzle
         console.log("doing shizzle");
@@ -295,7 +295,7 @@ $(document).ready(function () {
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"internalName\" value=\"" + list[i].internalName + "\"></td>"
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"description\" value=\"" + list[i].description + "\"></td>"
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"categories\" value=\"" + (list[i].categories === undefined ? "" : list[i].categories.join(",")) + "\"></td>"
-                    + "<td><button class=\"center save\">Save</button><td><button class=\"center delete\">&#10007;</button><input type=\"hidden\" name=\"id\" value=\"" + i + "\"></></td>"
+                    + "<td class=\"center\"><button class=\"save\">Save</button><td class=\"center\"><button class=\"delete\">&#10007;</button><input type=\"hidden\" name=\"id\" value=\"" + i + "\"></></td>"
                     + "</tr>"
                     //+ "<td><button class='delete' data-floor='" + i + "'>&times;</button></td>"
                     );
@@ -305,10 +305,10 @@ $(document).ready(function () {
             var id = parseInt($(e.currentTarget).parent().find("input").val());
             var vertex = editor.getPaths().vertices[id];
             vertex.name = $(tr).find("td input[name='name']").val();
-            editor.getPaths().moveVertex(id, 
-            parseInt($(tr).find("td input[name='x']").val()), 
-            parseInt($(tr).find("td input[name='y']").val()), 
-            parseInt($(tr).find("td input[name='floorIndex']").val()));
+            editor.getPaths().moveVertex(id,
+                    parseInt($(tr).find("td input[name='x']").val()),
+                    parseInt($(tr).find("td input[name='y']").val()),
+                    parseInt($(tr).find("td input[name='floorIndex']").val()));
             vertex.public = parseInt($(tr).find("td input[name='public']").val()) === 1;
             vertex.internalName = $(tr).find("td input[name='internalName']").val();
             vertex.description = $(tr).find("td input[name='description']").val();
@@ -385,20 +385,41 @@ $(document).ready(function () {
 
 
     $("#PathEdges").on("showen", function () {
-        $("#PathPointsEdgesTable").html("");
+        $("#PathEdgesTable").html("");
         var list = editor.getPaths().edges;
         for (var i = 0; i < list.length; i++) {
-            $("#PathPointsEdgesTable").append("<tr>"
-                    + "<td>" + list[i].Ax + ", " + list[i].Ay + ", " + list[i].Afloor + ", </td>"
-                    + "<td>" + list[i].Bx + ", " + list[i].By + ", " + list[i].Bfloor + ", </td>"
-                    + "<td>" + list[i].metric[0] + "</td>"
-                    + "<td>" + list[i].metric[1] + "</td>"
-                    + "<td>" + list[i].public + "</td>"
-                    + "<td>" + list[i].accessible + "</td>"
-                    + "<td>" + list[i].internalDescription + "</td>"
+            $("#PathEdgesTable").append("<tr>"
+                    + "<td>x: " + list[i].Ax + ", y: " + list[i].Ay + ", floor: " + list[i].Afloor + "</td>"
+                    + "<td>x: " + list[i].Bx + ", y: " + list[i].By + ", floor: " + list[i].Bfloor + "</td>"
+                    + "<td><input name=\"metricAB\" value=\"" + list[i].metric[0] + "\"></td>"
+                    + "<td><input name=\"metricBA\" value=\"" + list[i].metric[1] + "\"></td>"
+                    + "<td class=\"center\"><input type=\"checkbox\" name=\"public\" " + (list[i].public ? "checked=\"checked\"" : "") + "></td>"
+                    + "<td class=\"center\"><input type=\"checkbox\" name=\"accessible\" " + (list[i].accessible ? "checked=\"checked\"" : "") + "></td>"
+                    + "<td><input name=\"internalDescription\" value=\"" + list[i].internalDescription + "\"></td>"
+                    + "<td class=\"center\"><button class=\"save\">Save</button></td>"
+                    + "<td class=\"center\"><button class=\"delete\">&#10007;</button></td>"
+                    + "<input type=\"hidden\" name=\"i\" value=\"" + i + "\">"
                     + "</tr>"
                     );
         }
+        $("#PathEdgesTable .save").click(function (e) {
+            var tr = $(e.currentTarget).parent().parent();
+            var id = parseInt($(e.currentTarget).parent().parent().find("input[name='i']").val());
+            editor.getPaths().edges[id].public = $(tr).find("input[name='public']").is(":checked");
+            editor.getPaths().edges[id].accessible = $(tr).find("input[name='accessible']").is(":checked");
+            editor.getPaths().edges[id].internalDescription = $(tr).find("input[name='internalDescription']").val();
+            editor.getPaths().edges[id].metric = new Array(
+                parseInt($(tr).find("input[name='metricAB']").val()),
+                parseInt($(tr).find("input[name='metricBA']").val())
+            );
+            editor.getDrawer().redraw();
+        });
+        $("#PathEdgesTable tr td button.delete").click(function (e) {
+            var id = parseInt($(e.currentTarget).parent().parent().find("input[name='i']").val());
+            editor.getPaths().removeEdge(id);
+            editor.getDrawer().redraw();
+            $("#PathEdges").trigger("showen");
+        });
     });
     $(".ui-overlay .controls .transparent").mouseenter(function () {
         $(".ui-overlay").css("opacity", "0.2");
@@ -406,6 +427,7 @@ $(document).ready(function () {
     $(".ui-overlay .controls .transparent").mouseleave(function () {
         $(".ui-overlay").css("opacity", "1");
     });
+
 
     //set up the closed listener for the ui-overlay with the id backgroundImage
     $("#backgroundImageInput").on("change", function () {
