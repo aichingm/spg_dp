@@ -4,25 +4,29 @@
         <title>SPG_DP</title>
         <meta charset="utf-8">
         <link rel="shortcut icon"  href="/favicon.png">
-        <style>
-            html , body, body > canvas{
-                margin: 0;
-                padding: 0;
-            }
-            body > canvas{
-                position: fixed;
-                top:0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-            }
-            
-        </style>
+        <link rel="stylesheet" type="text/css" href="styles.css">
     </head>
     <body>
         <script src="js/three.min.js"></script>
         <script src="js/OrbitControls.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script>
+            $(document).on("keypress", function (e) {
+                if (e.charCode === 46) { //.
+                    if ($("#settings").hasClass("isIn")) {
+                        $("#settings").removeClass("isIn");
+                        $("#settings").animate({
+                            right: "-200px"
+                        }, 200);
+                    } else {
+                        $("#settings").addClass("isIn");
+                        $("#settings").animate({
+                            right: "0px"
+                        }, 200);
+                    }
+                }
+            });
+        </script>
         <script>
             var scene, camera, renderer;
 
@@ -85,6 +89,14 @@
             }
 
             function draw(data, clear) {
+
+                var selectedFloors = [];
+                if ($("#drawFloors").val()){
+                    $.each($("#drawFloors").val(), function (v, k) {
+                        selectedFloors.push(parseInt(k));
+                    });
+                }
+                console.log(selectedFloors, data);
                 if (clear === true) {
                     mmm_clear();
                 }
@@ -92,7 +104,7 @@
                 $(data.modelManager).each(function () {
                     $(this.floors).each(function (k) {
                         //console.log(this);
-                        if (!$("#floors input[name='show_" + k + "']").is(":checked")) {
+                        if ($.inArray(k, selectedFloors) === -1) {
                             return;
                         }
                         $(this.elements).each(function (floor) {
@@ -233,10 +245,10 @@
                             case "floor":
                                 var geometry = new THREE.Geometry();
                                 if (this.points.length === 4) {
-                                    if (!$("#floors input[name='show_" + object.points[0].floorIndex + "']").is(":checked") ||
-                                            !$("#floors input[name='show_" + object.points[1].floorIndex + "']").is(":checked") ||
-                                            !$("#floors input[name='show_" + object.points[2].floorIndex + "']").is(":checked") ||
-                                            !$("#floors input[name='show_" + object.points[3].floorIndex + "']").is(":checked")) {
+                                    if ($.inArray(object.points[0].floorIndex, selectedFloors) === -1 ||
+                                            $.inArray(object.points[1].floorIndex, selectedFloors) === -1 ||
+                                            $.inArray(object.points[2].floorIndex, selectedFloors) === -1 ||
+                                            $.inArray(object.points[3].floorIndex, selectedFloors) === -1) {
                                         return;
                                     }
                                     geometry.vertices.push(
@@ -250,9 +262,9 @@
                                     geometry.faces.push(new THREE.Face3(0, 1, 2));
                                     geometry.faces.push(new THREE.Face3(0, 2, 3));
                                 } else if (this.points.length === 3) {
-                                    if (!$("#floors input[name='show_" + object.points[0].floorIndex + "']").is(":checked") ||
-                                            !$("#floors input[name='show_" + object.points[1].floorIndex + "']").is(":checked") ||
-                                            !$("#floors input[name='show_" + object.points[2].floorIndex + "']").is(":checked")) {
+                                    if ($.inArray(object.points[0].floorIndex, selectedFloors) === -1 ||
+                                            $.inArray(object.points[1].floorIndex, selectedFloors) === -1 ||
+                                            $.inArray(object.points[2].floorIndex, selectedFloors) === -1) {
                                         return;
                                     }
                                     geometry.vertices.push(
@@ -271,8 +283,8 @@
                                 scene.add(mesh);
                                 break;
                             case "wall":
-                                if (!$("#floors input[name='show_" + object.points[0].floorIndex + "']").is(":checked") ||
-                                        !$("#floors input[name='show_" + object.points[1].floorIndex + "']").is(":checked")) {
+                                if ($.inArray(object.points[0].floorIndex, selectedFloors) === -1 ||
+                                        $.inArray(object.points[1].floorIndex, selectedFloors) === -1) {
                                     return;
                                 }
                                 //console.log("it's a wall");
@@ -309,13 +321,13 @@
                     if (exports !== null && exports !== undefined && exports.length > 0) {
                         //draw them
                         var data = JSON.parse(exports);
-                        $("#floors").html("");
+                        $("#drawFloors").html("");
                         $(data.modelManager.floors).each(function (k) {
-                            $("#floors").append(" <input type='checkbox' name='show_" + k + "' checked='checked'>" + this.name + "<br>");
+                            $("#drawFloors").append("<option selected='selected' value='" + k + "'>" + this.name + "</option>");
                         });
+                        $("#drawFloors").attr("size", data.modelManager.floors.length);
                     }
-                    $("#floors input[name^='show_']").change(function (e) {
-                        //console.log($(this).is("checked"));
+                    $("#drawFloors").change(function (e) {
                         if (typeof (Storage) !== "undefined") {
                             var exports = localStorage.getItem("PieceofShit.exports");
                             //check if they are valid
@@ -348,6 +360,15 @@
                 }
             });
         </script>
-        <div id="floors" style="position: fixed;top:0;left: 0;"></div>
+        <div id="settings">
+            <div class="settingsLine settingsLineH1">
+                Settings
+            </div>
+            <div class="settingsLine">
+                Draw Floors<br>
+                <select multiple="" id="drawFloors">
+                </select>
+            </div>
+        </div>
     </body>
 </html>
