@@ -16,6 +16,22 @@ function uiPropsSetUp() {
         editor.getDrawer().setDrawingParts(val);
         editor.getDrawer().redraw();
     });
+    uiProps.on("mouseMode", function (key, val) {
+        if(val === "autoWall"){
+            uiProps.set("maxSelect", 2);
+            uiProps.set("autoSelect", true);
+        }
+    });
+    uiProps.on("maxSelect", function (key, val) {
+        if(uiProps.equals("mouseMode","autoWall") && val !== 2){
+            uiProps.set("mouseMode", "points");
+        }
+    });
+    uiProps.on("autoSelect", function (key, val) {
+        if(uiProps.equals("mouseMode","autoWall") && val !== true){
+            uiProps.set("mouseMode", "points");
+        }
+    });
     
     
 

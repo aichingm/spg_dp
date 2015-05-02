@@ -10,7 +10,7 @@ function Editor(canvas, options) {
         this.drawer = new Drawer(canvas, this.modelManager, this.pointsManager, this.paths, this.edgeSelection);
         this.interFloorObjects = new InterFloorObjects();
     };
-    this.init(canvas,options);
+    this.init(canvas, options);
     /*   POINTS   */
 
     this.newPoint = function (x, y) {
@@ -18,6 +18,7 @@ function Editor(canvas, options) {
         var X = Math.round(1 / factor * x) + this.drawer.getViewport().offsetX * -1;
         var Y = Math.round(1 / factor * y) + this.drawer.getViewport().offsetY * -1;
         this.pointsManager.add(X, Y, this.options.autoSelect);
+        return {"x": X, "y": Y};
     };
 
     this.movePoint = function (x, y) {
@@ -78,6 +79,16 @@ function Editor(canvas, options) {
                     break;
             }
             this.getDrawer().drawLine(object, style);
+        } else if (type === "wall" && selectedPoints.length > 2) {
+            for (var i = 1; i < selectedPoints.length; i++) {
+                var object = {"type": "wall"};
+                object.points = new Array();
+                object.points.push(new Array(selectedPoints[i - 1].x, selectedPoints[i - 1].y));
+                object.points.push(new Array(selectedPoints[i].x, selectedPoints[i].y));
+                this.getModelManager().getFloorElements(this.floorIndex).push(object);
+                var style = WallStyle;
+                this.getDrawer().drawLine(object, style);
+            }
         }
     };
     this.delete = function (fuzzy) {
@@ -185,7 +196,7 @@ function Editor(canvas, options) {
             this.paths.load(data.paths);
             this.pointsManager.setPoints(this.modelManager.getAllPointsOnFloor(this.floorIndex));
         } else {
-            this.init(this.canvas,this.options);
+            this.init(this.canvas, this.options);
         }
     };
     return this;

@@ -7,7 +7,6 @@ var interFloorSelection;
 var storage = new Storage();
 var wasMove = false;
 
-
 $(document).ready(function () {
     interFloorSelection = new InterFloorSelection();
     //the canvas to which the editor will be attached
@@ -38,7 +37,7 @@ $(document).ready(function () {
         }
         //check if the clicked point is already a used point
         if (uiProps.equals("mouseMode", "movePoint")) {
-            target = editor.targetIsPoint(e.pageX, e.pageY);
+            var target = editor.targetIsPoint(e.pageX, e.pageY);
             if (target === false) {
                 editor.movePoint(e.pageX, e.pageY);
                 //uiProps.set("mouseMode", "points");
@@ -57,12 +56,12 @@ $(document).ready(function () {
                 alert(JSON.stringify(target));
             }
         } else if (uiProps.equals("mouseMode", "interFloorSelectionMode")) {
-            target = editor.targetIsPoint(e.pageX, e.pageY);
+            var target = editor.targetIsPoint(e.pageX, e.pageY);
             if (target !== false) {
                 interFloorSelection.add(target.x, target.y, editor.getFloorIndex());
             }
         } else if (uiProps.equals("mouseMode", "edges")) {
-            target = editor.targetIsPathPoint(e.pageX, e.pageY);
+            var target = editor.targetIsPathPoint(e.pageX, e.pageY);
             if (target !== false) {
                 editor.getEdgeSelection().select(target);
                 editor.getDrawer().redraw();
@@ -74,8 +73,22 @@ $(document).ready(function () {
                     uioverlay.open("#newPathEdge");
                 }
             }
+        } else if (uiProps.equals("mouseMode", "autoWall") && uiProps.equals("maxSelect", 2)) {
+            var target = editor.targetIsPoint(e.pageX, e.pageY);
+            if (target !== false) {
+                editor.getPointsManager().toggle(target.x, target.y);
+            } else {
+                var newPoint = editor.newPoint(e.pageX, e.pageY);
+                if (!uiProps.get("autoSelect")) {
+                    editor.getPointsManager().toggle(newPoint.x, newPoint.y);
+                }
+            }
+            if (editor.getPointsManager().getSelectedPoints().length === 2) {
+                editor.createLine("wall");
+                storage.save();
+            }
         } else {
-            target = editor.targetIsPoint(e.pageX, e.pageY);
+            var target = editor.targetIsPoint(e.pageX, e.pageY);
             if (target === false) {
                 editor.newPoint(e.pageX, e.pageY);
             } else {
@@ -90,7 +103,6 @@ $(document).ready(function () {
             console.log(e.originalEvent.movementX, e.originalEvent.movementY);
             editor.getViewport().move(e.originalEvent.movementX, e.originalEvent.movementY);
         }
-
     });
     //setup the scoll listner to trigger the zoom function DOMMouseScroll
     $("#canvas").on('DOMMouseScroll mousewheel', function (evt) {
@@ -101,6 +113,7 @@ $(document).ready(function () {
         }
         return evt.preventDefault();
     });
+
     //setup the coordinates display
     $(document).on("mousemove", function (e) {
         var c = editor.getCoordinates(e.pageX, e.pageY);

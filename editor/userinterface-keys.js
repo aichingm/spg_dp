@@ -6,6 +6,8 @@ function keys(editor, uioverlay) {
             console.log(e.charCode);
             if (e.charCode === 119) {//w
                 editor.createLine("wall");
+            }else if (e.charCode === 87) {//W
+                uiProps.set("mouseMode", "autoWall");
             } else if (e.charCode === 102) {//f
                 editor.createFloor();
             } else if (e.charCode === 100) {//d
