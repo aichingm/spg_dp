@@ -1,15 +1,16 @@
 function Editor(canvas, options) {
-    this.options = $.extend(new DefaultOptions(), options);
-
-    this.floorIndex = 0;
-    this.modelManager = new ModelManager();
-    this.pointsManager = new PointsManager();
-    this.paths = new Paths();
-    this.edgeSelection = new EdgeSelection();
-    this.drawer = new Drawer(canvas, this.modelManager, this.pointsManager, this.paths, this.edgeSelection);
-
-    this.interFloorObjects = new InterFloorObjects();
-
+    this.init = function (canvas, options) {
+        this.options = $.extend(new DefaultOptions(), options);
+        this.canvas = canvas;
+        this.floorIndex = 0;
+        this.modelManager = new ModelManager();
+        this.pointsManager = new PointsManager();
+        this.paths = new Paths();
+        this.edgeSelection = new EdgeSelection();
+        this.drawer = new Drawer(canvas, this.modelManager, this.pointsManager, this.paths, this.edgeSelection);
+        this.interFloorObjects = new InterFloorObjects();
+    };
+    this.init(canvas,options);
     /*   POINTS   */
 
     this.newPoint = function (x, y) {
@@ -177,11 +178,15 @@ function Editor(canvas, options) {
         return JSON.stringify(data);
     };
     this.load = function (text) {
-        var data = JSON.parse(text);
-        this.modelManager.load(data.modelManager);
-        this.interFloorObjects.load(data.interFloorObjects);
-        this.paths.load(data.paths);
-        this.pointsManager.setPoints(this.modelManager.getAllPointsOnFloor(this.floorIndex));
+        if (text !== "") {
+            var data = JSON.parse(text);
+            this.modelManager.load(data.modelManager);
+            this.interFloorObjects.load(data.interFloorObjects);
+            this.paths.load(data.paths);
+            this.pointsManager.setPoints(this.modelManager.getAllPointsOnFloor(this.floorIndex));
+        } else {
+            this.init(this.canvas,this.options);
+        }
     };
     return this;
 }
