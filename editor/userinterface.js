@@ -295,7 +295,7 @@ $(document).ready(function () {
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"public\" value=\"" + (list[i].public ? "1" : "0") + "\"></td>"
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"internalName\" value=\"" + list[i].internalName + "\"></td>"
                     + "<td><input style=\"width:80px;\" type=\"text\" name=\"description\" value=\"" + list[i].description + "\"></td>"
-                    + "<td><input style=\"width:80px;\" type=\"text\" name=\"categories\" value=\"" + (list[i].categories == undefined ? "" : list[i].categories.join(",")) + "\"></td>"
+                    + "<td><input style=\"width:80px;\" type=\"text\" name=\"categories\" value=\"" + (list[i].categories === undefined ? "" : list[i].categories.join(",")) + "\"></td>"
                     + "<td><button>Save</button><input type=\"hidden\" name=\"id\" value=\"" + i + "\"></></td>"
                     + "</tr>"
                     //+ "<td><button class='delete' data-floor='" + i + "'>&times;</button></td>"
@@ -308,15 +308,17 @@ $(document).ready(function () {
             console.log(id);
             var vertex = editor.getPaths().vertices[id];
             vertex.name = $(tr).find("td input[name='name']").val();
-            vertex.x = parseInt($(tr).find("td input[name='x']").val());
-            vertex.y = parseInt($(tr).find("td input[name='y']").val());
-            vertex.floorIndex = parseInt($(tr).find("td input[name='floorIndex']").val());
-            vertex.public = parseInt($(tr).find("td input[name='public']").val()) == 1;
+            editor.getPaths().moveVertex(id, 
+            parseInt($(tr).find("td input[name='x']").val()), 
+            parseInt($(tr).find("td input[name='y']").val()), 
+            parseInt($(tr).find("td input[name='floorIndex']").val()));
+            vertex.public = parseInt($(tr).find("td input[name='public']").val()) === 1;
             vertex.internalName = $(tr).find("td input[name='internalName']").val();
             vertex.description = $(tr).find("td input[name='description']").val();
             var cats = $(tr).find("td input[name='categories']").val();
             vertex.categories = cats !== "" ? cats.split(",") : [];
             storage.save();
+            editor.getDrawer().redraw();
         });
     });
 
