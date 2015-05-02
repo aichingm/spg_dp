@@ -10,7 +10,7 @@ var wasMove = false;
 
 $(document).ready(function () {
     interFloorSelection = new InterFloorSelection();
-//the canvas to which the editor will be attached
+    //the canvas to which the editor will be attached
     var canvas = document.getElementById('canvas');
     //the canvas's context
     var context = canvas.getContext('2d');
@@ -36,7 +36,7 @@ $(document).ready(function () {
             wasMove = false;
             return;
         }
-//check if the clicked point is already a used point
+        //check if the clicked point is already a used point
         if (uiProps.equals("mouseMode", "movePoint")) {
             target = editor.targetIsPoint(e.pageX, e.pageY);
             if (target === false) {
@@ -114,12 +114,12 @@ $(document).ready(function () {
 
     //setup the listener for the showen event on the oi-overlay with the id toString
     $("#toString").on("showen", function () {
-//convert the exportOjects to string and display them
+        //convert the exportOjects to string and display them
         $("#textarea").val(editor.toString());
     });
     //setup the listener for the closed-apply event on the oi-overlay with the id toString
     $("#toString").on("closed-apply", function () {
-//load the exportObjects to the editor
+        //load the exportObjects to the editor
         editor.load($("#textarea").val());
         editor.getDrawer().redraw();
     });
@@ -237,7 +237,7 @@ $(document).ready(function () {
         $("#newPathPoint input[name='name']").val("");
         $("#newPathPoint input[name='name']").focus();
         $("#newPathPoint input[name='public']").attr("checked", true);
-//        $("#newPathPoint input[name='public']").val(1);
+        // $("#newPathPoint input[name='public']").val(1);
         $("#newPathPoint input[name='internalName']").val("");
         $("#newPathPoint input[name='description']").val("");
         $("#newPathPoint input[name='categories']").val("");
@@ -409,9 +409,9 @@ $(document).ready(function () {
             editor.getPaths().edges[id].accessible = $(tr).find("input[name='accessible']").is(":checked");
             editor.getPaths().edges[id].internalDescription = $(tr).find("input[name='internalDescription']").val();
             editor.getPaths().edges[id].metric = new Array(
-                parseInt($(tr).find("input[name='metricAB']").val()),
-                parseInt($(tr).find("input[name='metricBA']").val())
-            );
+                    parseInt($(tr).find("input[name='metricAB']").val()),
+                    parseInt($(tr).find("input[name='metricBA']").val())
+                    );
             editor.getDrawer().redraw();
         });
         $("#PathEdgesTable tr td button.delete").click(function (e) {
@@ -427,12 +427,10 @@ $(document).ready(function () {
     $(".ui-overlay .controls .transparent").mouseleave(function () {
         $(".ui-overlay").css("opacity", "1");
     });
-
-
     //set up the closed listener for the ui-overlay with the id backgroundImage
     $("#backgroundImageInput").on("change", function () {
         if ($('#backgroundImageInput').get(0).files[0] !== null && $('#backgroundImageInput').get(0).files[0] !== undefined) {
-//create a new FileReader object
+            //create a new FileReader object
             var fr = new FileReader;
             //set an onLoaded function on the FileReader
             fr.onloadend = function (data) {
