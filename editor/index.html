@@ -105,6 +105,7 @@
             </div>        
         </div>
         <div class="ui-overlay" id="newPathPoint">
+            <h1>New Path Point</h1>
             Name: <input type="text" name="name" /><br />
             Public: <input type="checkbox" name="public" /><br />
             Internal name: <input type="text" name="internalName" /><small> (falls leer wird der Name übernommen)</small><br />
@@ -113,10 +114,9 @@
             <input type="hidden" name="x" /><br />
             <input type="hidden" name="y" /><br />
             <br />
-            <button id="newPathPointCancel">cancel</button>
-            <button id="newPathPointOk">ok</button>
             <div class="controls">
-                <button class="cancel">&#10007;</button>
+                <button id="newPathPointOk" class="apply">&#10003;</button>
+                <button id="newPathPointCancel" class="cancel">&#10007;</button>
             </div>        
         </div>
         <div class="ui-overlay" id="newPathEdge">
