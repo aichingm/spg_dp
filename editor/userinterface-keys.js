@@ -3,7 +3,7 @@ function keys(editor, uioverlay) {
         if (uioverlay.hasOpen()) {
             Debug.log(e);
             e.preventDefault();
-            console.log(e.charCode);
+            Debug.log(e.charCode);
             if (e.charCode === 119) {//w
                 editor.createLine("wall");
             } else if (e.charCode === 87) {//W

@@ -108,12 +108,12 @@ $(document).ready(function () {
                 editor.getPointsManager().toggle(target.x, target.y);
             }
         }
-        console.log(e);
+        Debug.log(e);
     });
     $("#canvas").mousemove(function (e) {
         if (e.which === 1) {
             wasMove = true;
-            console.log(e.originalEvent.movementX, e.originalEvent.movementY);
+            Debug.log(e.originalEvent.movementX, e.originalEvent.movementY);
             editor.getViewport().move(e.originalEvent.movementX, e.originalEvent.movementY);
         }
     });
@@ -269,17 +269,17 @@ $(document).ready(function () {
         $("#newPathPoint input[name='categories']").val("");
     });
     /*$("#newPathPoint").on("closed", function () {
-     console.log("fuck fuck");
+     Debug.log("fuck fuck");
      });
      $("#newPathPoint").on("closed-apply", function () {
-     console.log("fuck fuck apply");
+     Debug.log("fuck fuck apply");
      });*/
     $("#newPathPointOk").click(function () {
         //do shizzle
-        console.log("doing shizzle");
+        Debug.log("doing shizzle");
         var point = {};
         point.name = $("#newPathPoint input[name='name']").val();
-        console.log($("#newPathPoint input[name='public']").is(":checked"));
+        Debug.log($("#newPathPoint input[name='public']").is(":checked"));
         point.public = $("#newPathPoint input[name='public']").is(":checked");
         point.internalName = $("#newPathPoint input[name='internalName']").val();
         point.internalName = point.internalName !== "" ? point.internalName : point.name;
@@ -331,7 +331,7 @@ $(document).ready(function () {
             var tr = $(e.currentTarget).parent().parent();
             var id = parseInt($(e.currentTarget).parent().parent().find("input[name='id']").val());
             var vertex = editor.getPaths().vertices[id];
-            console.log(vertex);
+            Debug.log(vertex);
             vertex.name = $(tr).find("td input[name='name']").val();
             editor.getPaths().moveVertex(id,
                     parseInt($(tr).find("td input[name='x']").val()),
@@ -373,11 +373,11 @@ $(document).ready(function () {
         $("#newPathPoint input[name='BA']").val("");
     });
     $("#newPathEdge").on("closed", function () {
-        console.log("fuck fuck edge");
+        Debug.log("fuck fuck edge");
     });
     $("#newPathEdge #newPathEdgeOk").click(function () {
         //do shizzle
-        console.log("doing edgy shizzle");
+        Debug.log("doing edgy shizzle");
         var edge = {};
         edge.Ax = editor.getEdgeSelection().pointA.x;
         edge.Ay = editor.getEdgeSelection().pointA.y;

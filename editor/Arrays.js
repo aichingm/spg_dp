@@ -77,7 +77,6 @@ Arrays = new function () {
         return count;
     };
     this.deleteIndicesFromArray = function (array, indices) {
-        console.log(indices);
         return $.grep(array, function (n, i) {
             return $.inArray(i, indices) === -1;
         });

@@ -27,7 +27,7 @@ function Paths() {
     this.selectedVertex;
     
     this.getIndex = function (vertex) {
-        console.log(vertex)
+        Debug.log(vertex)
         for(var i = 0; i < this.vertices.length; i++){
             if (this.vertices[i].x === vertex.x && this.vertices[i].y === vertex.y && this.vertices[i].floorIndex === vertex.floorIndex) {
                 return i;

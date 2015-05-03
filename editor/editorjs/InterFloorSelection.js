@@ -10,7 +10,7 @@ function InterFloorSelection() {
     
     this.removeByValue = function(x,y,floorIndex){
         for(var i = 0; i < this.points.length;i++){
-            console.log(this.points[i]);
+            Debug.log(this.points[i]);
             if(this.points[i].x == x && this.points[i].y == y && this.points[i].floorIndex == floorIndex){
                 this.remove(i);
                 return true;

@@ -125,7 +125,7 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection) {
             for (var i = 0; i < this.paths.edges.length; i++) {
                 if (this.paths.edges[i].Afloor === this.selectedFloorIndex && this.paths.edges[i].Bfloor === this.selectedFloorIndex) {
                     var e = this.paths.edges[i];
-                    console.log(e.Ax, e.Ay, e.Bx, e.By)
+                    Debug.log(e.Ax, e.Ay, e.Bx, e.By)
                     this.drawLine({"points": [[e.Ax, e.Ay], [e.Bx, e.By]]}, this.pathstyle);
                 }
             }

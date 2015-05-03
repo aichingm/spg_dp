@@ -11,12 +11,12 @@ function PointsManager(options) {
         if (select) {
             this.select(x, y);
         } else {
-            console.log("new point");
+            Debug.log("new point");
             this.getDrawer().drawPoint(point, PointStyle);
         }
     };
     this.remove = function (x, y) {
-        console.log(x, y, "---");
+        Debug.log(x, y, "---");
 
         for (var i = 0; i < this.points.length; i++) {
             var removeIndex = -1;
@@ -29,12 +29,12 @@ function PointsManager(options) {
         if (removeIndex !== -1) {
             var selectedIndex = this.isSelected(x, y);
             if (selectedIndex !== -1) {
-                console.log("unselecting");
+                Debug.log("unselecting");
                 this.unselect(selectedIndex);
             }
-            console.log( this.points.length);
+            Debug.log( this.points.length);
             this.points.splice(removeIndex, 1);
-            console.log( this.points.length);
+            Debug.log( this.points.length);
         }
         //TODO tell the drawer on which coordinates the redraw is needed
         this.getDrawer().redraw();
@@ -45,7 +45,7 @@ function PointsManager(options) {
             return;
         } else if (this.selectedPoints.length >= this.options.maxSelect
                 && !this.options.unlimitedSelect) {
-            console.log(this.options.maxSelect);
+            Debug.log(this.options.maxSelect);
             while (this.selectedPoints.length >= this.options.maxSelect) {
                 this.unselect(0);
             }
@@ -111,7 +111,7 @@ function PointsManager(options) {
     };
     this.setOptions = function (options) {
         this.options = $.extend(this.options, options);
-        console.log(this.options);
+        Debug.log(this.options);
     };
     return this;
 }
