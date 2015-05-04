@@ -42,6 +42,44 @@
                     }
                 }
             }
+            
+             // depthWrite: false ->
+            // depthTest: false ->
+            //http://stackoverflow.com/questions/11165345/three-js-webgl-transparent-planes-hiding-other-planes-behind-them
+
+            var windowMaterial = new THREE.MeshBasicMaterial({
+                color: 0x0030ee,
+                opacity: 0.5,
+                transparent: true,
+                side: THREE.DoubleSide,
+                depthWrite: false,
+                depthTest: false,
+                blending: THREE.SubtractEquation
+            });
+            var wallMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                opacity: 0.5,
+                transparent: true,
+                side: THREE.DoubleSide,
+                depthWrite: false,
+                depthTest: false,
+                blending: THREE.SubtractEquation
+            });
+            var doorMaterial = new THREE.MeshBasicMaterial({
+                color: 0xee00ee,
+                opacity: 0.5,
+                transparent: true,
+                side: THREE.DoubleSide,
+                blending: THREE.SubtractEquation,
+                depthWrite: false,
+                depthTest: false
+            });
+            var floorMaterial = new THREE.MeshBasicMaterial({
+                color: 0x555555,
+                side: THREE.DoubleSide,
+                depthWrite: false,
+                depthTest: false
+            });
             // Set up the scene, camera, and renderer as global variables.
             init();
             animate();
@@ -137,11 +175,7 @@
                                             geometry.faces.push(new THREE.Face3(0, 1, 2));
                                         }
                                         geometry.computeBoundingSphere();
-                                        var material = new THREE.MeshBasicMaterial({
-                                            color: 0x555555,
-                                            side: THREE.DoubleSide
-                                        });
-                                        var mesh = new THREE.Mesh(geometry, material);
+                                        var mesh = new THREE.Mesh(geometry, floorMaterial);
                                         scene.add(mesh);
                                         break;
                                     case "wall":
@@ -156,22 +190,8 @@
                                         //console.log(floor);
                                         geometry.faces.push(new THREE.Face3(0, 1, 2));
                                         geometry.faces.push(new THREE.Face3(0, 2, 3));
-
                                         geometry.computeBoundingSphere();
-                                        var material = new THREE.MeshBasicMaterial({
-                                            color: 0xaaaaaa,
-                                            opacity: 0.5,
-                                            //color: "black",
-                                            transparent: true,
-                                            side: THREE.DoubleSide,
-                                            depthWrite: false, //http://stackoverflow.com/questions/11165345/three-js-webgl-transparent-planes-hiding-other-planes-behind-them
-                                            depthTest: false, //http://stackoverflow.com/questions/11165345/three-js-webgl-transparent-planes-hiding-other-planes-behind-them
-                                            blending: THREE.SubtractEquation
-                                        });
-                                        //mesh.material.side = THREE.DoubleSide;
-
-                                        var mesh = new THREE.Mesh(geometry, material);
-                                        mesh.renderDepth = 100000;
+                                        var mesh = new THREE.Mesh(geometry, wallMaterial);
                                         scene.add(mesh);
                                         break;
                                     case "door":
@@ -186,16 +206,8 @@
                                         geometryDoor.faces.push(new THREE.Face3(0, 1, 2));
                                         geometryDoor.faces.push(new THREE.Face3(0, 2, 3));
                                         geometryDoor.computeBoundingSphere();
-                                        var materialDoor = new THREE.MeshBasicMaterial({
-                                            color: 0xee00ee,
-                                            opacity: 0.5,
-                                            transparent: true,
-                                            side: THREE.DoubleSide,
-                                            blending: THREE.SubtractEquation,
-                                            depthWrite: false,
-                                            depthTest: false
-                                        });
-                                        var meshDoor = new THREE.Mesh(geometryDoor, materialDoor);
+                                       
+                                        var meshDoor = new THREE.Mesh(geometryDoor, doorMaterial);
                                         scene.add(meshDoor);
 
                                         var geometryOverDoor = new THREE.Geometry();
@@ -208,16 +220,7 @@
                                         geometryOverDoor.faces.push(new THREE.Face3(0, 1, 2));
                                         geometryOverDoor.faces.push(new THREE.Face3(0, 2, 3));
                                         geometryOverDoor.computeBoundingSphere();
-                                        var materialOverDoor = new THREE.MeshBasicMaterial({
-                                            color: 0xaaaaaa,
-                                            opacity: 0.5,
-                                            transparent: true,
-                                            side: THREE.DoubleSide,
-                                            depthWrite: false,
-                                            depthTest: false,
-                                            blending: THREE.SubtractEquation
-                                        });
-                                        var meshOverDoor = new THREE.Mesh(geometryOverDoor, materialOverDoor);
+                                        var meshOverDoor = new THREE.Mesh(geometryOverDoor, wallMaterial);
                                         scene.add(meshOverDoor);
                                         break;
                                     case "window":
@@ -232,16 +235,7 @@
                                         geometryWindow.faces.push(new THREE.Face3(0, 1, 2));
                                         geometryWindow.faces.push(new THREE.Face3(0, 2, 3));
                                         geometryWindow.computeBoundingSphere();
-                                        var materialWindow = new THREE.MeshBasicMaterial({
-                                            color: 0x0030ee,
-                                            opacity: 0.5,
-                                            transparent: true,
-                                            side: THREE.DoubleSide,
-                                            depthWrite: false,
-                                            depthTest: false,
-                                            blending: THREE.SubtractEquation
-                                        });
-                                        var meshWindow = new THREE.Mesh(geometryWindow, materialWindow);
+                                        var meshWindow = new THREE.Mesh(geometryWindow, windowMaterial);
                                         scene.add(meshWindow);
                                         break;
                                 }
@@ -290,13 +284,7 @@
                                     geometry.faces.push(new THREE.Face3(0, 1, 2));
                                 }
                                 geometry.computeBoundingSphere();
-                                var material = new THREE.MeshBasicMaterial({
-                                    color: 0x555555,
-                                    side: THREE.DoubleSide,
-                                    depthWrite: false,
-                                    depthTest: false
-                                });
-                                var mesh = new THREE.Mesh(geometry, material);
+                                var mesh = new THREE.Mesh(geometry, floorMaterial);
                                 scene.add(mesh);
                                 break;
                             case "wall":
@@ -316,16 +304,7 @@
                                 geometry.faces.push(new THREE.Face3(0, 2, 3));
 
                                 geometry.computeBoundingSphere();
-                                var material = new THREE.MeshBasicMaterial({
-                                    color: 0xffffff,
-                                    opacity: 0.5,
-                                    transparent: true,
-                                    side: THREE.DoubleSide,
-                                    depthWrite: false,
-                                    depthTest: false,
-                                    blending: THREE.SubtractEquation
-                                });
-                                var mesh = new THREE.Mesh(geometry, material);
+                                var mesh = new THREE.Mesh(geometry, wallMaterial);
                                 scene.add(mesh);
                                 break;
                         }
