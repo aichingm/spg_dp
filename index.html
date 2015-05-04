@@ -91,7 +91,7 @@
             function draw(data, clear) {
 
                 var selectedFloors = [];
-                if ($("#drawFloors").val()){
+                if ($("#drawFloors").val()) {
                     $.each($("#drawFloors").val(), function (v, k) {
                         selectedFloors.push(parseInt(k));
                     });
@@ -158,11 +158,17 @@
                                         var material = new THREE.MeshBasicMaterial({
                                             color: 0xaaaaaa,
                                             opacity: 0.5,
+                                            //color: "black",
                                             transparent: true,
                                             side: THREE.DoubleSide,
+                                            depthWrite: false, //http://stackoverflow.com/questions/11165345/three-js-webgl-transparent-planes-hiding-other-planes-behind-them
+                                            depthTest: false, //http://stackoverflow.com/questions/11165345/three-js-webgl-transparent-planes-hiding-other-planes-behind-them
                                             blending: THREE.SubtractEquation
                                         });
+                                        //mesh.material.side = THREE.DoubleSide;
+
                                         var mesh = new THREE.Mesh(geometry, material);
+                                        mesh.renderDepth = 100000;
                                         scene.add(mesh);
                                         break;
                                     case "door":
@@ -182,7 +188,9 @@
                                             opacity: 0.5,
                                             transparent: true,
                                             side: THREE.DoubleSide,
-                                            blending: THREE.SubtractiveBlending
+                                            blending: THREE.SubtractiveBlending,
+                                            depthWrite: false,
+                                            depthTest: false
                                         });
                                         var meshDoor = new THREE.Mesh(geometryDoor, materialDoor);
                                         scene.add(meshDoor);
@@ -202,6 +210,8 @@
                                             opacity: 0.5,
                                             transparent: true,
                                             side: THREE.DoubleSide,
+                                            depthWrite: false,
+                                            depthTest: false,
                                             blending: THREE.SubtractEquation
                                         });
                                         var meshOverDoor = new THREE.Mesh(geometryOverDoor, materialOverDoor);
@@ -224,7 +234,9 @@
                                             opacity: 0.5,
                                             transparent: true,
                                             side: THREE.DoubleSide,
-                                            blending: THREE.SubtractiveBlending
+                                            depthWrite: false,
+                                            depthTest: false,
+                                                    blending: THREE.SubtractiveBlending
                                         });
                                         var meshWindow = new THREE.Mesh(geometryWindow, materialWindow);
                                         scene.add(meshWindow);
@@ -277,7 +289,9 @@
                                 geometry.computeBoundingSphere();
                                 var material = new THREE.MeshBasicMaterial({
                                     color: 0x555555,
-                                    side: THREE.DoubleSide
+                                    side: THREE.DoubleSide,
+                                    depthWrite: false,
+                                    depthTest: false
                                 });
                                 var mesh = new THREE.Mesh(geometry, material);
                                 scene.add(mesh);
@@ -304,6 +318,8 @@
                                     opacity: 0.5,
                                     transparent: true,
                                     side: THREE.DoubleSide,
+                                    depthWrite: false,
+                                    depthTest: false,
                                     blending: THREE.SubtractEquation
                                 });
                                 var mesh = new THREE.Mesh(geometry, material);
