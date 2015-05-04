@@ -163,7 +163,7 @@
                                             side: THREE.DoubleSide,
                                             depthWrite: false, //http://stackoverflow.com/questions/11165345/three-js-webgl-transparent-planes-hiding-other-planes-behind-them
                                             depthTest: false, //http://stackoverflow.com/questions/11165345/three-js-webgl-transparent-planes-hiding-other-planes-behind-them
-                                            blending: THREE.SubtractEquation
+                                            blending: THREE.SubtractiveBlending
                                         });
                                         //mesh.material.side = THREE.DoubleSide;
 
@@ -212,7 +212,7 @@
                                             side: THREE.DoubleSide,
                                             depthWrite: false,
                                             depthTest: false,
-                                            blending: THREE.SubtractEquation
+                                            blending: THREE.SubtractiveBlending
                                         });
                                         var meshOverDoor = new THREE.Mesh(geometryOverDoor, materialOverDoor);
                                         scene.add(meshOverDoor);
@@ -320,7 +320,7 @@
                                     side: THREE.DoubleSide,
                                     depthWrite: false,
                                     depthTest: false,
-                                    blending: THREE.SubtractEquation
+                                    blending: THREE.SubtractiveBlending
                                 });
                                 var mesh = new THREE.Mesh(geometry, material);
                                 scene.add(mesh);
