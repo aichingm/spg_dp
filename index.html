@@ -28,6 +28,9 @@
             });
         </script>
         <script>
+            // JsHint directives
+            /* global THREE */
+
             var scene, camera, renderer;
 
             function mmm_clear() {
@@ -236,7 +239,7 @@
                                             side: THREE.DoubleSide,
                                             depthWrite: false,
                                             depthTest: false,
-                                                    blending: THREE.SubtractiveBlending
+                                            blending: THREE.SubtractiveBlending
                                         });
                                         var meshWindow = new THREE.Mesh(geometryWindow, materialWindow);
                                         scene.add(meshWindow);
