@@ -33,7 +33,7 @@
 
             var scene, camera, renderer;
 
-            function mmm_clear() {
+            function clearScene() {
                 var obj, i;
                 for (i = scene.children.length - 1; i >= 0; i--) {
                     obj = scene.children[ i ];
@@ -139,7 +139,7 @@
                 }
                 console.log(selectedFloors, data);
                 if (clear === true) {
-                    mmm_clear();
+                    clearScene();
                 }
 
                 $(data.modelManager).each(function () {
