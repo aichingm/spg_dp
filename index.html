@@ -124,33 +124,34 @@
                 opacity: 0.5,
                 transparent: true,
                 side: THREE.DoubleSide,
-                depthWrite: false,
-                depthTest: false,
-                blending: THREE.SubtractEquation
+                //depthWrite: false,
+               // depthTest: false,
+              //  blending: THREE.SubtractEquation
             });
             var wallMaterial = new THREE.MeshBasicMaterial({
                 color: 0xffffff,
                 opacity: 0.5,
                 transparent: true,
                 side: THREE.DoubleSide,
-                depthWrite: false,
-                depthTest: false,
-                blending: THREE.SubtractEquation
+//                depthWrite: false,
+//                depthTest: false,
+              //  blending: THREE.SubtractEquation
             });
             var doorMaterial = new THREE.MeshBasicMaterial({
                 color: 0xee00ee,
                 opacity: 0.5,
                 transparent: true,
                 side: THREE.DoubleSide,
-                blending: THREE.SubtractEquation,
-                depthWrite: false,
-                depthTest: false
+               // blending: THREE.SubtractEquation,
+//                depthWrite: false,
+//                depthTest: false
             });
             var floorMaterial = new THREE.MeshBasicMaterial({
                 color: 0x555555,
                 side: THREE.DoubleSide,
-                depthWrite: false,
-                depthTest: false
+                transparent: false,
+                //depthWrite: false,
+                //depthTest: false
             });
             // Set up the scene, camera, and renderer as global variables.
             init();
@@ -212,49 +213,75 @@
                 if (clear === true) {
                     clearScene();
                 }
-                
-                $(data.modelManager).each(function () {
-                    $(this.floors).each(function (k) {
-                        if ($.inArray(k, selectedFloors) === -1) {
-                            return;
-                        }
-                        $(this.elements).each(function (floor) {
-                            return function () {
-                                switch (this.type) {
-                                    case "floor":
-                                        var geometry = Geometries.floorGemometry(this.points, floor.offset.z);
-                                        geometry.computeBoundingSphere();
-                                        var mesh = new THREE.Mesh(geometry, floorMaterial);
-                                        scene.add(mesh);
-                                        break;
-                                    case "wall":
-                                        var geometry = Geometries.wallGemometry(this.points, floor.offset.z, floor.height);
-                                        geometry.computeBoundingSphere();
-                                        var mesh = new THREE.Mesh(geometry, wallMaterial);
-                                        scene.add(mesh);
-                                        break;
-                                    case "door":
-                                        var geometryDoor = Geometries.doorGemometry(this.points, floor.offset.z, floor.height);
-                                        geometryDoor.computeBoundingSphere();
-                                        var meshDoor = new THREE.Mesh(geometryDoor, doorMaterial);
-                                        scene.add(meshDoor);
-                                        var geometryOverDoor = Geometries.overDoorGemometry(this.points, floor.offset.z, floor.height);
-                                        geometryOverDoor.computeBoundingSphere();
-                                        var meshOverDoor = new THREE.Mesh(geometryOverDoor, wallMaterial);
-                                        scene.add(meshOverDoor);
-                                        break;
-                                    case "window":
-                                        var geometryWindow = Geometries.windowGeometry(this.points, floor.offset.z, floor.height);
-                                        var geometryWindow = new THREE.Geometry();
-                                        geometryWindow.computeBoundingSphere();
-                                        var meshWindow = new THREE.Mesh(geometryWindow, windowMaterial);
-                                        scene.add(meshWindow);
-                                        break;
-                                }
-                            };
-                        }(this));
-                    });
+                var objects = {}
+                objects.floors = [];
+                objects.walls = [];
+                objects.windows = [];
+                objects.doors = [];
+
+                $(data.modelManager.floors).each(function (k) {
+                    if ($.inArray(k, selectedFloors) === -1) {
+                        return;
+                    }
+                    $(this.elements).each(function (floor) {
+                        return function () {
+                            switch (this.type) {
+                                case "floor":
+                                    var geometry = Geometries.floorGemometry(this.points, floor.offset.z);
+                                    geometry.computeBoundingSphere();
+                                    var mesh = new THREE.Mesh(geometry, floorMaterial);
+                                    objects.floors.push(mesh);
+                                    break;
+                                case "wall":
+                                    var geometry = Geometries.wallGemometry(this.points, floor.offset.z, floor.height);
+                                    geometry.computeBoundingSphere();
+                                    var mesh = new THREE.Mesh(geometry, wallMaterial);
+                                    objects.walls.push(mesh);
+                                    break;
+                                case "door":
+                                    var geometryDoor = Geometries.doorGemometry(this.points, floor.offset.z, floor.height);
+                                    geometryDoor.computeBoundingSphere();
+                                    var meshDoor = new THREE.Mesh(geometryDoor, doorMaterial);
+                                    objects.doors.push(meshDoor);
+                                    var geometryOverDoor = Geometries.overDoorGemometry(this.points, floor.offset.z, floor.height);
+                                    geometryOverDoor.computeBoundingSphere();
+                                    var meshOverDoor = new THREE.Mesh(geometryOverDoor, wallMaterial);
+                                    objects.doors.push(meshOverDoor);
+                                    break;
+                                case "window":
+                                    var geometryWindow = Geometries.windowGeometry(this.points, floor.offset.z, floor.height);
+                                    var geometryWindow = new THREE.Geometry();
+                                    geometryWindow.computeBoundingSphere();
+                                    var meshWindow = new THREE.Mesh(geometryWindow, windowMaterial);
+                                    objects.windows.push(meshWindow);
+                                    break;
+                            }
+                        };
+                    }(this));
                 });
+
+                $.each(objects.floors, function () {
+                    scene.add(this);
+                });
+                
+                $.each(objects.walls, function () {
+                    scene.add(this);
+                });
+                $.each(objects.doors, function () {
+                    scene.add(this);
+                });
+                $.each(objects.windows, function () {
+                    scene.add(this);
+                });
+
+
+
+
+
+
+
+
+
                 //console.log("inter floor objects");
                 $(data.interFloorObjects).each(function (data) {
                     return function (i, object) {
