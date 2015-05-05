@@ -9,6 +9,7 @@
     <body>
         <script src="js/three.min.js"></script>
         <script src="js/OrbitControls.js"></script>
+        <script src="js/threex.transparency.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script>
             $(document).on("keypress", function (e) {
@@ -103,7 +104,8 @@
         <script>
             // JsHint directives
             /* global THREE */
-
+            /* global THREEx */
+            var updateFcts = [];
             var scene, camera, renderer;
             function clearScene() {
                 var obj, i;
@@ -125,8 +127,8 @@
                 transparent: true,
                 side: THREE.DoubleSide,
                 //depthWrite: false,
-               // depthTest: false,
-              //  blending: THREE.SubtractEquation
+                // depthTest: false,
+                //  blending: THREE.SubtractEquation
             });
             var wallMaterial = new THREE.MeshBasicMaterial({
                 color: 0xffffff,
@@ -135,14 +137,14 @@
                 side: THREE.DoubleSide,
 //                depthWrite: false,
 //                depthTest: false,
-              //  blending: THREE.SubtractEquation
+                //  blending: THREE.SubtractEquation
             });
             var doorMaterial = new THREE.MeshBasicMaterial({
                 color: 0xee00ee,
                 opacity: 0.5,
                 transparent: true,
                 side: THREE.DoubleSide,
-               // blending: THREE.SubtractEquation,
+                // blending: THREE.SubtractEquation,
 //                depthWrite: false,
 //                depthTest: false
             });
@@ -189,14 +191,21 @@
                 controls = new THREE.OrbitControls(camera, renderer.domElement);
                 controls.userPanSpeed = 15;
             }
+            var lastTimeMsec = null
 
 
             // Renders the scene and updates the render as needed.
-            function animate() {
+            function animate(nowMsec) {
                 requestAnimationFrame(animate);
                 // Render the scene.
                 renderer.render(scene, camera);
                 controls.update();
+                lastTimeMsec = lastTimeMsec || nowMsec - 1000 / 60;
+                var deltaMsec = Math.min(200, nowMsec - lastTimeMsec);
+                lastTimeMsec = nowMsec;
+                updateFcts.forEach(function (updateFn) {
+                    updateFn(deltaMsec / 1000, nowMsec / 1000);
+                });
             }
 
 
@@ -213,7 +222,7 @@
                 if (clear === true) {
                     clearScene();
                 }
-                var objects = {}
+                var objects = {};
                 objects.floors = [];
                 objects.walls = [];
                 objects.windows = [];
@@ -250,7 +259,6 @@
                                     break;
                                 case "window":
                                     var geometryWindow = Geometries.windowGeometry(this.points, floor.offset.z, floor.height);
-                                    var geometryWindow = new THREE.Geometry();
                                     geometryWindow.computeBoundingSphere();
                                     var meshWindow = new THREE.Mesh(geometryWindow, windowMaterial);
                                     objects.windows.push(meshWindow);
@@ -259,22 +267,27 @@
                         };
                     }(this));
                 });
-
                 $.each(objects.floors, function () {
                     scene.add(this);
                 });
-                
                 $.each(objects.walls, function () {
                     scene.add(this);
                 });
+                THREEx.Transparency.init(objects.walls);
                 $.each(objects.doors, function () {
                     scene.add(this);
                 });
+                THREEx.Transparency.init(objects.doors);
                 $.each(objects.windows, function () {
+                    console.log(this);
                     scene.add(this);
                 });
-
-
+                THREEx.Transparency.init(objects.windows);
+                updateFcts.push(function (delta, now) {
+                    THREEx.Transparency.update(objects.walls, camera);
+                    THREEx.Transparency.update(objects.windows, camera);
+                    THREEx.Transparency.update(objects.doors, camera);
+                });
 
 
 
