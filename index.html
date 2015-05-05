@@ -99,6 +99,56 @@
                     geometry.faces.push(new THREE.Face3(0, 1, 2));
                     geometry.faces.push(new THREE.Face3(0, 2, 3));
                     return geometry;
+                },
+                interfloorFloorGeometry: function (points, floors, selectedFloors) {
+                    var geometry = new THREE.Geometry();
+                    if (points.length === 4) {
+                        if ($.inArray(points[0].floorIndex, selectedFloors) === -1 ||
+                                $.inArray(points[1].floorIndex, selectedFloors) === -1 ||
+                                $.inArray(points[2].floorIndex, selectedFloors) === -1 ||
+                                $.inArray(points[3].floorIndex, selectedFloors) === -1) {
+                            return;
+                        }
+                        geometry.vertices.push(
+                                new THREE.Vector3(points[0].x, floors[points[0].floorIndex].offset.z, points[0].y),
+                                new THREE.Vector3(points[1].x, floors[points[1].floorIndex].offset.z, points[1].y),
+                                new THREE.Vector3(points[2].x, floors[points[2].floorIndex].offset.z, points[2].y),
+                                new THREE.Vector3(points[3].x, floors[points[3].floorIndex].offset.z, points[3].y)
+                                );
+                        //every geometry must be built out of triangles the parameter are the points used to create the triangle
+                        //a square is made out of 2 triangles remeber to keep the correct order of the points!
+                        geometry.faces.push(new THREE.Face3(0, 1, 2));
+                        geometry.faces.push(new THREE.Face3(0, 2, 3));
+                    } else if (points.length === 3) {
+                        if ($.inArray(points[0].floorIndex, selectedFloors) === -1 ||
+                                $.inArray(points[1].floorIndex, selectedFloors) === -1 ||
+                                $.inArray(points[2].floorIndex, selectedFloors) === -1) {
+                            return;
+                        }
+                        geometry.vertices.push(
+                                new THREE.Vector3(points[0].x, floors[points[0].floorIndex].offset.z, points[0][1]),
+                                new THREE.Vector3(points[1].x, floors[points[1].floorIndex].offset.z, points[1][1]),
+                                new THREE.Vector3(points[2].x, floors[points[2].floorIndex].offset.z, points[2][1])
+                                );
+                        geometry.faces.push(new THREE.Face3(0, 1, 2));
+                    }
+                    return geometry;
+                },
+                interfloorWallGeometry: function (points, floors, selectedFloors) {
+                    if ($.inArray(points[0].floorIndex, selectedFloors) === -1 ||
+                            $.inArray(points[1].floorIndex, selectedFloors) === -1) {
+                        return;
+                    }
+                    var geometry = new THREE.Geometry();
+                    geometry.vertices.push(
+                            new THREE.Vector3(points[0].x, floors[points[0].floorIndex].offset.z, points[0].y),
+                            new THREE.Vector3(points[0].x, floors[points[0].floorIndex].offset.z + floors[points[0].floorIndex].height, points[0].y),
+                            new THREE.Vector3(points[1].x, floors[points[1].floorIndex].offset.z + floors[points[1].floorIndex].height, points[1].y),
+                            new THREE.Vector3(points[1].x, floors[points[1].floorIndex].offset.z, points[1].y)
+                            );
+                    geometry.faces.push(new THREE.Face3(0, 1, 2));
+                    geometry.faces.push(new THREE.Face3(0, 2, 3));
+                    return geometry;
                 }
             };</script>
         <script>
@@ -284,56 +334,13 @@
                         var floors = data.modelManager.floors;
                         switch (object.type) {
                             case "floor":
-                                var geometry = new THREE.Geometry();
-                                if (this.points.length === 4) {
-                                    if ($.inArray(object.points[0].floorIndex, selectedFloors) === -1 ||
-                                            $.inArray(object.points[1].floorIndex, selectedFloors) === -1 ||
-                                            $.inArray(object.points[2].floorIndex, selectedFloors) === -1 ||
-                                            $.inArray(object.points[3].floorIndex, selectedFloors) === -1) {
-                                        return;
-                                    }
-                                    geometry.vertices.push(
-                                            new THREE.Vector3(object.points[0].x, floors[object.points[0].floorIndex].offset.z, object.points[0].y),
-                                            new THREE.Vector3(object.points[1].x, floors[object.points[1].floorIndex].offset.z, object.points[1].y),
-                                            new THREE.Vector3(object.points[2].x, floors[object.points[2].floorIndex].offset.z, object.points[2].y),
-                                            new THREE.Vector3(object.points[3].x, floors[object.points[3].floorIndex].offset.z, object.points[3].y)
-                                            );
-                                    //every geometry must be built out of triangles the parameter are the points used to create the triangle
-                                    //a square is made out of 2 triangles remeber to keep the correct order of the points!
-                                    geometry.faces.push(new THREE.Face3(0, 1, 2));
-                                    geometry.faces.push(new THREE.Face3(0, 2, 3));
-                                } else if (this.points.length === 3) {
-                                    if ($.inArray(object.points[0].floorIndex, selectedFloors) === -1 ||
-                                            $.inArray(object.points[1].floorIndex, selectedFloors) === -1 ||
-                                            $.inArray(object.points[2].floorIndex, selectedFloors) === -1) {
-                                        return;
-                                    }
-                                    geometry.vertices.push(
-                                            new THREE.Vector3(object.points[0].x, floors[object.points[0].floorIndex].offset.z, object.points[0][1]),
-                                            new THREE.Vector3(object.points[1].x, floors[object.points[1].floorIndex].offset.z, object.points[1][1]),
-                                            new THREE.Vector3(object.points[2].x, floors[object.points[2].floorIndex].offset.z, object.points[2][1])
-                                            );
-                                    geometry.faces.push(new THREE.Face3(0, 1, 2));
-                                }
+                                var geometry = Geometries.interfloorFloorGeometry(object.points, floors, selectedFloors);
                                 geometry.computeBoundingSphere();
                                 var mesh = new THREE.Mesh(geometry, floorMaterial);
                                 scene.add(mesh);
                                 break;
                             case "wall":
-                                if ($.inArray(object.points[0].floorIndex, selectedFloors) === -1 ||
-                                        $.inArray(object.points[1].floorIndex, selectedFloors) === -1) {
-                                    return;
-                                }
-                                //console.log("it's a wall");
-                                var geometry = new THREE.Geometry();
-                                geometry.vertices.push(
-                                        new THREE.Vector3(this.points[0].x, floors[object.points[0].floorIndex].offset.z, this.points[0].y),
-                                        new THREE.Vector3(this.points[0].x, floors[object.points[0].floorIndex].offset.z + floors[object.points[0].floorIndex].height, this.points[0].y),
-                                        new THREE.Vector3(this.points[1].x, floors[object.points[1].floorIndex].offset.z + floors[object.points[1].floorIndex].height, this.points[1].y),
-                                        new THREE.Vector3(this.points[1].x, floors[object.points[1].floorIndex].offset.z, this.points[1].y)
-                                        );
-                                geometry.faces.push(new THREE.Face3(0, 1, 2));
-                                geometry.faces.push(new THREE.Face3(0, 2, 3));
+                                var geometry = Geometries.interfloorWallGeometry(object.points, floors, selectedFloors);
                                 geometry.computeBoundingSphere();
                                 var mesh = new THREE.Mesh(geometry, wallMaterial);
                                 scene.add(mesh);
