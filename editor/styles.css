@@ -8,8 +8,8 @@ html,body{
     position: fixed;
     top:0;
     left: -100%;
-    width: 100%;
-    height: 100%;
+    width: calc(100% - 30px);
+    height: calc(100% - 30px);
     display: none; 
     background-color: #6571be;
     overflow: auto;
@@ -29,11 +29,11 @@ html,body{
     font-size: 18px;
 }
 .ui-overlay textarea{
-    width: calc(100% - 35px);
+    width: calc(100% - 5px);
     height: calc(100% - 100px);
 }
 .ui-overlay .controls{
-    position: absolute;top: 10px;right: 45px;
+    position: absolute;top: 10px;right: 15px;
 }
 
 
@@ -150,10 +150,9 @@ html,body{
     font-family: sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow: auto;
-    width: calc(100% - 26px);
+    width: 100%;
     border: none;
     margin: 0;
-    margin-left: -2px;
     padding: 0;
 }
 .ui-overlay table thead tr td {
