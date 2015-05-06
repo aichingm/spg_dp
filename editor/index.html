@@ -135,7 +135,47 @@
         </div>
         <div class="ui-overlay" id="help">
             <h1>Help</h1>
-            <table><thead><tr><td>Key</td><td>Description</td></tr></thead><tbody><tr><td>w</td><td>select 2 points to draw a wall</td></tr><tr><td>s</td><td>select 2 points to draw a window</td></tr><tr><td>d</td><td>select 2 points to draw a door</td></tr><tr><td>f</td><td>select 3 or 4 points to draw a floor</td></tr><tr><td>p</td><td>redraw</td></tr><tr><td>l</td><td>clear the screen</td></tr><tr><td>k</td><td>delete data</td></tr><tr><td>-&gt; (arrow)</td><td>move to 50px right </td></tr><tr><td>&lt;- (arrow)</td><td>move to 50px left </td></tr><tr><td>^ (arrow)</td><td>move to 50px up </td></tr><tr><td>v (arrow)</td><td>move to 50px down </td></tr><tr><td>c</td><td>move to center </td></tr><tr><td>e</td><td>open export/import </td></tr><tr><td>2</td><td>set max. selected items to 2</td></tr><tr><td>4</td><td>set max. selected items to 4</td></tr><tr><td>3</td><td>reset zoom</td></tr><tr><td>b</td><td>open background image loader</td></tr><tr><td>+</td><td>zoom in</td></tr><tr><td>-</td><td>zoom out</td></tr><tr><td>h</td><td>show help</td></tr><tr><td>[esc]</td><td>close overlay window</td></tr><tr><td>u</td><td>toggle auto select for new points</td></tr><tr><td>x</td><td>delete all elements with the exact selected points</td></tr><tr><td>X</td><td>delete all elements which have at least one of the selected points</td></tr><tr><td>v</td><td>view in model viewer</td></tr><tr><td>q</td><td>move a point: select a point, hit [q] and click on the new location, after the click the you will be back in the normal point mode</td></tr><tr><td>j</td><td>create a new floor or jump around between existing ones</td></tr><tr><td>i</td><td>handle inter floor objects</td></tr><tr><td>I</td><td>switch to inter floor selection mode</td></tr><tr><td>t</td><td>clear selected points</td></tr><tr><td>z</td><td>remove unused points</td></tr><tr><td>.</td><td>show the settings interface</td></tr><tr><td>W</td><td>switch to auto wall mode</td></tr></tbody></table>
+            <table><thead><tr><td>Key</td><td>Description</td></tr></thead>
+                <tbody>
+                    <tr><td>w</td><td>Make sure that 2 or more points are selected to draw one or more walls between the ponits. Note that no wall is created between the first and the last selected point.</td></tr>
+                    <tr><td>W</td><td>Switch to auto wall mode. A wall will be created between every new seleced point and the last selected point.</td></tr>
+                    <tr><td>s</td><td>Make sure that 2 points are selected to draw a window</td></tr>
+                    <tr><td>d</td><td>Make sure that 2 points are selected to draw a door</td></tr>
+                    <tr><td>f</td><td>Make sure that 3 or 4 points are selected to draw a floor</td></tr>
+                    <tr><td>p</td><td>Redraw the editor</td></tr>
+                    <tr><td>l</td><td>Clear the viewport</td></tr>
+                    <tr><td>k</td><td>Delete all stored data (no recovery)</td></tr>
+                    <tr><td>-&gt; (arrow)</td><td>Move the viewport 50px right </td></tr>
+                    <tr><td>&lt;- (arrow)</td><td>Move the viewport 50px left </td></tr>
+                    <tr><td>^ (arrow)</td><td>Move the viewport 50px up </td></tr>
+                    <tr><td>v (arrow)</td><td>Move the viewport 50px down </td></tr>
+                    <tr><td>c</td><td>Move the viewport to its central position</td></tr>
+                    <tr><td>e</td><td>Open the import/export interface </td></tr>
+                    <tr><td>2</td><td>Set the number of maximal selected points to </td></tr>
+                    <tr><td>4</td><td>Set the number of maximal selected points to 4</td></tr>
+                    <tr><td>3</td><td>Reset the zoom level zo 0</td></tr>
+                    <tr><td>b</td><td>Open the background image interface</td></tr>
+                    <tr><td>+</td><td>Zoom in</td></tr>
+                    <tr><td>-</td><td>Zoom out</td></tr>
+                    <tr><td>h</td><td>Show the help interface</td></tr>
+                    <tr><td>[esc]</td><td>Close the opened interface</td></tr>
+                    <tr><td>u</td><td>Toggle the auto selection of newly created points</td></tr>
+                    <tr><td>x</td><td>Delete all elements the selected points equals the points of the element (floor, wall, ...) </td></tr>
+                    <tr><td>X</td><td>Delete all elements which are connected to least one of the selected points</td></tr>
+                    <tr><td>v</td><td>Open the 3D viewer</td></tr>
+                    <tr><td>q</td><td>Switch between points and movePoints mode. To move a point select the point by clicking at it and click on any empty space on the editor to set the points new position. </td></tr>
+                    <tr><td>Q</td><td>Switch between points and movePathPoints mode. To move a pathPoint select the pathPoint by clicking at it and click on any empty space on the editor to set the pathPoints new position. </td></tr>
+                    <tr><td>j</td><td>Open the floor management interface</td></tr>
+                    <tr><td>i</td><td>Open the management interface for the inter floor objects</td></tr>
+                    <tr><td>I</td><td>Switch between the interfloorSelectionMode and the points mode</td></tr>
+                    <tr><td>ä</td><td>Switch between the pathPoint and the points mode</td></tr>
+                    <tr><td>Ä</td><td>Open the pathPoint management interface</td></tr>
+                    <tr><td>ö</td><td>Switch between the edge and the points mode</td></tr>
+                    <tr><td>Ö</td><td>Open the pathEdge management interface</td></tr>
+                    <tr><td>t</td><td>Unselect all selected points</td></tr>
+                    <tr><td>z</td><td>Remove unused points. Point which are not part of any element (floor, wall, ...)</td></tr>
+                    <tr><td>.</td><td>Open the settings interface</td></tr>
+                </tbody></table>
             <div class="controls">
                 <button class="cancel">&#10007;</button>
             </div>        
