@@ -327,7 +327,20 @@
                     };
                 }(data));
 
-           
+                $(data.paths.vertices).each(function (data) {
+                    return function (i, object) {
+                        var floors = data.modelManager.floors;
+                        console.log(object);
+                        var geometry = new THREE.SphereGeometry(50, 32, 32);
+                        var material = new THREE.MeshBasicMaterial({color: 0xffff00});
+                        var sphere = new THREE.Mesh(geometry, material);
+                        sphere.position.x = object.x;
+                        sphere.position.z = object.y;
+                        sphere.position.y = floors[object.floorIndex].offset.z + 70;
+                        scene.add(sphere);
+                    };
+                }(data));
+
                 $.each(objects.floors, function () {
                     scene.add(this);
                 });
