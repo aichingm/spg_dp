@@ -261,6 +261,7 @@
                 objects.doors = [];
                 objects.interfloorWalls = [];
                 objects.interfloorFloors = [];
+                objects.pathPoints = [];
 
                 $(data.modelManager.floors).each(function (k) {
                     if ($.inArray(k, selectedFloors) === -1) {
@@ -308,20 +309,25 @@
                         switch (object.type) {
                             case "floor":
                                 var geometry = Geometries.interfloorFloorGeometry(object.points, floors, selectedFloors);
-                                geometry.computeBoundingSphere();
-                                var mesh = new THREE.Mesh(geometry, floorMaterial);
-                                objects.interfloorFloors.push(mesh);
+                                if (geometry) {
+                                    geometry.computeBoundingSphere();
+                                    var mesh = new THREE.Mesh(geometry, floorMaterial);
+                                    objects.interfloorFloors.push(mesh);
+                                }
                                 break;
                             case "wall":
                                 var geometry = Geometries.interfloorWallGeometry(object.points, floors, selectedFloors);
-                                geometry.computeBoundingSphere();
-                                var mesh = new THREE.Mesh(geometry, wallMaterial);
-                                objects.interfloorWalls.push(mesh);
+                                if (geometry) {
+                                    geometry.computeBoundingSphere();
+                                    var mesh = new THREE.Mesh(geometry, wallMaterial);
+                                    objects.interfloorWalls.push(mesh);
+                                }
                                 break;
                         }
                     };
                 }(data));
 
+           
                 $.each(objects.floors, function () {
                     scene.add(this);
                 });
