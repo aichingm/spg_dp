@@ -348,6 +348,9 @@
 
                 $(data.paths.vertices).each(function (data) {
                     return function (i, object) {
+                        if ($.inArray(object.floorIndex, selectedFloors) === -1) {
+                            return;
+                        }
                         var floors = data.modelManager.floors;
                         console.log(object);
                         var geometry = new THREE.SphereGeometry(50, 32, 32);
