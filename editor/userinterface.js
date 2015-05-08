@@ -384,7 +384,7 @@ $(document).ready(function () {
         edge.Bx = editor.getEdgeSelection().pointB.x;
         edge.By = editor.getEdgeSelection().pointB.y;
         edge.Afloor = editor.getEdgeSelection().pointA.floorIndex;
-        edge.Bfloor = editor.getEdgeSelection().pointA.floorIndex;
+        edge.Bfloor = editor.getEdgeSelection().pointB.floorIndex;
         var AB = parseInt($("#newPathEdge input[name='AB']").val());
         var BA = $("#newPathEdge input[name='BA']").val();
         BA = BA === "" ? AB : parseInt(BA);
