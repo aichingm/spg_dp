@@ -367,12 +367,6 @@
                             return;
                         }
                         var floors = data.modelManager.floors;
-                        /* OLD ATTEMPT LINE BASED */
-//                         var geometry = new THREE.Geometry();
-//                         geometry.vertices.push(
-//                         new THREE.Vector3(object.Ax, floors[object.Afloor].offset.z + 70, object.Ay),
-//                         new THREE.Vector3(object.Bx, floors[object.Bfloor].offset.z + 70, object.By)
-//                         );
                         var material = new THREE.MeshBasicMaterial({color: 0x0000ff});
                         var edge = Geometries.edgeGeometry(
                                 new THREE.Vector3(object.Ax, floors[object.Afloor].offset.z + 70, object.Ay),
