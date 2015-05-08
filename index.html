@@ -281,6 +281,7 @@
                 objects.interfloorWalls = [];
                 objects.interfloorFloors = [];
                 objects.pathPoints = [];
+                objects.edges = [];
 
                 $(data.modelManager.floors).each(function (k) {
                     if ($.inArray(k, selectedFloors) === -1) {
@@ -359,7 +360,7 @@
                         sphere.position.x = object.x;
                         sphere.position.z = object.y;
                         sphere.position.y = floors[object.floorIndex].offset.z + 70;
-                        scene.add(sphere);
+                        objects.pathPoints.push(sphere);
                     };
                 }(data));
 
@@ -377,7 +378,7 @@
                                 {"radiusAtTop": 10, "radiusAtBottom": 10, "radiusSegments": 6, "heightSegments": 4},
                         material
                                 );
-                        scene.add(edge);
+                        objects.edges.push(edge);
                     };
                 }(data)
                         );
@@ -388,6 +389,12 @@
                     scene.add(this);
                 });
                 $.each(objects.walls, function () {
+                    scene.add(this);
+                });
+                $.each(objects.pathPoints, function () {
+                    scene.add(this);
+                });
+                $.each(objects.edges, function () {
                     scene.add(this);
                 });
                 THREEx.Transparency.init(objects.walls);
