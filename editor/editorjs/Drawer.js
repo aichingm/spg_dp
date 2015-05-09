@@ -1,4 +1,5 @@
 function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style) {
+    "use strict";
 
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
@@ -13,14 +14,14 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
     this.viewport = new Viewport(canvas.height, canvas.width, this.context, this);
 
     this.backgroundImage = null;
-    this.style =style
-    this.setStyle = function(style){
-    	this.style = style;
-    	this.redraw();
-    }
-    this.getStyle = function(){
-    	return this.style;
-    }
+    this.style = style;
+    this.setStyle = function (style) {
+        this.style = style;
+        this.redraw();
+    };
+    this.getStyle = function () {
+        return this.style;
+    };
 
     this.selectedFloorIndex = 0;
     this.drawingParts = ["wall", "floor", "door", "window", "pathpoints", "pathedges", "points"];
@@ -31,7 +32,7 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
         this.context.fillStyle = style.color;
         this.context.beginPath();
         this.context.moveTo(points[0][0], points[0][1]);
-        for (i = 0; i < points.length; i++) {
+        for (var i = 0; i < points.length; i++) {
             this.context.lineTo(points[i][0], points[i][1]);
         }
         this.context.fill();
@@ -115,7 +116,7 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
             if (this.paths.selectedVertex !== undefined) {
                 this.drawPoint(this.paths.selectedVertex, this.style.vertexSelectedPoint);
             }
-        }   
+        }
         if (Arrays.boolInArray("pathedges", this.drawingParts)) {
             for (var i = 0; i < this.paths.edges.length; i++) {
                 if (this.paths.edges[i].Afloor === this.selectedFloorIndex && this.paths.edges[i].Bfloor === this.selectedFloorIndex) {
@@ -134,7 +135,7 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
 
 
     this.pushPoints = function (array, object) {
-        for (i = 0; i < object.points.length; i++) {
+        for (var i = 0; i < object.points.length; i++) {
             array.push({"x": object.points[i][0], "y": object.points[i][1]});
         }
         return array;
