@@ -1,5 +1,5 @@
 function Editor(canvas, options) {
-    this.init = function (canvas, options) {
+    this.init = function (canvas, options, style) {
         this.options = $.extend(new DefaultOptions(), options);
         this.canvas = canvas;
         this.floorIndex = 0;
@@ -7,7 +7,7 @@ function Editor(canvas, options) {
         this.pointsManager = new PointsManager();
         this.paths = new Paths();
         this.edgeSelection = new EdgeSelection();
-        this.drawer = new Drawer(canvas, this.modelManager, this.pointsManager, this.paths, this.edgeSelection);
+        this.drawer = new Drawer(canvas, this.modelManager, this.pointsManager, this.paths, this.edgeSelection,this.options.style?this.options.style:Styles);
         this.interFloorObjects = new InterFloorObjects();
     };
     this.init(canvas, options);
@@ -62,7 +62,7 @@ function Editor(canvas, options) {
                 object.points.push(new Array(selectedPoints[i].x, selectedPoints[i].y));
             }
             this.getModelManager().getFloorElements(this.floorIndex).push(object);
-            this.getDrawer().drawFloor(object, FloorStyle);
+            this.getDrawer().drawFloor(object, this.getDrawer().getStyle().floor);
         }
     };
     this.createPathPoint = function (x, y) {
@@ -81,13 +81,13 @@ function Editor(canvas, options) {
             var style;
             switch (type) {
                 case "window":
-                    style = WindowStyle;
+                    style = this.getDrawer().getStyle().window;
                     break;
                 case "door":
-                    style = DoorStyle;
+                    style = this.getDrawer().getStyle().door;
                     break;
                 case "wall":
-                    style = WallStyle;
+                    style = this.getDrawer().getStyle().wall;
                     break;
             }
             this.getDrawer().drawLine(object, style);
@@ -98,7 +98,7 @@ function Editor(canvas, options) {
                 object.points.push(new Array(selectedPoints[i - 1].x, selectedPoints[i - 1].y));
                 object.points.push(new Array(selectedPoints[i].x, selectedPoints[i].y));
                 this.getModelManager().getFloorElements(this.floorIndex).push(object);
-                var style = WallStyle;
+                var style = this.getDrawer().getStyle().wall;
                 this.getDrawer().drawLine(object, style);
             }
         }
@@ -187,6 +187,9 @@ function Editor(canvas, options) {
      * SETTERS
      */
     this.setOptions = function (options) {
+    	if(options.style){
+    		this.getDrawer().setStyle(options.style);
+    	}
         this.options = $.extend(this.options, options);
     };
     this.setFloorIndex = function (index) {

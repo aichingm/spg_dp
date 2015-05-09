@@ -12,7 +12,7 @@ function PointsManager(options) {
             this.select(x, y);
         } else {
             Debug.log("new point");
-            this.getDrawer().drawPoint(point, PointStyle);
+            this.getDrawer().drawPoint(point, this.getDrawer().getStyle().point);
         }
     };
     this.remove = function (x, y) {
@@ -52,11 +52,11 @@ function PointsManager(options) {
         }
         var point = {"x": x, "y": y};
         this.selectedPoints.push(point);
-        this.getDrawer().drawPoint(point, SelectedPointStyle);
+        this.getDrawer().drawPoint(point, this.getDrawer().getStyle().selectedPoint);
     };
     this.unselect = function (index) {
         if (index !== -1 && index < this.selectedPoints.length) {
-            this.getDrawer().drawPoint(this.selectedPoints[index], PointStyle);
+            this.getDrawer().drawPoint(this.selectedPoints[index], this.getDrawer().getStyle().point);
             this.selectedPoints.splice(index, 1);
         }
     };
