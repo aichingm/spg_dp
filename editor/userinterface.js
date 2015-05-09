@@ -368,9 +368,10 @@ $(document).ready(function () {
 //########################################################
 
     $("#newPathEdge").on("showen", function () {
-        $("#newPathPoint input[name='AB']").val("");
-        $("#newPathPoint input[name='name']").focus();
-        $("#newPathPoint input[name='BA']").val("");
+        $("#newPathEdge input[name='AB']").val("100");
+        $("#newPathEdge input[name='AB']").focus();
+        $("#newPathEdge input[name='BA']").val("");
+        $("#newPathEdge input[name='internalDescription']").val("");
     });
     $("#newPathEdge").on("closed", function () {
         Debug.log("fuck fuck edge");
