@@ -3,8 +3,8 @@ function EdgeSelection() {
     this.pointB = null;
 
     this.select = function (point) {
-        this.pointB = this.pointA;
-        this.pointA = point;
+        this.pointA = this.pointB;
+        this.pointB = point;
     };
     this.unselectA = function () {
         this.pointA = null;
