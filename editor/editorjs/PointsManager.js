@@ -1,6 +1,6 @@
 function PointsManager(options) {
 
-    this.options = $.extend({"maxSelect": 4,"unlimitedSelect": false}, options);
+    this.options = $.extend({"maxSelect": 4}, options);
     this.points = new Array();
     this.selectedPoints = new Array();
     this.drawer;
@@ -44,7 +44,7 @@ function PointsManager(options) {
         if (this.isSelected(x, y) !== -1) {
             return;
         } else if (this.selectedPoints.length >= this.options.maxSelect
-                && !this.options.unlimitedSelect) {
+                && this.options.maxSelect >= 0) {
             Debug.log(this.options.maxSelect);
             while (this.selectedPoints.length >= this.options.maxSelect) {
                 this.unselect(0);
