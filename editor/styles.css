@@ -76,10 +76,10 @@ html,body{
 
 
 .gradientAB{
-    background: linear-gradient( to right, #00CB00, #0000CB);
+    /* values are dynamic --> userinterface.js JUMP_MARK DGC*/
 }
 .gradientBA{
-    background: linear-gradient( to left, #00CB00, #0000CB);;
+    /* values are dynamic --> userinterface.js JUMP_MARK DGC*/
 }
 
 

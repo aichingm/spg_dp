@@ -45,15 +45,15 @@ $(document).ready(function () {
             } else {
                 editor.getPointsManager().toggle(target.x, target.y);
             }
-        }else if (uiProps.equals("mouseMode", "movePathPoint")) {
+        } else if (uiProps.equals("mouseMode", "movePathPoint")) {
             var target = editor.targetIsPathPoint(e.pageX, e.pageY);
             if (target === false) {
                 editor.moveVertex(editor.getPaths().selectedVertex, e.pageX, e.pageY);
                 storage.save();
             } else {
-                if(editor.getPaths().selectedVertex === target){
+                if (editor.getPaths().selectedVertex === target) {
                     editor.getPaths().selectedVertex = undefined;
-                }else{
+                } else {
                     editor.getPaths().selectedVertex = target;
                 }
                 editor.getDrawer().redraw();
@@ -368,6 +368,9 @@ $(document).ready(function () {
 //########################################################
 
     $("#newPathEdge").on("showen", function () {
+        //JUPM_MARK DGC
+        $("#newPathEdge .gradientAB").css("background","linear-gradient( to right, " + editor.getDrawer().getStyle().vertexSelectedPointA.color + ", " + editor.getDrawer().getStyle().vertexSelectedPointB.color + ")");
+        $("#newPathEdge .gradientBA").css("background","linear-gradient( to right, " + editor.getDrawer().getStyle().vertexSelectedPointB.color + ", " + editor.getDrawer().getStyle().vertexSelectedPointA.color + ")");
         $("#newPathEdge input[name='AB']").val("100");
         $("#newPathEdge input[name='AB']").focus();
         $("#newPathEdge input[name='BA']").val("");
