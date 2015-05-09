@@ -103,7 +103,7 @@ function Editor(canvas, options) {
             }
         }
     };
-    this.delete = function (fuzzy) {
+    this.deleteElements = function (fuzzy) {
         var selectedPoints = this.pointsManager.getSelectedPointsAsArrays();
         var indices = new Array();
         var elements = this.getModelManager().getFloorElements(this.floorIndex);

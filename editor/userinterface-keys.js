@@ -53,9 +53,9 @@ function keys(editor, uioverlay) {
             } else if (e.charCode === 117) { //u
                 uiProps.set("autoSelect", !uiProps.get("autoSelect"));
             } else if (e.charCode === 120) { //x
-                editor.delete();
+                editor.deleteElements();
             } else if (e.charCode === 88) { //X
-                editor.delete(true);
+                editor.deleteElements(true);
             } else if (e.charCode === 118) { //v
                 window.open("../index.html");
             } else if (e.charCode === 113) { //q
