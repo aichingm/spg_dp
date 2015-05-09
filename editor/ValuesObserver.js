@@ -4,9 +4,11 @@ ValuesObserver = function () {
 
 
 
-    this.set = function (key, value) {
+    this.set = function (key, value, trigger) {
         this.keyValue[key] = value;
-        this.trigger(key, [key, value]);
+        if(!trigger){
+            this.trigger(key, [key, value]);
+        }
     };
     this.get = function (key) {
         return this.keyValue[key];
