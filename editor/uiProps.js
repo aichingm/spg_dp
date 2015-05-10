@@ -9,6 +9,12 @@ function uiPropsSetUp() {
         //jQuery .attr() does not refresh the checkbox
         document.getElementById("settingsAutoSelect").checked = val;
     });
+    uiProps.on("editorStyle", function (key, val) {
+        editor.setOptions({"style": Styles[val]});
+        //jQuery .attr() does not refresh the checkbox
+        $("#settingsMaxSelected").val(val);
+    });
+    
     uiProps.on("mouseMode", function (key, val) {
         $("#settingsMouseMode").val(val);
     });

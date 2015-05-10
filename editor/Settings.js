@@ -12,6 +12,9 @@ $(document).ready(function () {
     $("#settingsDrawingParts").on("change",function () {
         uiProps.set("drawingParts", $(this).val());
     });
+    $("#settingsEditorStyle").on("change",function () {
+        uiProps.set("editorStyle", $(this).val());
+    });
 
 
 
