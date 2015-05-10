@@ -105,5 +105,55 @@ var Styles = {
             "color": "#01FF70",
             "pointRadius": 10
         }
+    },
+    MonoStyle: {
+        floor: {
+            "color": "rgba(210,210,210,0.75)"
+        },
+        wall: {
+            "width": 5,
+            "color": "#666666"
+        },
+        edge: {
+            "width": 5,
+            "color": "#333333"
+        },
+        window: {
+            "width": 3,
+            "color": "#BBBBBB"
+        },
+        door: {
+            "width": 8,
+            "color": "#BBBBBB"
+        },
+        selectedPoint: {
+            "color": "#000000",
+            "pointRadius": 8
+        },
+        point: {
+            "color": "#444444",
+            "pointRadius": 8
+        },
+        vertexPoint: {
+            //"color" : "rgba(240,18,190,0.75)",
+            "color": "#444444",
+            "pointRadius": 10
+        },
+        vertexSelectedPoint: {
+            "color": "#000000",
+            //"color" : "rgba(236,247,30,0.75)",
+            "pointRadius": 10
+
+        },
+        vertexSelectedPointA: {
+            //"color": "rgba(0, 0, 204, 1)",
+            "color": "#222222",
+            "pointRadius": 10
+        },
+        vertexSelectedPointB: {
+            //"color": "rgba(0, 204, 0,1)",
+            "color": "#CCCCCC",
+            "pointRadius": 10
+        }
     }
 };
