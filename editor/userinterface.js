@@ -78,7 +78,7 @@ $(document).ready(function () {
             if (target !== false) {
                 editor.getEdgeSelection().select(target);
                 editor.getDrawer().redraw();
-                if (editor.getEdgeSelection().isReady()) {
+                if (editor.getEdgeSelection().isReady() && !editor.getPaths().edgeExists(editor.getEdgeSelection().pointA, editor.getEdgeSelection().pointB)) {
                     $("#newPathEdge input[name='Ax']").val(editor.getEdgeSelection().pointA.x);
                     $("#newPathEdge input[name='Bx']").val(editor.getEdgeSelection().pointA.y);
                     $("#newPathEdge input[name='Ay']").val(editor.getEdgeSelection().pointB.x);
@@ -369,8 +369,8 @@ $(document).ready(function () {
 
     $("#newPathEdge").on("showen", function () {
         //JUPM_MARK DGC
-        $("#newPathEdge .gradientAB").css("background","linear-gradient( to right, " + editor.getDrawer().getStyle().vertexSelectedPointA.color + ", " + editor.getDrawer().getStyle().vertexSelectedPointB.color + ")");
-        $("#newPathEdge .gradientBA").css("background","linear-gradient( to right, " + editor.getDrawer().getStyle().vertexSelectedPointB.color + ", " + editor.getDrawer().getStyle().vertexSelectedPointA.color + ")");
+        $("#newPathEdge .gradientAB").css("background", "linear-gradient( to right, " + editor.getDrawer().getStyle().vertexSelectedPointA.color + ", " + editor.getDrawer().getStyle().vertexSelectedPointB.color + ")");
+        $("#newPathEdge .gradientBA").css("background", "linear-gradient( to right, " + editor.getDrawer().getStyle().vertexSelectedPointB.color + ", " + editor.getDrawer().getStyle().vertexSelectedPointA.color + ")");
         $("#newPathEdge input[name='AB']").val("100");
         $("#newPathEdge input[name='AB']").focus();
         $("#newPathEdge input[name='BA']").val("");

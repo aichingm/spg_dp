@@ -25,17 +25,17 @@ function Paths() {
      };*/
     this.vertices = [];
     this.selectedVertex;
-    
+
     this.getIndex = function (vertex) {
         Debug.log(vertex)
-        for(var i = 0; i < this.vertices.length; i++){
+        for (var i = 0; i < this.vertices.length; i++) {
             if (this.vertices[i].x === vertex.x && this.vertices[i].y === vertex.y && this.vertices[i].floorIndex === vertex.floorIndex) {
                 return i;
             }
         }
         return -1;
     };
-    
+
     this.addPoint = function (vertex) {
         this.vertices.push(vertex);
     };
@@ -77,9 +77,28 @@ function Paths() {
         this.vertices.splice(index, 1);
     };
     this.removeEdge = function (index) {
-        if(this.edges.length > index && index > -1){
+        if (this.edges.length > index && index > -1) {
             this.edges.splice(index, 1);
         }
+    };
+    this.edgeExists = function (pointA, pointB) {
+        for (var i = 0; i< this.edges.length;i++) {
+            var edge = this.edges[i];
+            if (
+                    (
+                            pointA.x === edge.Ax && pointA.y === edge.Ay && pointA.floorIndex === edge.Afloor &&
+                            pointB.x === edge.Bx && pointB.y === edge.By && pointB.floorIndex === edge.Bfloor
+                            )
+                    ||
+                    (
+                            pointA.x === edge.Bx && pointA.y === edge.By && pointA.floorIndex === edge.Bfloor &&
+                            pointB.x === edge.Ax && pointB.y === edge.Ay && pointB.floorIndex === edge.Afloor
+                            )
+                    ) {
+                return true;
+            }
+        }
+        return false;
     };
     this.save = function () {
         return {"vertices": this.vertices, "edges": this.edges};
