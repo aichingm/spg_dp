@@ -7,7 +7,7 @@ function Editor(canvas, options) {
         this.pointsManager = new PointsManager();
         this.paths = new Paths();
         this.edgeSelection = new EdgeSelection();
-        this.drawer = new Drawer(canvas, this.modelManager, this.pointsManager, this.paths, this.edgeSelection,this.options.style?this.options.style:Styles);
+        this.drawer = new Drawer(canvas, this.modelManager, this.pointsManager, this.paths, this.edgeSelection,this.options.style?this.options.style:Styles.ClassicStyle);
         this.interFloorObjects = new InterFloorObjects();
     };
     this.init(canvas, options);
