@@ -40,7 +40,7 @@ $(document).ready(function () {
             var target = editor.targetIsPoint(e.pageX, e.pageY);
             if (target === false) {
                 editor.movePoint(e.pageX, e.pageY);
-                //uiProps.set("mouseMode", "points");
+                storage.save();
                 editor.getPointsManager().clearSelectedPoints();
             } else {
                 editor.getPointsManager().toggle(target.x, target.y);
