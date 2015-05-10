@@ -45,14 +45,8 @@ function Viewport(height, width, context, drawer) {
         this.drawer.redraw();
     };
      this.moveRespectful = function (x, y) {
-        this.clear();
         var factor = Math.pow(this.zoomFactor, this.zoomClickes * -1);
-        var X = Math.round(x * factor); 
-        var Y = Math.round(y * factor); 
-        this.offsetX += X;
-        this.offsetY += Y;
-        this.context.translate(X, Y);
-        this.drawer.redraw();
+        this.move(Math.round(x * factor), Math.round(y * factor)); 
     };
     this.resetMove = function () {
         this.clear();
