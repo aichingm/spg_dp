@@ -114,7 +114,7 @@ $(document).ready(function () {
         if (e.which === 1) {
             wasMove = true;
             Debug.log(e.originalEvent.movementX, e.originalEvent.movementY);
-            editor.getViewport().move(e.originalEvent.movementX, e.originalEvent.movementY);
+            editor.getViewport().moveRespectful(e.originalEvent.movementX, e.originalEvent.movementY);
         }
     });
     //setup the scoll listner to trigger the zoom function DOMMouseScroll
