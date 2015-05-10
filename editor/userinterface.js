@@ -290,7 +290,7 @@ $(document).ready(function () {
         var cats = $("#newPathPoint input[name='categories']").val();
         point.categories = cats !== "" ? cats.split(",") : [];
         editor.getPaths().addPoint(point);
-        editor.getDrawer().drawPoint(point, VertexPointStyle);
+        editor.getDrawer().drawPoint(point, editor.getDrawer().getStyle().vertexPoint);
         storage.save();
     });
     $("#newPathPoint input[name='public']").on("keypress", function (e) {
