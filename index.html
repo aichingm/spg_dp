@@ -13,6 +13,8 @@
         <script src="js/jquery-2.1.3.min.js"></script>
         <script type="text/javascript" src="js/drawing/function.draw.js"></script>
         <script type="text/javascript" src="js/drawing/function.init.js"></script>
+        <script type="text/javascript" src="js/drawing/function.animate.js"></script>
+        <script type="text/javascript" src="js/drawing/function.clearScene.js"></script>
         <script type="text/javascript" src="js/drawing/object.Geometries.js"></script>
         <script type="text/javascript" src="js/drawing/object.Materials.js"></script>
         <script type="text/javascript" src="js/events/on.document.keypress.js"></script>
@@ -24,30 +26,14 @@
             /* global Storage */
             var updateFcts = [];
             var scene, camera, renderer;
-            function clearScene() {
-                var obj, i;
-                for (i = scene.children.length - 1; i >= 0; i--) {
-                    obj = scene.children[ i ];
-                    if (obj !== camera) {
-                        scene.remove(obj);
-                    }
-                }
-            }
+           
             // Set up the scene, camera, and renderer as global variables.
             init();
             animate();
             
 
             // Renders the scene and updates the render as needed.
-            function animate() {
-                requestAnimationFrame(animate);
-                // Render the scene.
-                renderer.render(scene, camera);
-                controls.update();
-                updateFcts.forEach(function (updateFn) {
-                    updateFn();
-                });
-            }
+            
             
             function buildShowDiv() {
                 if (typeof (Storage) !== "undefined") {
