@@ -29,29 +29,29 @@ function draw(data, clear) {
                     case "floor":
                         var geometry = Geometries.floorGemometry(this.points, floor.offset.z);
                         geometry.computeBoundingSphere();
-                        var mesh = new THREE.Mesh(geometry, floorMaterial);
+                        var mesh = new THREE.Mesh(geometry, Materials.floor);
                         objects.floors.push(mesh);
                         break;
                     case "wall":
                         var geometry = Geometries.wallGemometry(this.points, floor.offset.z, floor.height);
                         geometry.computeBoundingSphere();
-                        var mesh = new THREE.Mesh(geometry, wallMaterial);
+                        var mesh = new THREE.Mesh(geometry, Materials.wall);
                         objects.walls.push(mesh);
                         break;
                     case "door":
                         var geometryDoor = Geometries.doorGemometry(this.points, floor.offset.z, floor.height);
                         geometryDoor.computeBoundingSphere();
-                        var meshDoor = new THREE.Mesh(geometryDoor, doorMaterial);
+                        var meshDoor = new THREE.Mesh(geometryDoor, Materials.door);
                         objects.doors.push(meshDoor);
                         var geometryOverDoor = Geometries.overDoorGemometry(this.points, floor.offset.z, floor.height);
                         geometryOverDoor.computeBoundingSphere();
-                        var meshOverDoor = new THREE.Mesh(geometryOverDoor, wallMaterial);
+                        var meshOverDoor = new THREE.Mesh(geometryOverDoor, Materials.wall);
                         objects.doors.push(meshOverDoor);
                         break;
                     case "window":
                         var geometryWindow = Geometries.windowGeometry(this.points, floor.offset.z, floor.height);
                         geometryWindow.computeBoundingSphere();
-                        var meshWindow = new THREE.Mesh(geometryWindow, windowMaterial);
+                        var meshWindow = new THREE.Mesh(geometryWindow, Materials.window);
                         objects.windows.push(meshWindow);
                         break;
                 }
@@ -67,7 +67,7 @@ function draw(data, clear) {
                     var geometry = Geometries.interfloorFloorGeometry(object.points, floors, selectedFloors);
                     if (geometry) {
                         geometry.computeBoundingSphere();
-                        var mesh = new THREE.Mesh(geometry, floorMaterial);
+                        var mesh = new THREE.Mesh(geometry, Materials.floor);
                         objects.interfloorFloors.push(mesh);
                     }
                     break;
@@ -75,7 +75,7 @@ function draw(data, clear) {
                     var geometry = Geometries.interfloorWallGeometry(object.points, floors, selectedFloors);
                     if (geometry) {
                         geometry.computeBoundingSphere();
-                        var mesh = new THREE.Mesh(geometry, wallMaterial);
+                        var mesh = new THREE.Mesh(geometry, Materials.wall);
                         objects.interfloorWalls.push(mesh);
                     }
                     break;
