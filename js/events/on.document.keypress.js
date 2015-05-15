@@ -1,5 +1,16 @@
 $(document).ready(function (e) {
-    $(document).on("keypress", function (e) {
+    $(document).on("keypress keyup", function (e) {
+        //hide open leftDrawer
+        if (e.keyCode === 27) {
+            $(".leftDrawer.isIn").removeClass("isIn").animate({
+                left: "-100%"
+            }, 200);
+            //animates all .opener to margin-left: 0 which is preatty dirty!! fix this todo
+            $(".opener").animate({
+                "margin-left": 0
+            }, 200);;
+        }
+
         //init settings drawer
         if (e.charCode === 46) { //.
             if ($("#settings").hasClass("isIn")) {
@@ -14,5 +25,5 @@ $(document).ready(function (e) {
                 }, 200);
             }
         }
-    })
+    });
 });

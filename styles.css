@@ -41,6 +41,40 @@ body > canvas{
     width:190px;
 }
 
+.leftDrawer{
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: calc(-100%);
+    width: 100%;
+    height: 100%;
+}
 
-
-
+.leftDrawer .content{
+    z-index: 2;
+    color: #ebecf4;
+    float: left;
+    background-color: #6571be;
+    width: calc(100% - 30px);
+    height: 100%;
+    padding: 15px;
+}
+.openers{
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    float: left;
+    width: 30px;
+}
+.openers .opener{
+    color: #ebecf4;
+    background-color: #6571be;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+}
+.openers .opener:last-child {
+    border-bottom-right-radius: 7px;
+}
