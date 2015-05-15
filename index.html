@@ -7,6 +7,7 @@
         <link rel="stylesheet" type="text/css" href="styles.css">
     </head>
     <body>
+        <script src="js/globalVariables.js"></script>
         <script src="js/three.min.js"></script>
         <script src="js/OrbitControls.js"></script>
         <script src="js/threex.transparency.js"></script>
@@ -20,13 +21,6 @@
         <script type="text/javascript" src="js/drawing/object.Materials.js"></script>
         <script type="text/javascript" src="js/events/on.document.keypress.js"></script>
         <script type="text/javascript" src="js/events/on.document.ready.js"></script>
-        <script>
-            // Set up the scene, camera, updateFcts, and renderer as global variables.
-            var scene, camera, renderer, updateFcts = [];
-            init();
-            //request animation
-            animate();
-        </script>
         <div id="settings">
             <div class="settingsLine settingsLineH1">
                 Settings

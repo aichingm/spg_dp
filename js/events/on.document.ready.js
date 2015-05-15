@@ -1,4 +1,10 @@
 $(document).ready(function (e) {
+    //start up
+    init();
+    //request animation
+    animate();
+
+
     //bind storage events
     $(window).bind('storage', function (e) {
         if (e.originalEvent.key === "PieceofShit.exports") {
@@ -6,7 +12,6 @@ $(document).ready(function (e) {
             draw(JSON.parse(e.originalEvent.newValue), true);
         }
     });
-    // start drawing
     //check if exportObjects are cached and if load them
     if (typeof (Storage) !== "undefined") {
         var exports = localStorage.getItem("PieceofShit.exports");
