@@ -11,6 +11,7 @@
         <script src="js/OrbitControls.js"></script>
         <script src="js/threex.transparency.js"></script>
         <script src="js/jquery-2.1.3.min.js"></script>
+        <script type="text/javascript" src="js/function.buildShowDiv.js"></script>
         <script type="text/javascript" src="js/drawing/function.draw.js"></script>
         <script type="text/javascript" src="js/drawing/function.init.js"></script>
         <script type="text/javascript" src="js/drawing/function.animate.js"></script>
@@ -20,46 +21,11 @@
         <script type="text/javascript" src="js/events/on.document.keypress.js"></script>
         <script type="text/javascript" src="js/events/on.document.ready.js"></script>
         <script>
-            // JsHint directives
-            /* global THREE */
-            /* global THREEx */
-            /* global Storage */
-            var updateFcts = [];
-            var scene, camera, renderer;
-           
-            // Set up the scene, camera, and renderer as global variables.
+            // Set up the scene, camera, updateFcts, and renderer as global variables.
+            var scene, camera, renderer, updateFcts = [];
             init();
+            //request animation
             animate();
-            
-
-            // Renders the scene and updates the render as needed.
-            
-            
-            function buildShowDiv() {
-                if (typeof (Storage) !== "undefined") {
-                    var exports = localStorage.getItem("PieceofShit.exports");
-                    //check if they are valid
-                    if (exports !== null && exports !== undefined && exports.length > 0) {
-                        //draw them
-                        var data = JSON.parse(exports);
-                        $("#drawFloors").html("");
-                        $(data.modelManager.floors).each(function (k) {
-                            $("#drawFloors").append("<option selected='selected' value='" + k + "'>" + this.name + "</option>");
-                        });
-                        $("#drawFloors").attr("size", data.modelManager.floors.length);
-                    }
-                    $("#drawFloors").change(function (e) {
-                        if (typeof (Storage) !== "undefined") {
-                            var exports = localStorage.getItem("PieceofShit.exports");
-                            //check if they are valid
-                            if (exports !== null && exports !== undefined && exports.length > 0) {
-                                //draw them
-                                draw(JSON.parse(exports), true);
-                            }
-                        }
-                    });
-                }
-            }
         </script>
         <div id="settings">
             <div class="settingsLine settingsLineH1">
