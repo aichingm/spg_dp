@@ -94,7 +94,7 @@ body > canvas{
 
 
 
-/***************************BUTTONS&CONTROLES IN OVERLAY*****************/
+/***************************BUTTONS&CONTROLES IN LEFT DRAWER*****************/
 .leftDrawer .controls{
     position: absolute;top: 10px;right: 15px;
 }
@@ -139,4 +139,22 @@ body > canvas{
 }
 .leftDrawer button:hover {
     background: none repeat scroll 0 0 #444444;
+}
+/******** LEFT DRAWER INPUTS ************/
+.leftDrawer  input, .leftDrawer  select{
+    border: 0 none;
+    border-radius: 2px 2px 2px 2px;
+    color: #444444;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Arial,sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 20px;
+    margin-bottom: 0;
+    padding: 7px 10px;
+    text-transform: none;
+    transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
 }
