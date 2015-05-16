@@ -1,19 +1,22 @@
-function buildMapFromDataPaths(data) {
-    var map = {}, eIndex, paths = new Paths(), e;
-    paths.load(data);
+function buildMapFromDataPaths(data, distanceCalculator) {
+    distanceCalculator = distanceCalculator?distanceCalculator:DistanceCalculators.calculateByVectorDistance3D;
+    var map = {}, eIndex, paths = new Paths(), e, a, b;
+    paths.load(data.paths);
     for (eIndex in paths.edges) {
         e = paths.edges[eIndex];
         try {
-            if (map[paths.getVertex(e.Ax, e.Ay, e.Afloor).name] === undefined) {
-                map[paths.getVertex(e.Ax, e.Ay, e.Afloor).name] = {};
+            a = paths.getVertex(e.Ax, e.Ay, e.Afloor);
+            b = paths.getVertex(e.Bx, e.By, e.Bfloor);
+            if (map[a.name] === undefined) {
+                map[a.name] = {};
             }
-            if (map[paths.getVertex(e.Bx, e.By, e.Bfloor).name] === undefined) {
-                map[paths.getVertex(e.Bx, e.By, e.Bfloor).name] = {};
+            if (map[b.name] === undefined) {
+                map[b.name] = {};
             }
-            map[paths.getVertex(e.Ax, e.Ay, e.Afloor).name][paths.getVertex(e.Bx, e.By, e.Bfloor).name] = e.metric[0]; //distance calculation todo
-            map[paths.getVertex(e.Bx, e.By, e.Bfloor).name][paths.getVertex(e.Ax, e.Ay, e.Afloor).name] = e.metric[1]; //distance calculation todo
+            map[a.name][b.name] = distanceCalculator(0, e, a, b, data);
+            map[b.name][a.name] = distanceCalculator(1, e, a, b, data);
         } catch (e) {
-            console.log("Edge not found", e.data);
+            console.log("Vertex not found", e.data);
         }
     }
     return map;
