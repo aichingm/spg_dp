@@ -6,6 +6,7 @@ function Viewer() {
     this.path;
     this.data;
     this.updateFunctions = [];
+    this.stats;
     this.init = function () {
         // Create the scene and set the scene size.
         this.scene = new THREE.Scene();
@@ -219,6 +220,9 @@ function Viewer() {
     };
 
     this.animate = function () {
+        if (this.stats) {
+            this.stats.begin();
+        }
         var _this = this; //the first time this is call it is the viewer itself but after the fist call it is window.
         window.requestAnimationFrame(function () {
             _this.animate();
@@ -231,7 +235,9 @@ function Viewer() {
                 updateFn();
             }
         });
-
+        if (this.stats) {
+            this.stats.end();
+        }
     };
 
     this.setData = function (data) {
@@ -239,6 +245,12 @@ function Viewer() {
     };
     this.setPath = function (path) {
         this.path = path;
+    };
+    this.setStats = function (stats) {
+        this.stats = stats;
+    };
+    this.getStats = function () {
+        return this.stats;
     };
 
 
