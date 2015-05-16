@@ -90,6 +90,11 @@ body > canvas{
     text-align: center;
     line-height: 30px;
 }
+.openers .opener:hover{
+    background-color: #330099;
+    cursor: pointer;
+
+}
 .openers .opener:last-child {
     border-bottom-right-radius: 7px;
 }
