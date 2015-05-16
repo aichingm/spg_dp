@@ -1,5 +1,5 @@
-function draw(data, clear) {
-
+function draw(data, clear, path) {
+    path = path ? path : [];
     var selectedFloors = [];
     if ($("#drawFloors").val()) {
         $.each($("#drawFloors").val(), function (v, k) {
@@ -83,11 +83,14 @@ function draw(data, clear) {
         };
     }(data));
 
+    var vertices = [];
+
     $(data.paths.vertices).each(function (data) {
         return function (i, object) {
-            if ($.inArray(object.floorIndex, selectedFloors) === -1) {
+            if ($.inArray(object.floorIndex, selectedFloors) === -1 || !Arrays.boolInArray(object.name, path)) {
                 return;
             }
+            vertices.push({"x": object.x, "y": object.y, "floorIndex": object.floorIndex});
             var floors = data.modelManager.floors;
             console.log(object);
             var geometry = new THREE.SphereGeometry(50, 32, 32);
@@ -100,10 +103,20 @@ function draw(data, clear) {
         };
     }(data));
 
+
+
+
     $(data.paths.edges).each(function (data) {
         return function (i, object) {
             if ($.inArray(object.Afloor, selectedFloors) === -1 ||
-                    $.inArray(object.Bfloor, selectedFloors) === -1) {
+                    $.inArray(object.Bfloor, selectedFloors) === -1 ||
+                    Arrays.countSameItems([
+                        {"x": object.Ax, "y": object.Ay, "floorIndex": object.Afloor},
+                        {"x": object.Bx, "y": object.By, "floorIndex": object.Bfloor}
+                    ], vertices) !== 2
+                    // !Arrays.containsEqualObject(vertices, {"x":object.Ax, "y":object.Ay, "floorIndex":object.Afloor}) ||
+                    // !Arrays.containsEqualObject(vertices, {"x":object.Bx, "y":object.By, "floorIndex":object.Bfloor}) 
+                    ) {
                 return;
             }
             var floors = data.modelManager.floors;
