@@ -50,6 +50,7 @@ body > canvas{
     height: 100%;
 }
 
+
 .leftDrawer .content{
     z-index: 2;
     color: #ebecf4;
@@ -58,6 +59,18 @@ body > canvas{
     width: calc(100% - 30px);
     height: 100%;
     padding: 15px;
+}
+.leftDrawer .content h1{
+    margin-top: 0;
+    color: #ebecf4;
+    font-variant:small-caps;
+    font-size: 24px;
+}
+.leftDrawer .content h2{
+    margin-top: 0;
+    color: #ebecf4;
+    font-variant:small-caps;
+    font-size: 18px;
 }
 .openers{
     z-index: 1;
