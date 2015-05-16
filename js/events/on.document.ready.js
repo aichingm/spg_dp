@@ -1,15 +1,15 @@
 $(document).ready(function (e) {
-    //start up
-    init();
-    //request animation
-    animate();
+    VIEWER = new Viewer();
+    VIEWER.init();
+    VIEWER.animate();
 
 
     //bind storage events
     $(window).bind('storage', function (e) {
         if (e.originalEvent.key === "PieceofShit.exports") {
             buildShowDiv();
-            draw(JSON.parse(e.originalEvent.newValue), true);
+            VIEWER.setData(JSON.parse(e.originalEvent.newValue));
+            VIEWER.draw(true);
         }
     });
     //check if exportObjects are cached and if load them
@@ -19,7 +19,8 @@ $(document).ready(function (e) {
         if (exports !== null && exports !== undefined && exports.length > 0) {
             //draw them
             buildShowDiv();
-            draw(JSON.parse(exports), false);
+            VIEWER.setData(JSON.parse(exports));
+            VIEWER.draw(false);
         }
     }
 });

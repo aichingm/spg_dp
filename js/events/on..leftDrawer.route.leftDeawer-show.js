@@ -29,8 +29,9 @@ $(document).ready(function (e) {
         var map = buildMapFromDataPaths(exports.paths);
         graph = new Dijkstra(map);
         var path = graph.getPath($(".leftDrawer.route div select[name='from']").val(), $(".leftDrawer.route div select[name='to']").val());
-
-        draw(exports, true, path);
+        
+        VIEWER.setPath(path);
+        VIEWER.draw(true);
         $drawer = $(".leftDrawer.isIn");
         $drawer.trigger("leftDrawer-close")
                 .removeClass("isIn")

@@ -17,7 +17,7 @@ function buildShowDiv() {
                 //check if they are valid
                 if (exports !== null && exports !== undefined && exports.length > 0) {
                     //draw them
-                    draw(JSON.parse(exports), true);
+                    VIEWER.draw(true);
                 }
             }
         });
