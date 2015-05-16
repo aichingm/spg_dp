@@ -84,6 +84,15 @@ Arrays = new function () {
     this.boolInArray = function (value, array) {
         return $.inArray(value, array) !== -1;
     };
-
+    this.unique = function (a) {
+        var fastRefObject = {}, uniqueList = [];
+        for (var i = 0; i < a.length; i++) {
+            if (fastRefObject[a[i]] === undefined) {
+                fastRefObject[a[i]] = true;
+                uniqueList.push(a[i]);
+            }
+        }
+        return uniqueList;
+    };
     return this;
 };
