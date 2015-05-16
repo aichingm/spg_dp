@@ -22,22 +22,23 @@ $(document).ready(function (e) {
             $(".leftDrawer.route div select[name='to']").append("<option>" + list[i] + "</option>");
         }
     });
+    $(".leftDrawer.route div button.apply").attr("disabled","disabled");
     $(".leftDrawer.route div select[name='from']").on("change", function (e) {
         if ($(this).val() !== "-1") {
             $(".leftDrawer.route div select[name='to']").removeAttr("disabled");
         } else {
             $(".leftDrawer.route div select[name='to']").attr("disabled", "disabled");
-            $(".leftDrawer.route div button").attr("disabled", "disabled");
+            $(".leftDrawer.route div button.apply").attr("disabled", "disabled");
         }
     });
     $(".leftDrawer.route div select[name='to']").on("change", function (e) {
         if ($(this).val() !== "-1") {
-            $(".leftDrawer.route div button").removeAttr("disabled");
+            $(".leftDrawer.route div button.apply").removeAttr("disabled");
         } else {
-            $(".leftDrawer.route div button").attr("disabled", "disabled");
+            $(".leftDrawer.route div button.apply").attr("disabled", "disabled");
         }
     });
-    $(".leftDrawer.route div button").click(function () {
+    $(".leftDrawer.route").on("leftDrawer-apply",function () {
         var exports = JSON.parse(localStorage.getItem("PieceofShit.exports"));
         var map = buildMapFromDataPaths(exports.paths);
         graph = new Dijkstra(map);
@@ -45,21 +46,8 @@ $(document).ready(function (e) {
 
         VIEWER.setPath(path);
         VIEWER.draw(true);
-        $drawer = $(".leftDrawer.isIn");
-        $drawer.trigger("leftDrawer-close")
-                .removeClass("isIn")
-                .animate({
-                    left: "-100%"
-                }, {
-                    duration: 200,
-                    done: function () {
-                        $drawer.trigger("leftDrawer-closed");
-                    }
-                });
-        //animates all .opener to margin-left: 0 which is preatty dirty!! fix this todo
-        $(".opener").animate({
-            "margin-left": 0
-        }, 200);
+       
+        
 
     });
 });
