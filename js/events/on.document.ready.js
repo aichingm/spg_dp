@@ -2,6 +2,16 @@ $(document).ready(function (e) {
     STORAGE = new StorageControler("PieceofShit.exports");
     STORAGE.jsonConvert = true;
     STORAGE.setupChangeListener();
+    STORAGE.dataManipulator = function (data) {
+        var i, e, paths = new Paths();
+        paths.load(data.paths);
+        for (i = 0; i < paths.edges.length; i++) {
+            e = paths.edges[i];
+            e.A = paths.getVertex(e.Ax, e.Ay, e.Afloor);
+            e.B = paths.getVertex(e.Bx, e.By, e.Bfloor);
+        }
+        return data;
+    };
     STORAGE.reloadData();
     VIEWER = new Viewer();
 
