@@ -1,7 +1,6 @@
 $(document).ready(function (e) {
     $(".leftDrawer.route").on("leftDrawer-open", function (e) {
         var list, exports = STORAGE.getData();
-        console.log(exports && exports.paths)
         if (exports && exports.paths && exports.paths.vertices.length > 0) {
             list = buildVetexNameList(exports.paths);
             $(".leftDrawer.route .content:first-child").show();

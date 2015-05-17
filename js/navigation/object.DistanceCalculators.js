@@ -5,7 +5,6 @@ var DistanceCalculators = {
     calculateByVectorDistance2D: function (direction, edge, a, b, data) {
         var vac = new THREE.Vector2(a.x, a.y);
         var d = vac.distanceTo(new THREE.Vector2(b.x, b.y));
-        console.log(d);
         return d;
     },
     calculateByVectorDistance3D: function (direction, edge, a, b, data) {
