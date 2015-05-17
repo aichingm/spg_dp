@@ -1,6 +1,7 @@
 $(document).ready(function (e) {
     STORAGE = new StorageControler("PieceofShit.exports");
     STORAGE.jsonConvert = true;
+    STORAGE.setupChangeListener();
     STORAGE.reloadData();
     VIEWER = new Viewer();
 
