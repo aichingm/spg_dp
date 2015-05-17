@@ -21,15 +21,15 @@ function StorageControler(storageKey) {
                 if (!e) {
                     e = window.event;
                 }
-                if (e.originalEvent.key === obj.storageKey) {
+                if (e.key === obj.storageKey) {
                     if (obj.updateOnChange) {
                         obj.reloadData();
                     }
                     for (f in obj.changeListeners) {
                         if (obj.jsonConvert) {
-                            f(JSON.parse(e.originalEvent.newValue), e, obj);
+                            obj.changeListeners[f](JSON.parse(e.newValue), e, obj);
                         } else {
-                            f(e.originalEvent.newValue, e, obj);
+                            obj.changeListeners[f](e.newValue, e, obj);
                         }
                     }
                 }
@@ -54,7 +54,7 @@ function StorageControler(storageKey) {
         } else {
             this.data = this.storage.getItem(this.storageKey);
         }
-        if(typeof this.dataManipulator === "function"){
+        if (typeof this.dataManipulator === "function") {
             this.data = this.dataManipulator(this.data, this);
         }
     };
