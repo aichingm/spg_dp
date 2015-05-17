@@ -89,6 +89,8 @@ body > canvas{
     height: 30px;
     text-align: center;
     line-height: 30px;
+    font-weight: bold;
+    font-size: 15px;
 }
 .openers .opener:hover{
     background-color: #330099;
