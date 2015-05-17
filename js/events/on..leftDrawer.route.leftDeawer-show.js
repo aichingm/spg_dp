@@ -1,7 +1,6 @@
 $(document).ready(function (e) {
     $(".leftDrawer.route").on("leftDrawer-open", function (e) {
-        var list, exports = localStorage.getItem("PieceofShit.exports");
-        exports = JSON.parse(exports);
+        var list, exports = STORAGE.getData();
         console.log(exports && exports.paths)
         if (exports && exports.paths && exports.paths.vertices.length > 0) {
             list = buildVetexNameList(exports.paths);
@@ -39,7 +38,7 @@ $(document).ready(function (e) {
         }
     });
     $(".leftDrawer.route").on("leftDrawer-apply", function () {
-        var exports = JSON.parse(localStorage.getItem("PieceofShit.exports"));
+        var exports = STORAGE.getData();
         var map = buildMapFromDataPaths(exports);
         graph = new Dijkstra(map);
         var path = graph.getPath($(".leftDrawer.route div select[name='from']").val(), $(".leftDrawer.route div select[name='to']").val());

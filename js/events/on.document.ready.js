@@ -1,4 +1,7 @@
 $(document).ready(function (e) {
+    STORAGE = new StorageControler("PieceofShit.exports");
+    STORAGE.jsonConvert = true;
+    STORAGE.reloadData();
     VIEWER = new Viewer();
 
     VIEWER.setStats(new Stats());
@@ -8,27 +11,24 @@ $(document).ready(function (e) {
     VIEWER.getStats().domElement.style.bottom = '0px';
     VIEWER.getStats().domElement.style.zIndex = '1000';
     document.body.appendChild(VIEWER.getStats().domElement);
-    
+
     VIEWER.init();
     VIEWER.animate();
 
     //bind storage events
-    $(window).bind('storage', function (e) {
-        if (e.originalEvent.key === "PieceofShit.exports") {
-            buildShowDiv();
-            VIEWER.setData(JSON.parse(e.originalEvent.newValue));
-            VIEWER.draw(true);
-        }
+    STORAGE.onChange(function (data, event, controler) {
+        buildShowDiv();
+        VIEWER.setData(data);
+        VIEWER.draw(true);
     });
-    //check if exportObjects are cached and if load them
-    if (typeof (Storage) !== "undefined") {
-        var exports = localStorage.getItem("PieceofShit.exports");
-        //check if they are valid
-        if (exports !== null && exports !== undefined && exports.length > 0) {
-            //draw them
-            buildShowDiv();
-            VIEWER.setData(JSON.parse(exports));
-            VIEWER.draw(false);
-        }
+    var exports = STORAGE.getData();
+    //check if the exports are valid
+    if (exports !== undefined) {
+        //build settings drawer
+        buildShowDiv();
+        //set draw data
+        VIEWER.setData(exports);
+        //draw them
+        VIEWER.draw(false);
     }
 });
