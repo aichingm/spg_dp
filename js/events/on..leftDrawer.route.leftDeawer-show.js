@@ -28,6 +28,7 @@ $(document).ready(function (e) {
             $(".leftDrawer.route div select[name='to']").attr("disabled", "disabled");
             $(".leftDrawer.route div button.apply").attr("disabled", "disabled");
         }
+        $(".leftDrawer.route div .error.noRoute").hide();
     });
     $(".leftDrawer.route div select[name='to']").on("change", function (e) {
         if ($(this).val() !== "-1") {
@@ -35,17 +36,22 @@ $(document).ready(function (e) {
         } else {
             $(".leftDrawer.route div button.apply").attr("disabled", "disabled");
         }
+        $(".leftDrawer.route div .error.noRoute").hide();
     });
-    $(".leftDrawer.route").on("leftDrawer-apply", function () {
-        var exports = STORAGE.getData();
-        var map = buildMapFromDataPaths(exports);
+    $(".leftDrawer.route").on("leftDrawer-apply", function (event) {
+        var exception, exports, map, graph, path;
+        exports = STORAGE.getData();
+        map = buildMapFromDataPaths(exports);
         graph = new Dijkstra(map);
-        var path = graph.getPath($(".leftDrawer.route div select[name='from']").val(), $(".leftDrawer.route div select[name='to']").val());
-
-        VIEWER.setPath(path);
-        VIEWER.draw(true);
-
-
-
+        try {
+            path = graph.getPath($(".leftDrawer.route div select[name='from']").val(), $(".leftDrawer.route div select[name='to']").val());
+            VIEWER.setPath(path);
+            VIEWER.draw(true);
+        } catch (exception) {
+            if (exception.name === "NoRoute") {//#leftDrawers > div.leftDrawer.route.isIn > div:nth-child(1) > div
+                $(".leftDrawer.route div .error.noRoute").show();
+                event.preventDefault();
+            }
+        }
     });
 });
