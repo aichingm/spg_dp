@@ -148,16 +148,14 @@ function Viewer() {
 
 
 
-        $(this.data.paths.edges).each(function (data) {
+        $(this.data.paths.edges).each(function (data, viewer) {
             return function (i, object) {
+                var aPos, bPos;
+                aPos = viewer.path.indexOf(object.A.name);
+                bPos = viewer.path.indexOf(object.B.name);
                 if ($.inArray(object.Afloor, selectedFloors) === -1 ||
-                        $.inArray(object.Bfloor, selectedFloors) === -1 ||
-                        Arrays.countSameItems([
-                            {"x": object.Ax, "y": object.Ay, "floorIndex": object.Afloor},
-                            {"x": object.Bx, "y": object.By, "floorIndex": object.Bfloor}
-                        ], vertices) !== 2
-                        // !Arrays.containsEqualObject(vertices, {"x":object.Ax, "y":object.Ay, "floorIndex":object.Afloor}) ||
-                        // !Arrays.containsEqualObject(vertices, {"x":object.Bx, "y":object.By, "floorIndex":object.Bfloor}) 
+                        $.inArray(object.Bfloor, selectedFloors) === -1 || aPos === -1 || bPos === -1 ||
+                        !(aPos + 1 === bPos || bPos + 1 === aPos)
                         ) {
                     return;
                 }
@@ -171,7 +169,7 @@ function Viewer() {
                         );
                 objects.edges.push(edge);
             };
-        }(this.data));
+        }(this.data, this));
         var _this = this;
         $.each(objects.floors, function () {
             _this.scene.add(this);
