@@ -54,6 +54,11 @@ var Styles = {
         vertexSelectedPointB: {
             "color": "rgba(0, 204, 0,1)",
             "pointRadius": 10
+        },
+        mouseSelectionSquare: {
+            "color": "rgba(0, 204, 0,0.3)",
+            "lineWidth": 10,
+            "lineColor": "rgba(100, 204, 100,1)"
         }
     },
     GoodStyle: {
@@ -85,25 +90,26 @@ var Styles = {
             "pointRadius": 8
         },
         vertexPoint: {
-            //"color" : "rgba(240,18,190,0.75)",
             "color": "#85144b",
             "pointRadius": 10
         },
         vertexSelectedPoint: {
             "color": "#F012BE",
-            //"color" : "rgba(236,247,30,0.75)",
             "pointRadius": 10
 
         },
         vertexSelectedPointA: {
-            //"color": "rgba(0, 0, 204, 1)",
             "color": "#F012BE",
             "pointRadius": 10
         },
         vertexSelectedPointB: {
-            //"color": "rgba(0, 204, 0,1)",
             "color": "#01FF70",
             "pointRadius": 10
+        },
+        mouseSelectionSquare: {
+            "color": "rgba(0,31,63,0.5)",
+            "lineWidth": 3,
+            "lineColor": "rgba(0,31,63,0.9)"
         }
     },
     MonoStyle: {
@@ -135,25 +141,26 @@ var Styles = {
             "pointRadius": 8
         },
         vertexPoint: {
-            //"color" : "rgba(240,18,190,0.75)",
             "color": "#444444",
             "pointRadius": 10
         },
         vertexSelectedPoint: {
             "color": "#000000",
-            //"color" : "rgba(236,247,30,0.75)",
             "pointRadius": 10
 
         },
         vertexSelectedPointA: {
-            //"color": "rgba(0, 0, 204, 1)",
             "color": "#222222",
             "pointRadius": 10
         },
         vertexSelectedPointB: {
-            //"color": "rgba(0, 204, 0,1)",
             "color": "#CCCCCC",
             "pointRadius": 10
+        },
+        mouseSelectionSquare: {
+            "color": "rgba(204, 204, 204,0.5)",
+            "lineWidth": 1,
+            "lineColor": "rgba(100, 100, 100,1)"
         }
     }
 };
