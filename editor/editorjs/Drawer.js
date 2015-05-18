@@ -27,6 +27,21 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
     this.drawingParts = ["wall", "floor", "door", "window", "pathpoints", "pathedges", "points"];
 
     /*   DRAW   */
+    this.drawRect = function (from, to, style) {
+        this.context.fillStyle = style.color;
+        this.context.fillRect(from.x,
+                from.y,
+                to.x - from.x,
+                to.y - from.y);
+        this.context.strokeStyle = style.lineColor;
+
+        this.context.lineWidth = style.lineWidth;
+        this.context.rect(from.x,
+                from.y,
+                to.x - from.x,
+                to.y - from.y);
+        this.context.stroke();
+    };
     this.drawFloor = function (floor, style) {
         var points = floor.points;
         this.context.fillStyle = style.color;
@@ -115,7 +130,6 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
             for (var i = 0; i < this.paths.edges.length; i++) {
                 if (this.paths.edges[i].Afloor === this.selectedFloorIndex && this.paths.edges[i].Bfloor === this.selectedFloorIndex) {
                     var e = this.paths.edges[i];
-                    Debug.log(e.Ax, e.Ay, e.Bx, e.By)
                     this.drawLine({"points": [[e.Ax, e.Ay], [e.Bx, e.By]]}, this.style.edge);
                 }
             }
@@ -137,7 +151,7 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
                 this.drawPoint(this.paths.selectedVertex, this.style.vertexSelectedPoint);
             }
         }
-        
+
 
 
 
