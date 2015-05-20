@@ -32,9 +32,9 @@ function PointsManager(options) {
                 Debug.log("unselecting");
                 this.unselect(selectedIndex);
             }
-            Debug.log( this.points.length);
+            Debug.log(this.points.length);
             this.points.splice(removeIndex, 1);
-            Debug.log( this.points.length);
+            Debug.log(this.points.length);
         }
         //TODO tell the drawer on which coordinates the redraw is needed
         this.getDrawer().redraw();
@@ -83,8 +83,8 @@ function PointsManager(options) {
     };
     this.clearSelectedPoints = function () {
         while (this.selectedPoints.length > 0) {
-                this.unselect(0);
-            }
+            this.unselect(0);
+        }
     };
     this.getSelectedPointsAsArrays = function () {
         var array = new Array();
@@ -98,6 +98,17 @@ function PointsManager(options) {
     };
     this.getPoints = function () {
         return this.points;
+    };
+    this.getPointsInRange = function (from, to) {
+        var inRange = [], p;
+        for (var i = 0; i < this.points.length; i++) {
+            p = this.points[i];
+            if (p.x >= from.x && p.x <= to.x &&
+                    p.y >= from.y && p.y <= to.y) {
+                inRange.push(p);
+            }
+        }
+        return inRange;
     };
     this.setPoints = function (points) {
         this.points = points;
