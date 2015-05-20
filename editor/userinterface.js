@@ -6,6 +6,7 @@ var uiProps;
 var interFloorSelection;
 var storage = new Storage();
 var wasMove = false;
+var selectDown;
 
 $(document).ready(function () {
     interFloorSelection = new InterFloorSelection();
@@ -35,88 +36,115 @@ $(document).ready(function () {
             wasMove = false;
             return;
         }
-        //check if the clicked point is already a used point
-        if (uiProps.equals("mouseMode", "movePoint")) {
-            var target = editor.targetIsPoint(e.pageX, e.pageY);
-            if (target === false) {
-                editor.movePoint(e.pageX, e.pageY);
-                storage.save();
-                editor.getPointsManager().clearSelectedPoints();
-            } else {
-                editor.getPointsManager().toggle(target.x, target.y);
-            }
-        } else if (uiProps.equals("mouseMode", "movePathPoint")) {
-            var target = editor.targetIsPathPoint(e.pageX, e.pageY);
-            if (target === false) {
-                editor.moveVertex(editor.getPaths().selectedVertex, e.pageX, e.pageY);
-                storage.save();
-            } else {
-                if (editor.getPaths().selectedVertex === target) {
-                    editor.getPaths().selectedVertex = undefined;
+        if (e.which === 1 && !e.ctrlKey) {
+            //check if the clicked point is already a used point
+            if (uiProps.equals("mouseMode", "movePoint")) {
+                var target = editor.targetIsPoint(e.pageX, e.pageY);
+                if (target === false) {
+                    editor.movePoint(e.pageX, e.pageY);
+                    storage.save();
+                    editor.getPointsManager().clearSelectedPoints();
                 } else {
-                    editor.getPaths().selectedVertex = target;
+                    editor.getPointsManager().toggle(target.x, target.y);
                 }
-                editor.getDrawer().redraw();
-            }
-        } else if (uiProps.equals("mouseMode", "PathPoints")) {
-            var target = editor.targetIsPathPoint(e.pageX, e.pageY);
-            if (target === false) {
-                var xy = editor.getCoordinates(e.pageX, e.pageY);
-                $("#newPathPoint input[name='x']").val(xy.x);
-                $("#newPathPoint input[name='y']").val(xy.y);
-                uioverlay.open("#newPathPoint");
-            } else {
-                alert(JSON.stringify(target));
-            }
-        } else if (uiProps.equals("mouseMode", "interFloorSelectionMode")) {
-            var target = editor.targetIsPoint(e.pageX, e.pageY);
-            if (target !== false) {
-                interFloorSelection.add(target.x, target.y, editor.getFloorIndex());
-            }
-        } else if (uiProps.equals("mouseMode", "edges")) {
-            var target = editor.targetIsPathPoint(e.pageX, e.pageY);
-            if (target !== false) {
-                editor.getEdgeSelection().select(target);
-                editor.getDrawer().redraw();
-                if (editor.getEdgeSelection().isReady() && !editor.getPaths().edgeExists(editor.getEdgeSelection().pointA, editor.getEdgeSelection().pointB)) {
-                    $("#newPathEdge input[name='Ax']").val(editor.getEdgeSelection().pointA.x);
-                    $("#newPathEdge input[name='Bx']").val(editor.getEdgeSelection().pointA.y);
-                    $("#newPathEdge input[name='Ay']").val(editor.getEdgeSelection().pointB.x);
-                    $("#newPathEdge input[name='By']").val(editor.getEdgeSelection().pointB.y);
-                    uioverlay.open("#newPathEdge");
+            } else if (uiProps.equals("mouseMode", "movePathPoint")) {
+                var target = editor.targetIsPathPoint(e.pageX, e.pageY);
+                if (target === false) {
+                    editor.moveVertex(editor.getPaths().selectedVertex, e.pageX, e.pageY);
+                    storage.save();
+                } else {
+                    if (editor.getPaths().selectedVertex === target) {
+                        editor.getPaths().selectedVertex = undefined;
+                    } else {
+                        editor.getPaths().selectedVertex = target;
+                    }
+                    editor.getDrawer().redraw();
                 }
-            }
-        } else if (uiProps.equals("mouseMode", "autoWall") && uiProps.equals("maxSelect", 2)) {
-            var target = editor.targetIsPoint(e.pageX, e.pageY);
-            if (target !== false) {
-                editor.getPointsManager().toggle(target.x, target.y);
-            } else {
-                var newPoint = editor.newPoint(e.pageX, e.pageY);
-                if (!uiProps.get("autoSelect")) {
-                    editor.getPointsManager().toggle(newPoint.x, newPoint.y);
+            } else if (uiProps.equals("mouseMode", "PathPoints")) {
+                var target = editor.targetIsPathPoint(e.pageX, e.pageY);
+                if (target === false) {
+                    var xy = editor.getCoordinates(e.pageX, e.pageY);
+                    $("#newPathPoint input[name='x']").val(xy.x);
+                    $("#newPathPoint input[name='y']").val(xy.y);
+                    uioverlay.open("#newPathPoint");
+                } else {
+                    alert(JSON.stringify(target));
                 }
-            }
-            if (editor.getPointsManager().getSelectedPoints().length === 2) {
-                editor.createLine("wall");
-                storage.save();
-            }
-        } else {
-            var target = editor.targetIsPoint(e.pageX, e.pageY);
-            if (target === false) {
-                editor.newPoint(e.pageX, e.pageY);
+            } else if (uiProps.equals("mouseMode", "interFloorSelectionMode")) {
+                var target = editor.targetIsPoint(e.pageX, e.pageY);
+                if (target !== false) {
+                    interFloorSelection.add(target.x, target.y, editor.getFloorIndex());
+                }
+            } else if (uiProps.equals("mouseMode", "edges")) {
+                var target = editor.targetIsPathPoint(e.pageX, e.pageY);
+                if (target !== false) {
+                    editor.getEdgeSelection().select(target);
+                    editor.getDrawer().redraw();
+                    if (editor.getEdgeSelection().isReady() && !editor.getPaths().edgeExists(editor.getEdgeSelection().pointA, editor.getEdgeSelection().pointB)) {
+                        $("#newPathEdge input[name='Ax']").val(editor.getEdgeSelection().pointA.x);
+                        $("#newPathEdge input[name='Bx']").val(editor.getEdgeSelection().pointA.y);
+                        $("#newPathEdge input[name='Ay']").val(editor.getEdgeSelection().pointB.x);
+                        $("#newPathEdge input[name='By']").val(editor.getEdgeSelection().pointB.y);
+                        uioverlay.open("#newPathEdge");
+                    }
+                }
+            } else if (uiProps.equals("mouseMode", "autoWall") && uiProps.equals("maxSelect", 2)) {
+                var target = editor.targetIsPoint(e.pageX, e.pageY);
+                if (target !== false) {
+                    editor.getPointsManager().toggle(target.x, target.y);
+                } else {
+                    var newPoint = editor.newPoint(e.pageX, e.pageY);
+                    if (!uiProps.get("autoSelect")) {
+                        editor.getPointsManager().toggle(newPoint.x, newPoint.y);
+                    }
+                }
+                if (editor.getPointsManager().getSelectedPoints().length === 2) {
+                    editor.createLine("wall");
+                    storage.save();
+                }
             } else {
-                editor.getPointsManager().toggle(target.x, target.y);
+                var target = editor.targetIsPoint(e.pageX, e.pageY);
+                if (target === false) {
+                    editor.newPoint(e.pageX, e.pageY);
+                } else {
+                    editor.getPointsManager().toggle(target.x, target.y);
+                }
             }
         }
         Debug.log(e);
     });
     $("#canvas").mousemove(function (e) {
-        if (e.which === 1) {
+        if (e.which === 1 && !e.ctrlKey) {
             wasMove = true;
-            Debug.log(e.originalEvent.movementX, e.originalEvent.movementY);
             editor.getViewport().moveRespectful(e.originalEvent.movementX, e.originalEvent.movementY);
+        } else if (e.which === 1 && e.ctrlKey) {
+            editor.getDrawer().redraw();
+            editor.getDrawer().drawRect(selectDown,
+                    editor.getViewport().translatePoint({x: e.pageX, y: e.pageY}),
+                    editor.getDrawer().getStyle().mouseSelectionSquare
+                    );
         }
     });
+    $("#canvas").mousedown(function (e) {
+        if (e.which === 1 && e.ctrlKey) {
+            selectDown = editor.getViewport().translatePoint({x: e.pageX, y: e.pageY});
+        }
+    });
+    $("#canvas").mouseup(function (e) {
+        if (e.which === 1 && e.ctrlKey) {
+            uiProps.set("maxSelect", -1);
+            var a = selectDown, b = editor.getViewport().translatePoint({x: e.pageX, y: e.pageY});
+            var points = editor.getPointsManager().getPointsInRange(
+                    {x:Math.min(a.x,b.x),y:Math.min(a.y,b.y)},
+                    {x:Math.max(a.x,b.x),y:Math.max(a.y,b.y)}
+                    );
+            for (var i = 0; i < points.length; i++) {
+                editor.getPointsManager().select(points[i].x, points[i].y);
+            }
+            editor.getDrawer().redraw();
+        }
+    });
+
     //setup the scoll listner to trigger the zoom function DOMMouseScroll
     $("#canvas").on('DOMMouseScroll mousewheel', function (evt) {
         evt = evt.originalEvent;
