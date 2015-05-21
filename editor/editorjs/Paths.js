@@ -44,7 +44,32 @@ function Paths() {
     };
 
     this.addPoint = function (vertex) {
+        var isChanged = false;
+        if(this.getVertexByName(vertex.name)){
+            vertex.name = this.generateVertexName(vertex.name,-1);
+            isChanged = true;
+        }
         this.vertices.push(vertex);
+        if(isChanged){
+            return vertex;
+        }else{
+            return true;
+        }
+    };
+    this.generateVertexName = function (name, number){
+        var newName = name + "_" + (++number);
+        if(this.getVertexByName(newName)){
+            return this.generateVertexName(name,number);
+        }
+        return newName;
+    };
+    this.getVertexByName = function (name){
+        for(var  i = 0; i < this.vertices.length;i++){
+            if(this.vertices[i].name === name){
+                return this.vertices[i];
+            }
+        }
+        return undefined;
     };
     this.addEdge = function (edge) {
         this.edges.push(edge);
