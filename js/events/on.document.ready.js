@@ -10,6 +10,10 @@ $(document).ready(function (e) {
             e.A = paths.getVertex(e.Ax, e.Ay, e.Afloor);
             e.B = paths.getVertex(e.Bx, e.By, e.Bfloor);
         }
+        data.paths.vshadow = {};
+        for (i = 0; i < data.paths.vertices.length; i++) {
+            data.paths.vshadow[paths.vertices[i].name] = i;
+        }
         return data;
     };
     STORAGE.reloadData();
