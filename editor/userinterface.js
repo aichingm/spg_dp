@@ -135,9 +135,9 @@ $(document).ready(function () {
             uiProps.set("maxSelect", -1);
             var a = selectDown, b = editor.getViewport().translatePoint({x: e.pageX, y: e.pageY});
             var points = editor.getPointsManager().getPointsInRange(
-                    {x:Math.min(a.x,b.x),y:Math.min(a.y,b.y)},
-                    {x:Math.max(a.x,b.x),y:Math.max(a.y,b.y)}
-                    );
+                    {x: Math.min(a.x, b.x), y: Math.min(a.y, b.y)},
+            {x: Math.max(a.x, b.x), y: Math.max(a.y, b.y)}
+            );
             for (var i = 0; i < points.length; i++) {
                 editor.getPointsManager().select(points[i].x, points[i].y);
             }
@@ -449,6 +449,7 @@ $(document).ready(function () {
         var list = editor.getPaths().edges;
         for (var i = 0; i < list.length; i++) {
             $("#PathEdgesTable").append("<tr>"
+                    + "<td>Point names: " + editor.getPaths().getVertex(list[i].Ax, list[i].Ay, list[i].Afloor).name + " / " + editor.getPaths().getVertex(list[i].Bx, list[i].By, list[i].Bfloor).name + "</td>"
                     + "<td>x: " + list[i].Ax + ", y: " + list[i].Ay + ", floor: " + list[i].Afloor + "</td>"
                     + "<td>x: " + list[i].Bx + ", y: " + list[i].By + ", floor: " + list[i].Bfloor + "</td>"
                     + "<td><input name=\"metricAB\" value=\"" + list[i].metric[0] + "\"></td>"
