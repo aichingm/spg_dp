@@ -117,7 +117,7 @@ $(document).ready(function () {
         if (e.which === 1 && !e.ctrlKey) {
             wasMove = true;
             editor.getViewport().moveRespectful(e.originalEvent.movementX, e.originalEvent.movementY);
-        } else if (e.which === 1 && e.ctrlKey) {
+        } else if (e.which === 1 && e.ctrlKey && uiProps.equals("mouseMode","points")) {
             editor.getDrawer().redraw();
             editor.getDrawer().drawRect(selectDown,
                     editor.getViewport().translatePoint({x: e.pageX, y: e.pageY}),
@@ -126,12 +126,12 @@ $(document).ready(function () {
         }
     });
     $("#canvas").mousedown(function (e) {
-        if (e.which === 1 && e.ctrlKey) {
+        if (e.which === 1 && e.ctrlKey && uiProps.equals("mouseMode","points")) {
             selectDown = editor.getViewport().translatePoint({x: e.pageX, y: e.pageY});
         }
     });
     $("#canvas").mouseup(function (e) {
-        if (e.which === 1 && e.ctrlKey) {
+        if (e.which === 1 && e.ctrlKey && uiProps.equals("mouseMode","points")) {
             uiProps.set("maxSelect", -1);
             var a = selectDown, b = editor.getViewport().translatePoint({x: e.pageX, y: e.pageY});
             var points = editor.getPointsManager().getPointsInRange(
