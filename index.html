@@ -20,6 +20,7 @@
         <script type="text/javascript" src="js/navigation/object.DistanceCalculators.js"></script>
         <script type="text/javascript" src="js/navigation/function.buildMapFromDataPaths.js"></script>
         <script type="text/javascript" src="js/navigation/function.buildVetexNameList.js"></script>
+        <script type="text/javascript" src="js/navigation/function.buildVetexCategoryList.js"></script>
         <script type="text/javascript" src="js/userinterface/function.buildShowDiv.js"></script>
         <script type="text/javascript" src="js/drawing/object.Viewer.js"></script>
         <script type="text/javascript" src="js/drawing/object.Geometries.js"></script>
@@ -27,6 +28,7 @@
         <script type="text/javascript" src="js/events/on.document.keypress.js"></script>
         <script type="text/javascript" src="js/events/on..opener.click.js"></script>
         <script type="text/javascript" src="js/events/on..leftDrawer.route.leftDeawer-show.js"></script>
+        <script type="text/javascript" src="js/events/on..leftDrawer.findNext.leftDeawer-show.js"></script>
         <script type="text/javascript" src="js/events/on..leftDrawer.controls.click.js"></script>
         <script type="text/javascript" src="js/events/on.document.ready.js"></script>
         <div id="settings">
@@ -58,9 +60,30 @@
                     <button class="cancel">&#10007;</button>
                 </div>
             </div>
+            <div class="leftDrawer findNext">
+                <div class="content">
+                    <h1>Select a route to show</h1>
+                    <select name="from"></select><br /><br />
+                    <select name="category"></select><br /><br />
+                    <select name="distanceType"></select><br /><br />
+                    <label>Use only public ways<input type="checkbox" name="onlyPublic" checked="checked"></label><br /><br />
+                    <label>Use only accessible ways<input type="checkbox" name="onlyAccessible" checked="checked"></label><br /><br />
+                    <div class="error noRoute">Sorry no route found!</div>
+                </div>
+                <div class="content">
+                    <h1>Sorry this model has no paths</h1>
+                </div>
+                <div class="controls">
+                    <button class="apply">&#10003;</button>
+                    <button class="cancel">&#10007;</button>
+                </div>
+            </div>
             <div class="openers">
                 <div class="opener">
                     &#8605;
+                </div>
+                <div class="opener">
+                    &#8608;
                 </div>
             </div>
         </div>
