@@ -27,7 +27,7 @@ function StorageControler(storageKey) {
                     }
                     for (f in obj.changeListeners) {
                         if (obj.jsonConvert) {
-                            obj.changeListeners[f](JSON.parse(e.newValue), e, obj);
+                            obj.changeListeners[f](obj.getData(), e, obj);
                         } else {
                             obj.changeListeners[f](e.newValue, e, obj);
                         }
