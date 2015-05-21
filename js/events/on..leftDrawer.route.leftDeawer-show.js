@@ -19,6 +19,13 @@ $(document).ready(function (e) {
             $(".leftDrawer.route div select[name='from']").append("<option>" + list[i] + "</option>");
             $(".leftDrawer.route div select[name='to']").append("<option>" + list[i] + "</option>");
         }
+        $(".leftDrawer.route div select[name='distanceType']").html("");
+
+        for (var i in DistanceCalculators) {
+            $(".leftDrawer.route div select[name='distanceType']").append("<option>" + i + "</option>");
+        }
+
+
     });
     $(".leftDrawer.route div button.apply").attr("disabled", "disabled");
     $(".leftDrawer.route div select[name='from']").on("change", function (e) {
@@ -39,12 +46,19 @@ $(document).ready(function (e) {
         $(".leftDrawer.route div .error.noRoute").hide();
     });
     $(".leftDrawer.route").on("leftDrawer-apply", function (event) {
-        var exception, exports, map, graph, path;
+        var exception, exports, map, graph, path, mapBuildOptions, distanceCalculator;
         exports = STORAGE.getData();
-        map = buildMapFromDataPaths(exports);
+        mapBuildOptions = {
+            onlyPublic: $(".leftDrawer.route div input[name='onlyPublic']").is(":checked"),
+            onlyAccessible: $(".leftDrawer.route div input[name='onlyAccessible']").is(":checked")
+        };
+        distanceCalculator = DistanceCalculators[$(".leftDrawer.route div select[name='distanceType']").val()];
+        map = buildMapFromDataPaths(exports,distanceCalculator,mapBuildOptions);
+        console.log(map)
         graph = new Dijkstra(map);
         try {
             path = graph.getPath($(".leftDrawer.route div select[name='from']").val(), $(".leftDrawer.route div select[name='to']").val());
+        console.log(path    )
             VIEWER.setPath(path);
             VIEWER.draw(true);
         } catch (exception) {
