@@ -48,7 +48,7 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
         this.context.beginPath();
         this.context.fillStyle = style.color;
         this.context.moveTo(points[0][0], points[0][1]);
-        for (var i = 0; i < points.length; i++) {
+        for (var i = 1; i < points.length; i++) {
             this.context.lineTo(points[i][0], points[i][1]);
         }
         this.context.fill();
