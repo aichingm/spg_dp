@@ -4,6 +4,15 @@ $(document).ready(function (e) {
     STORAGE.setupChangeListener();
     STORAGE.dataManipulator = function (data) {
         var i, e, paths = new Paths();
+        if(!data.paths){
+            data.paths = {};
+        }
+        if(!data.paths.vertices){
+            data.paths.vertices = [];
+        }
+         if(!data.paths.edges){
+            data.paths.edges = [];
+        }
         paths.load(data.paths);
         for (i = 0; i < paths.edges.length; i++) {
             e = paths.edges[i];
@@ -11,7 +20,7 @@ $(document).ready(function (e) {
             e.B = paths.getVertex(e.Bx, e.By, e.Bfloor);
         }
         data.paths.vshadow = {};
-        for (i = 0; i < data.paths.vertices.length; i++) {
+        for (i = 0; i < paths.vertices.length; i++) {
             data.paths.vshadow[paths.vertices[i].name] = i;
         }
         return data;
