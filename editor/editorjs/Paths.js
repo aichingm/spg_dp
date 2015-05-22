@@ -34,38 +34,38 @@ function Paths() {
         }
         return -1;
     };
-    this.getVertex = function (x,y,floorIndex) {
+    this.getVertex = function (x, y, floorIndex) {
         for (var i = 0; i < this.vertices.length; i++) {
             if (this.vertices[i].x === x && this.vertices[i].y === y && this.vertices[i].floorIndex === floorIndex) {
                 return this.vertices[i];
             }
         }
-        throw {name: "NotFound", error: "No vertex found", data: {"x":x,"y":y,"floorIndex":floorIndex}};
+        throw {name: "NotFound", error: "No vertex found", data: {"x": x, "y": y, "floorIndex": floorIndex}};
     };
 
     this.addPoint = function (vertex) {
         var isChanged = false;
-        if(this.getVertexByName(vertex.name)){
-            vertex.name = this.generateVertexName(vertex.name,-1);
+        if (this.getVertexByName(vertex.name)) {
+            vertex.name = this.generateVertexName(vertex.name, -1);
             isChanged = true;
         }
         this.vertices.push(vertex);
-        if(isChanged){
+        if (isChanged) {
             return vertex;
-        }else{
+        } else {
             return true;
         }
     };
-    this.generateVertexName = function (name, number){
+    this.generateVertexName = function (name, number) {
         var newName = name + "_" + (++number);
-        if(this.getVertexByName(newName)){
-            return this.generateVertexName(name,number);
+        if (this.getVertexByName(newName)) {
+            return this.generateVertexName(name, number);
         }
         return newName;
     };
-    this.getVertexByName = function (name){
-        for(var  i = 0; i < this.vertices.length;i++){
-            if(this.vertices[i].name === name){
+    this.getVertexByName = function (name) {
+        for (var i = 0; i < this.vertices.length; i++) {
+            if (this.vertices[i].name === name) {
                 return this.vertices[i];
             }
         }
@@ -114,7 +114,7 @@ function Paths() {
         }
     };
     this.edgeExists = function (pointA, pointB) {
-        for (var i = 0; i< this.edges.length;i++) {
+        for (var i = 0; i < this.edges.length; i++) {
             var edge = this.edges[i];
             if (
                     (
@@ -136,8 +136,12 @@ function Paths() {
         return {"vertices": this.vertices, "edges": this.edges};
     };
     this.load = function (data) {
-        this.vertices = data.vertices;
-        this.edges = data.edges;
+        if (data.vertices) {
+            this.vertices = data.vertices;
+        }
+        if (data.edges) {
+            this.edges = data.edges;
+        }
     };
     return this;
 }
