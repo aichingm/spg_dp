@@ -36,7 +36,7 @@ $(document).ready(function () {
             wasMove = false;
             return;
         }
-        if (e.which === 1 && !e.ctrlKey) {
+        if (BrowserFuckery.fixMouseEventButtons(e).bf_mouseButtons.isDown(1) && !e.ctrlKey) {
             //check if the clicked point is already a used point
             if (uiProps.equals("mouseMode", "movePoint")) {
                 var target = editor.targetIsPoint(e.pageX, e.pageY);
@@ -114,10 +114,12 @@ $(document).ready(function () {
         Debug.log(e);
     });
     $("#canvas").mousemove(function (e) {
-        if (e.which === 1 && !e.ctrlKey) {
+        BrowserFuckery.fixMouseEventButtons(e);
+        if (e.bf_mouseButtons.isDown(1) && !e.ctrlKey) {
+            BrowserFuckery.fixMouseEventMovement(e);
             wasMove = true;
-            editor.getViewport().moveRespectful(e.originalEvent.movementX, e.originalEvent.movementY);
-        } else if (e.which === 1 && e.ctrlKey && uiProps.equals("mouseMode","points")) {
+            editor.getViewport().moveRespectful(e.bf_mouseMovement.getX(), e.bf_mouseMovement.getY());
+        } else if (e.bf_mouseButtons.isDown(1) && e.ctrlKey && uiProps.equals("mouseMode", "points")) {
             editor.getDrawer().redraw();
             editor.getDrawer().drawRect(selectDown,
                     editor.getViewport().translatePoint({x: e.pageX, y: e.pageY}),
@@ -126,12 +128,13 @@ $(document).ready(function () {
         }
     });
     $("#canvas").mousedown(function (e) {
-        if (e.which === 1 && e.ctrlKey && uiProps.equals("mouseMode","points")) {
+        BrowserFuckery.fixMouseEventButtons(e);
+        if (e.bf_mouseButtons.isDown(1) && e.ctrlKey && uiProps.equals("mouseMode", "points")) {
             selectDown = editor.getViewport().translatePoint({x: e.pageX, y: e.pageY});
         }
     });
     $("#canvas").mouseup(function (e) {
-        if (e.which === 1 && e.ctrlKey && uiProps.equals("mouseMode","points")) {
+        if (BrowserFuckery.fixMouseEventButtons(e).bf_mouseButtons.isDown(1) && e.ctrlKey && uiProps.equals("mouseMode", "points")) {
             uiProps.set("maxSelect", -1);
             var a = selectDown, b = editor.getViewport().translatePoint({x: e.pageX, y: e.pageY});
             var points = editor.getPointsManager().getPointsInRange(
