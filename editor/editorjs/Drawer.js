@@ -28,24 +28,25 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
 
     /*   DRAW   */
     this.drawRect = function (from, to, style) {
+        this.context.beginPath();
         this.context.fillStyle = style.color;
         this.context.fillRect(from.x,
                 from.y,
                 to.x - from.x,
                 to.y - from.y);
         this.context.strokeStyle = style.lineColor;
-
         this.context.lineWidth = style.lineWidth;
         this.context.rect(from.x,
                 from.y,
                 to.x - from.x,
                 to.y - from.y);
         this.context.stroke();
+        this.context.closePath();
     };
     this.drawFloor = function (floor, style) {
         var points = floor.points;
-        this.context.fillStyle = style.color;
         this.context.beginPath();
+        this.context.fillStyle = style.color;
         this.context.moveTo(points[0][0], points[0][1]);
         for (var i = 0; i < points.length; i++) {
             this.context.lineTo(points[i][0], points[i][1]);
