@@ -82,10 +82,9 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
     /**
      * 
      * @param {ModelManager} modelManager
-     * @returns {Array}
+     * @returns {undefined}
      */
     this.drawAll = function (modelManager) {
-        //var points = new Array();
         var drawLaterLines = {walls: [], doors: [], windows: []};
         for (var i = 0; i < modelManager.getFloorElements(this.selectedFloorIndex).length; i++) {
             var object = modelManager.getFloorElements(this.selectedFloorIndex)[i];
@@ -114,7 +113,6 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
             for (var i = 0; i < modelManager.getFloor(this.selectedFloorIndex).pathPoints.length; i++) {
                 var object = modelManager.paths[i];
                 this.drawPoint(object, this.style.pathPoint);
-                //this.pushPoints(points, {points: {"x": object.x, "y": object.y}});
             }
         }
         if (Arrays.boolInArray("points", this.drawingParts)) {
@@ -152,12 +150,6 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
                 this.drawPoint(this.paths.selectedVertex, this.style.vertexSelectedPoint);
             }
         }
-
-
-
-
-
-        //return points;
     };
 
 
@@ -172,8 +164,7 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
         if (this.backgroundImage !== null) {
             this.drawBackground();
         }
-        var points = this.drawAll(this.modelManager);
-        //this.drawSelectionPoints(points, this.style.point);
+        this.drawAll(this.modelManager);
     };
 
 
