@@ -116,11 +116,12 @@ $(document).ready(function () {
     });
     $("#canvas").mousemove(function (e) {
         BrowserFuckery.fixMouseEventButtons(e);
+
         if (e.bf_mouseButtons.isDown(1) && !e.ctrlKey) {
             BrowserFuckery.fixMouseEventMovement(e);
             wasMove = true;
             //editor.getViewport().moveRespectful(e.bf_mouseMovement.getX(), e.bf_mouseMovement.getY());
-            if(editor.getViewport().copyMoveState === 0){
+            if (editor.getViewport().copyMoveState === 0) {
                 editor.getViewport().startCopyMove();
             }
             editor.getViewport().copyMove(e.bf_mouseMovement.getX(), e.bf_mouseMovement.getY());

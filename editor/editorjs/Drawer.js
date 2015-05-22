@@ -236,7 +236,6 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
         if (Arrays.boolInArray("points", this.drawingParts)) {
             var points = this.pointsManager.getPoints();
             for (var i = 0; i < points.length; i++) {
-                console.log(i,points[i])
                 size.min.x = Math.min(size.min.x, points[i].x);
                 size.max.x = Math.max(size.max.x, points[i].x);
                 size.min.y = Math.min(size.min.y, points[i].y);

@@ -9,6 +9,7 @@ function Viewport(height, width, context, drawer) {
     this.zoomClickes = 0;
     this.copyImageData;
     this.copyMoveState = 0;
+    this.copyMoveMethod = 1;
     this.clear = function () {
         var factor = this.getZoomFactor();
         this.context.clearRect(
@@ -41,29 +42,48 @@ function Viewport(height, width, context, drawer) {
     };
     this.startCopyMove = function (x, y) {
         this.copyMoveState = 1;
-        var areaSize = this.drawer.calcDrawingAreaSize();
+        this.areaSize = this.drawer.calcDrawingAreaSize();
         /*
          * FAKE SOME SHIT 
          */
-        areaSize.min.x -= 10;
-        areaSize.min.x -= 10;
-        areaSize.max.x += 10;
-        areaSize.max.y += 10;
+        this.areaSize.min.x -= 10;
+        this.areaSize.min.x -= 10;
+        this.areaSize.max.x += 10;
+        this.areaSize.max.y += 10;
         var offscreenCanvas = document.createElement('canvas');
-        offscreenCanvas.width = (Math.abs(areaSize.min.x) + Math.abs(areaSize.max.x));
-        offscreenCanvas.height = (Math.abs(areaSize.min.y) + Math.abs(areaSize.max.y));
+        offscreenCanvas.width = (Math.abs(this.areaSize.min.x) + Math.abs(this.areaSize.max.x));
+        offscreenCanvas.height = (Math.abs(this.areaSize.min.y) + Math.abs(this.areaSize.max.y));
         var context = offscreenCanvas.getContext('2d');
-        context.translate(areaSize.min.x * -1, areaSize.min.y * -1);
+        context.translate(this.areaSize.min.x * -1, this.areaSize.min.y * -1);
+
         this.drawer.drawAll(context);
-        this.copyImageData = context.getImageData(0, 0, offscreenCanvas.width, offscreenCanvas.height);
+        switch (this.copyMoveMethod) {
+            case 0:
+                this.copyImageData = offscreenCanvas;
+                break;
+            case 1:
+                this.copyImageData = context.getImageData(0, 0, offscreenCanvas.width, offscreenCanvas.height);
+                break;
+        }
     };
     this.copyMove = function (x, y) {
         this.clear();
         this.offsetX += x;
         this.offsetY += y;
         this.context.translate(x, y);
-        this.context.putImageData(this.copyImageData, this.offsetX, this.offsetY);
+        switch (this.copyMoveMethod) {
+            case 0:
+                this.context.drawImage(this.copyImageData, this.areaSize.min.x, this.areaSize.min.y);
+                break;
+            case 1:
+                this.context.putImageData(this.copyImageData,this.offsetX +this.areaSize.min.x, this.offsetY+this.areaSize.min.y);
+                break;
+        }
     };
+    /*this.copyMoveRespectful = function (x, y) {
+        var factor = Math.pow(this.zoomFactor, this.zoomClickes * -1);
+        this.copyMove(Math.round(x * factor), Math.round(y * factor));
+    };*/
     this.endCopyMove = function (x, y) {
         this.copyMoveState = 0;
         this.copyImageData = null;
