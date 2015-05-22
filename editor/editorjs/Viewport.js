@@ -7,6 +7,8 @@ function Viewport(height, width, context, drawer) {
     this.offsetY = 0;
     this.zoomFactor = 1.1;
     this.zoomClickes = 0;
+    this.copyImageData;
+    this.copyMoveState = 0;
     this.clear = function () {
         var factor = this.getZoomFactor();
         this.context.clearRect(
@@ -37,6 +39,35 @@ function Viewport(height, width, context, drawer) {
         this.zoomClickes = 0;
         this.drawer.redraw();
     };
+    this.startCopyMove = function (x, y) {
+        this.copyMoveState = 1;
+        var areaSize = this.drawer.calcDrawingAreaSize();
+        /*
+         * FAKE SOME SHIT 
+         */
+        areaSize.min.x -= 10;
+        areaSize.min.x -= 10;
+        areaSize.max.x += 10;
+        areaSize.max.y += 10;
+        var offscreenCanvas = document.createElement('canvas');
+        offscreenCanvas.width = (Math.abs(areaSize.min.x) + Math.abs(areaSize.max.x));
+        offscreenCanvas.height = (Math.abs(areaSize.min.y) + Math.abs(areaSize.max.y));
+        var context = offscreenCanvas.getContext('2d');
+        context.translate(areaSize.min.x * -1, areaSize.min.y * -1);
+        this.drawer.drawAll(context);
+        this.copyImageData = context.getImageData(0, 0, offscreenCanvas.width, offscreenCanvas.height);
+    };
+    this.copyMove = function (x, y) {
+        this.clear();
+        this.offsetX += x;
+        this.offsetY += y;
+        this.context.translate(x, y);
+        this.context.putImageData(this.copyImageData, this.offsetX, this.offsetY);
+    };
+    this.endCopyMove = function (x, y) {
+        this.copyMoveState = 0;
+        this.copyImageData = null;
+    };
     this.move = function (x, y) {
         this.clear();
         this.offsetX += x;
@@ -50,7 +81,7 @@ function Viewport(height, width, context, drawer) {
     };
     this.translatePoint = function (point) {
         var factor = Math.pow(this.zoomFactor, this.zoomClickes * -1);
-        return {x: Math.round(point.x * factor)-this.offsetX, y: Math.round(point.y * factor)-this.offsetY};
+        return {x: Math.round(point.x * factor) - this.offsetX, y: Math.round(point.y * factor) - this.offsetY};
     };
     this.resetMove = function () {
         this.clear();
