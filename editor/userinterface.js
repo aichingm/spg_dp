@@ -33,6 +33,7 @@ $(document).ready(function () {
     //setup the click listener for the canvas
     $("#canvas").on("click", function (e) {
         if (wasMove) {
+            editor.getViewport().endCopyMove();
             wasMove = false;
             return;
         }
@@ -114,12 +115,13 @@ $(document).ready(function () {
         Debug.log(e);
     });
     $("#canvas").mousemove(function (e) {
-        var start = new Date().getTime();
-
         BrowserFuckery.fixMouseEventButtons(e);
         if (e.bf_mouseButtons.isDown(1) && !e.ctrlKey) {
             BrowserFuckery.fixMouseEventMovement(e);
             wasMove = true;
+            if (editor.getViewport().moveData.moveState === 0) {
+                editor.getViewport().startCopyMove();
+            }
             editor.getViewport().moveRespectful(e.bf_mouseMovement.getX(), e.bf_mouseMovement.getY());
         } else if (e.bf_mouseButtons.isDown(1) && e.ctrlKey && uiProps.equals("mouseMode", "points")) {
             editor.getDrawer().redraw();
@@ -128,9 +130,6 @@ $(document).ready(function () {
                     editor.getDrawer().getStyle().mouseSelectionSquare
                     );
         }
-        var end = new Date().getTime();
-        var time = end - start;
-        //console.log('------Execution time: ' + time);
     });
     $("#canvas").mousedown(function (e) {
         BrowserFuckery.fixMouseEventButtons(e);

@@ -82,10 +82,13 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
     /**
      * 
      * @param {ModelManager} modelManager
-     * @returns {Array}
+     * @returns {undefined}
      */
-    this.drawAll = function (modelManager) {
-        //var points = new Array();
+    this.drawAll = function (context) {
+        var oldContext = this.context;
+        if (context) {
+            this.context = context;
+        }
         var drawLaterLines = {walls: [], doors: [], windows: []};
         for (var i = 0; i < modelManager.getFloorElements(this.selectedFloorIndex).length; i++) {
             var object = modelManager.getFloorElements(this.selectedFloorIndex)[i];
@@ -114,7 +117,6 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
             for (var i = 0; i < modelManager.getFloor(this.selectedFloorIndex).pathPoints.length; i++) {
                 var object = modelManager.paths[i];
                 this.drawPoint(object, this.style.pathPoint);
-                //this.pushPoints(points, {points: {"x": object.x, "y": object.y}});
             }
         }
         if (Arrays.boolInArray("points", this.drawingParts)) {
@@ -152,13 +154,9 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
                 this.drawPoint(this.paths.selectedVertex, this.style.vertexSelectedPoint);
             }
         }
-
-
-
-
-
-        //return points;
+        this.context = oldContext;
     };
+
 
 
     this.pushPoints = function (array, object) {
@@ -168,12 +166,12 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
         return array;
     };
     this.redraw = function () {
+        console.log("redraw")
         this.viewport.clear();
         if (this.backgroundImage !== null) {
             this.drawBackground();
         }
-        var points = this.drawAll(this.modelManager);
-        //this.drawSelectionPoints(points, this.style.point);
+        this.drawAll();
     };
 
 
@@ -207,4 +205,56 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
     this.getViewport = function () {
         return this.viewport;
     };
+
+
+    /*
+     * calcDrawingAreaSize 
+     */
+    this.calcDrawingAreaSize = function () {
+        var size = {"max": {"x": 0, "y": 0}, "min": {"x": 0, "y": 0}};
+        if (Arrays.boolInArray("points", this.drawingParts)) {
+            var points = this.pointsManager.getPoints();
+            for (var i = 0; i < points.length; i++) {
+                size.min.x = Math.min(size.min.x, points[i].x);
+                size.max.x = Math.max(size.max.x, points[i].x);
+                size.min.y = Math.min(size.min.y, points[i].y);
+                size.max.y = Math.max(size.max.y, points[i].y);
+            }
+            points = this.pointsManager.getSelectedPoints();
+            for (var i = 0; i < points.length; i++) {
+                size.min.x = Math.min(size.min.x, points[i].x);
+                size.max.x = Math.max(size.max.x, points[i].x);
+                size.min.y = Math.min(size.min.y, points[i].y);
+                size.max.y = Math.max(size.max.y, points[i].y);
+            }
+        }
+        if (Arrays.boolInArray("pathedges", this.drawingParts)) {
+            for (var i = 0; i < this.paths.edges.length; i++) {
+                if (this.paths.edges[i].Afloor === this.selectedFloorIndex && this.paths.edges[i].Bfloor === this.selectedFloorIndex) {
+                    var e = this.paths.edges[i];
+                    size.min.x = Math.min(size.min.x, e.Ax);
+                    size.max.x = Math.max(size.max.x, e.Ax);
+                    size.min.y = Math.min(size.min.y, e.Ay);
+                    size.max.y = Math.max(size.max.y, e.Ay);
+                    size.min.x = Math.min(size.min.x, e.Bx);
+                    size.max.x = Math.max(size.max.x, e.Bx);
+                    size.min.y = Math.min(size.min.y, e.By);
+                    size.max.y = Math.max(size.max.y, e.By);
+                }
+            }
+        }
+        if (Arrays.boolInArray("pathpoints", this.drawingParts)) {
+            for (var i = 0; i < this.paths.vertices.length; i++) {
+                size.min.x = Math.min(size.min.x, this.paths.vertices[i].x);
+                size.max.x = Math.max(size.max.x, this.paths.vertices[i].x);
+                size.min.y = Math.min(size.min.y, this.paths.vertices[i].y);
+                size.max.y = Math.max(size.max.y, this.paths.vertices[i].y);
+            }
+        }
+        return size;
+    };
+
+
+
+
 }
