@@ -26,8 +26,8 @@ function Viewport(height, width, context, drawer) {
     };
     this.zoom = function (clicks, x, y, noRedraw) {
         var oldFactor = 1 / Math.pow(this.zoomFactor, this.zoomClickes);
-        var offsetX1 = this.offsetX / oldFactor;
-        var offsetY1 = this.offsetY / oldFactor;
+        var offsetX1 = Math.round(this.offsetX / oldFactor);
+        var offsetY1 = Math.round(this.offsetY / oldFactor);
         var factor = Math.pow(this.zoomFactor, clicks);
         this.zoomClickes += clicks;
         this.context.scale(factor, factor);
