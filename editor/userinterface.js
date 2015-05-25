@@ -33,7 +33,9 @@ $(document).ready(function () {
     //setup the click listener for the canvas
     $("#canvas").on("click", function (e) {
         if (wasMove) {
-            editor.getViewport().endCopyMove();
+            if (editor.getViewport().moveData.moveMethod === 1 && editor.getViewport().moveData.moveState === 1) {
+                editor.getViewport().endCopyMove();
+            }
             wasMove = false;
             return;
         }
@@ -119,7 +121,7 @@ $(document).ready(function () {
         if (e.bf_mouseButtons.isDown(1) && !e.ctrlKey) {
             BrowserFuckery.fixMouseEventMovement(e);
             wasMove = true;
-            if (editor.getViewport().moveData.moveState === 0) {
+            if (editor.getViewport().moveData.moveMethod === 1 && editor.getViewport().moveData.moveState === 0) {
                 editor.getViewport().startCopyMove();
             }
             editor.getViewport().moveRespectful(e.bf_mouseMovement.getX(), e.bf_mouseMovement.getY());
