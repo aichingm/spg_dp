@@ -38,6 +38,9 @@ function uiPropsSetUp() {
             uiProps.set("mouseMode", "points");
         }
     });
+    uiProps.on("moveRanderingMode", function (key, val) {
+        editor.getViewport().moveData.moveMethod = val;
+    });
     
     
 

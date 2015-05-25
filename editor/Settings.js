@@ -15,6 +15,12 @@ $(document).ready(function () {
     $("#settingsEditorStyle").on("change",function () {
         uiProps.set("editorStyle", $(this).val());
     });
+    $("#settingsEditorStyle").on("change",function () {
+        uiProps.set("editorStyle", $(this).val());
+    });
+    $("#settingsMoveRanderingMode").on("change",function () {
+        uiProps.set("moveRanderingMode", parseInt($(this).val()));
+    });
 
 
 
