@@ -18,16 +18,16 @@ function Viewport(height, width, context, drawer) {
         this.context.clearRect(
                 this.offsetX * -1,
                 this.offsetY * -1,
-                this.width * 1 / factor,
-                this.height * 1 / factor);
+                Math.round(1 / factor * this.width)     ,
+                Math.round(1 / factor * this.height) );
     };
     this.getZoomFactor = function () {
         return Math.pow(this.zoomFactor, this.zoomClickes);
     };
     this.zoom = function (clicks, x, y, noRedraw) {
         var oldFactor = 1 / Math.pow(this.zoomFactor, this.zoomClickes);
-        var offsetX1 = Math.round(this.offsetX / oldFactor);
-        var offsetY1 = Math.round(this.offsetY / oldFactor);
+        var offsetX1 = this.offsetX / oldFactor;
+        var offsetY1 = this.offsetY / oldFactor;
         var factor = Math.pow(this.zoomFactor, clicks);
         this.zoomClickes += clicks;
         this.context.scale(factor, factor);
@@ -52,8 +52,8 @@ function Viewport(height, width, context, drawer) {
          * FAKE SOME SHIT 
          */
         this.moveData.areaSize.min.x -= 10;
-        this.moveData.areaSize.min.x -= 10;
         this.moveData.areaSize.max.x += 10;
+        this.moveData.areaSize.min.y -= 10;
         this.moveData.areaSize.max.y += 10;
         var offscreenCanvas = document.createElement('canvas');
         offscreenCanvas.width = (Math.abs(this.moveData.areaSize.min.x) + Math.abs(this.moveData.areaSize.max.x));
@@ -74,7 +74,8 @@ function Viewport(height, width, context, drawer) {
         this.moveData.imageData = undefined;
     };
     this.move = function (x, y) {
-
+        this.offsetX += x;
+        this.offsetY += y;
         switch (this.moveData.moveMethod) {
             case 0:
                 this.clear();
@@ -87,10 +88,7 @@ function Viewport(height, width, context, drawer) {
                         this.moveData.areaSize.max.y + Math.abs(this.moveData.areaSize.min.y));
                 break;
         }
-        this.offsetX += x;
-        this.offsetY += y;
         this.context.translate(x, y);
-
         switch (this.moveData.moveMethod) {
             case 0:
                 this.drawer.redraw();
