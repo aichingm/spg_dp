@@ -264,7 +264,14 @@ $(document).ready(function () {
         ;
         $("#interFloorPointsObjectsTable").html("");
         for (var i = 0; i < objectLlist.length; i++) {
-            $("#interFloorPointsObjectsTable").append("<tr><td>" + JSON.stringify(objectLlist[i]) + "</td><td class=\"center\"><button class='delete' data-index='" + i + "'>&times;</button></td></tr>");
+            var content = "<tr><td>" + objectLlist[i].type + "</td><td><table><thead><tr><td>x</td><td>y</td><td>floor</td></tr></thead><tbody>"
+            for (var j = 0; j < objectLlist[i].points.length; j++) {
+                content += "<tr><td>" + objectLlist[i].points[j].x + "</td><td>"
+                        + objectLlist[i].points[j].y + "</td><td>"
+                        + objectLlist[i].points[j].floorIndex + ": \""+editor.modelManager.model.floors[objectLlist[i].points[j].floorIndex].name+"\"</td></tr>";
+            }
+            content += "</tbody></table></td><td class=\"center\"><button class='delete' data-index='" + i + "'>&times;</button></td></tr>";
+            $("#interFloorPointsObjectsTable").append(content);
         }
         $("#interFloorPointsObjectsTable tr td button.delete").click(function (e) {
             editor.getInterFloorObjects().remove(e.currentTarget.dataset.index);
