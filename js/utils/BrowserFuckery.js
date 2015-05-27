@@ -1,11 +1,7 @@
 BrowserFuckery = {
     fixMouseEventButtons: function (mouseEvent) {
         var buttons = [];
-        if (mouseEvent.buttons === undefined && [0, 1, 2, 3].indexOf(mouseEvent.which) !== -1) {
-            //chrome
-            buttons = [mouseEvent.which];
-        } else if (mouseEvent.buttons !== undefined && mouseEvent.which === 1) {
-            //firefox
+        if (mouseEvent.buttons !== undefined && [1, 2, 2, 3, 4, 5, 6, 7].indexOf(mouseEvent.buttons)) {
             switch (mouseEvent.buttons) {
                 //1 = left
                 //2 = right
@@ -35,6 +31,8 @@ BrowserFuckery = {
                     buttons = [];
                     break;
             }
+        } else if ([0, 1, 2, 3].indexOf(mouseEvent.which) !== -1) {
+            buttons = [mouseEvent.which];
         } else {
             throw new Error("Some heavy BrowserFuckery is going on!!!1!!11 Can't fix mouse event buttons.");
         }
@@ -59,7 +57,6 @@ BrowserFuckery = {
     }
 
 };
-
 BrowserFuckery.MouseButton = function (buttons) {
     var _buttons = buttons;
     this.isDown = function (index) {
