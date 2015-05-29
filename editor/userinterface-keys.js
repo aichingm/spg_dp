@@ -93,6 +93,8 @@ function keys(editor, uioverlay) {
                 }
             } else if (e.charCode === 196) { //Ä
                 uioverlay.open("#PathPoints");
+            } else if (e.charCode === 79) { //O
+                uioverlay.open("#modelSettings");
             } else if (e.charCode === 214) { //Ö
                 uioverlay.open("#PathEdges");
             } else if (e.charCode === 246) { //ö

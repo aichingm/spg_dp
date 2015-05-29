@@ -268,7 +268,7 @@ $(document).ready(function () {
             for (var j = 0; j < objectLlist[i].points.length; j++) {
                 content += "<tr><td>" + objectLlist[i].points[j].x + "</td><td>"
                         + objectLlist[i].points[j].y + "</td><td>"
-                        + objectLlist[i].points[j].floorIndex + ": \""+editor.modelManager.model.floors[objectLlist[i].points[j].floorIndex].name+"\"</td></tr>";
+                        + objectLlist[i].points[j].floorIndex + ": \"" + editor.modelManager.model.floors[objectLlist[i].points[j].floorIndex].name + "\"</td></tr>";
             }
             content += "</tbody></table></td><td class=\"center\"><button class='delete' data-index='" + i + "'>&times;</button></td></tr>";
             $("#interFloorPointsObjectsTable").append(content);
@@ -504,6 +504,54 @@ $(document).ready(function () {
     $(".ui-overlay .controls .transparent").mouseleave(function () {
         $(".ui-overlay").css("opacity", "1");
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//########################################################
+//########################################################
+//########################################################
+//#################### Model Settings ####################
+//########################################################
+//########################################################
+//########################################################
+
+    $("#modelSettings").on("showen", function () {
+        $("#modelSettings input[name='modelSettings.pxPerMeter']").val(editor.modelManager.model.settings.pxPerMeter);
+        storage.save();
+    });
+    $("#modelSettings").on("closed-apply", function () {
+        editor.modelManager.model.settings.pxPerMeter = parseInt($("#modelSettings input[name='modelSettings.pxPerMeter']").val());
+
+    });
+    $("#modelSettings").on("closed", function () {
+
+    });
+
+
+
     //set up the closed listener for the ui-overlay with the id backgroundImage
     $("#backgroundImageInput").on("change", function () {
         if ($('#backgroundImageInput').get(0).files[0] !== null && $('#backgroundImageInput').get(0).files[0] !== undefined) {

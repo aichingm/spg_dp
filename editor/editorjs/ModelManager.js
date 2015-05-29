@@ -2,10 +2,18 @@ function ModelManager() {
     //this.model = {"floors": [{"name": "1. stock", "elements": [], "offset": {"x": 0, "y": 0, "z": 0}, "height": 30}]};
     //this.model = {"floors": [], "interFloorObjects": {"floors": [], "walls": []}, "paths": []};
     //this.model.floors.push({"name": "default floor", "elements": [], "pathPoints": [], "offset": {"x": 0, "y": 0, "z": 0}, "height": 200});
-   
+
     this.init = function () {
         this.model = {"floors": []};
         this.model.floors.push({"name": "default floor", "elements": [], "offset": {"x": 0, "y": 0, "z": 0}, "height": 200});
+    };
+    this.initSettings = function () {
+        if (!this.model.settings) {
+            this.model.settings = {};
+        }
+        if (typeof this.model.settings.pxPerMeter === "undefined") {
+            this.model.settings.pxPerMeter = 100;
+        }
     };
 
 
@@ -67,9 +75,10 @@ function ModelManager() {
         return this.model;
     };
     this.load = function (data) {
-		if(data){
-        	this.model = data;
-		}
+        if (data) {
+            this.model = data;
+            this.initSettings();
+        }
     };
 
     this.getAllPointsOnFloorAsArray = function (index) {
@@ -82,13 +91,13 @@ function ModelManager() {
         }
         return points;
     };
-     this.getAllPointsOnFloor = function (index) {
+    this.getAllPointsOnFloor = function (index) {
         var floor = this.getFloor(index);
         var points = new Array();
         for (var i = 0; i < floor.elements.length; i++) {
             for (var j = 0; j < floor.elements[i].points.length; j++) {
-                if(!Arrays.containsEqualObject(points, {"x":floor.elements[i].points[j][0],"y":floor.elements[i].points[j][1]})){
-                    points.push({"x":floor.elements[i].points[j][0],"y":floor.elements[i].points[j][1]});
+                if (!Arrays.containsEqualObject(points, {"x": floor.elements[i].points[j][0], "y": floor.elements[i].points[j][1]})) {
+                    points.push({"x": floor.elements[i].points[j][0], "y": floor.elements[i].points[j][1]});
                 }
             }
         }
@@ -120,5 +129,7 @@ function ModelManager() {
         }
     };
     this.init();
+    this.initSettings();
     return this;
-};
+}
+;
