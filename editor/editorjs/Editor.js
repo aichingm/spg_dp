@@ -121,8 +121,10 @@ function Editor(canvas, options) {
     /*   RESET TO NEW   */
     this.getClean = function () {
         this.modelManager.init();
+        this.modelManager.initSettings();
         this.pointsManager.clear();
         this.interFloorObjects.clear();
+        this.paths.getClean();
         this.drawer.getViewport().clear();
         this.floorIndex = 0;
     };
