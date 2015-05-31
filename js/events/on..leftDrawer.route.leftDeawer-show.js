@@ -20,12 +20,6 @@ $(document).ready(function (e) {
             $(".leftDrawer.route div select[name='to']").append("<option>" + list[i] + "</option>");
         }
         $(".leftDrawer.route div select[name='distanceType']").html("");
-
-        for (var i in DistanceCalculators) {
-            $(".leftDrawer.route div select[name='distanceType']").append("<option>" + i + "</option>");
-        }
-
-
     });
     $(".leftDrawer.route div button.apply").attr("disabled", "disabled");
     $(".leftDrawer.route div select[name='from']").on("change", function (e) {
@@ -52,7 +46,7 @@ $(document).ready(function (e) {
             onlyPublic: $(".leftDrawer.route div input[name='onlyPublic']").is(":checked"),
             onlyAccessible: $(".leftDrawer.route div input[name='onlyAccessible']").is(":checked")
         };
-        distanceCalculator = DistanceCalculators[$(".leftDrawer.route div select[name='distanceType']").val()];
+        distanceCalculator = DistanceCalculators.calculateByVectorDistance3DPercentMetric;
         map = buildMapFromDataPaths(exports, distanceCalculator, mapBuildOptions);
         graph = new Dijkstra(map);
         try {
@@ -65,7 +59,7 @@ $(document).ready(function (e) {
             var meters = (distance / exports.modelManager.settings.pxPerMeter);
             $(".snackbar.showPathBar .distance").html(Math.round(meters * 100) / 100);
             //include metric in to the calculation
-            distance = graph.dataCache[path[0]].distance[path[path.length-1]];
+            distance = graph.dataCache[path[0]].distance[path[path.length - 1]];
             meters = (distance / exports.modelManager.settings.pxPerMeter);
             $(".snackbar.showPathBar .time").html(Time.secondsToReadable(Math.round(meters / ((parseInt($(".leftDrawer.route div input[name='kmh']").val()) * 1000) / 3600))));
             $(".snackbar.showPathBar").show();
@@ -74,7 +68,7 @@ $(document).ready(function (e) {
             if (exception.name === "NoRoute") {//#leftDrawers > div.leftDrawer.route.isIn > div:nth-child(1) > div
                 $(".leftDrawer.route div .error.noRoute").show();
                 event.preventDefault();
-            }else{
+            } else {
                 console.log(exception);
             }
         }
