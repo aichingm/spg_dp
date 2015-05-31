@@ -1,5 +1,5 @@
 $(document).ready(function (e) {
-    STORAGE = new StorageControler("PieceofShit.exports");
+    STORAGE = new StorageControler("BuildingExplorer.exports");
     STORAGE.jsonConvert = true;
     STORAGE.setupChangeListener();
     STORAGE.dataManipulator = function (data) {
