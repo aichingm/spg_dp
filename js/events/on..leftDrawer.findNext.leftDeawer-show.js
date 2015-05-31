@@ -23,11 +23,7 @@ $(document).ready(function (e) {
             $(".leftDrawer.findNext div select[name='category']").append("<option>" + clist[i] + "</option>");
         }
         $(".leftDrawer.findNext div select[name='distanceType']").html("");
-        for (var i in DistanceCalculators) {
-            $(".leftDrawer.findNext div select[name='distanceType']").append("<option>" + i + "</option>");
-        }
-
-
+        
     });
     $(".leftDrawer.findNext").on("leftDrawer-apply", function (event) {
         var exception, exports, map, graph, path, mapBuildOptions, distanceCalculator, startVertex, category, vertex, closestVertex;
@@ -36,7 +32,7 @@ $(document).ready(function (e) {
             onlyPublic: $(".leftDrawer.findNext div input[name='onlyPublic']").is(":checked"),
             onlyAccessible: $(".leftDrawer.findNext div input[name='onlyAccessible']").is(":checked")
         };
-        distanceCalculator = DistanceCalculators[$(".leftDrawer.findNext div select[name='distanceType']").val()];
+        distanceCalculator = DistanceCalculators.calculateByVectorDistance3DPercentMetric;
         map = buildMapFromDataPaths(exports, distanceCalculator, mapBuildOptions);
         graph = new Dijkstra(map);
         try {
@@ -55,6 +51,23 @@ $(document).ready(function (e) {
             path = graph.buildPath(closestVertex);
             VIEWER.setPath(path);
             VIEWER.draw(true);
+            
+            
+            $(".snackbar.showPathBar .startPosition").html(path[0]);
+            $(".snackbar.showPathBar .endPosition").html(path[path.length - 1]);
+            var distance = CalculationHelpers.calculatePathLength3D(exports, path);
+            var meters = (distance / exports.modelManager.settings.pxPerMeter);
+            $(".snackbar.showPathBar .distance").html(Math.round(meters * 100) / 100);
+            //include metric in to the calculation
+            distance = graph.dataCache[path[0]].distance[path[path.length - 1]];
+            meters = (distance / exports.modelManager.settings.pxPerMeter);
+            $(".snackbar.showPathBar .time").html(Time.secondsToReadable(Math.round(meters / ((parseInt($(".leftDrawer.findNext div input[name='kmh']").val()) * 1000) / 3600))));
+            $(".snackbar.showPathBar").show();
+
+            
+            
+            
+            
         } catch (exception) {
             if (exception.name === "NoRoute") {//#leftDrawers > div.leftDrawer.route.isIn > div:nth-child(1) > div
                 $(".leftDrawer.route div .error.noRoute").show();
