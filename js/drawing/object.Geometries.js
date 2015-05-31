@@ -138,5 +138,11 @@ Geometries = {
         edge.position.y = finalPosition.y;
         edge.position.z = finalPosition.z;
         return edge;
+    },
+    vertexStartEndPoint: function (pxPerMeter) {
+        return new THREE.SphereGeometry(Math.round(pxPerMeter/2), 32, 32);
+    },
+    vertexPoint: function (pxPerMeter) {
+        return new THREE.SphereGeometry(Math.round(pxPerMeter/4), 32, 32);
     }
 };

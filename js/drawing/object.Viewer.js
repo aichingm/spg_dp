@@ -135,20 +135,18 @@ function Viewer() {
                     floors = data.modelManager.floors;
                     if (indexOfPath === 0) {
                         material = Materials.pathStartPoint;
-                        floorOffset = floors[object.floorIndex].offset.z + 70;
-                        geometry = new THREE.SphereGeometry(50, 32, 32);
+                        geometry = Geometries.vertexStartEndPoint(data.modelManager.settings.pxPerMeter);
                     } else if (indexOfPath === viewer.path.length - 1) {
                         material = Materials.pathEndPoint;
-                        floorOffset = floors[object.floorIndex].offset.z + 70;
-                        geometry = new THREE.SphereGeometry(50, 32, 32);
+                        geometry = Geometries.vertexStartEndPoint(data.modelManager.settings.pxPerMeter);
                     } else {
                         material = Materials.pathPoint;
-                        floorOffset = floors[object.floorIndex].offset.z + 70;
-                        geometry = new THREE.SphereGeometry(20, 32, 32);
+                        geometry = Geometries.vertexPoint(data.modelManager.settings.pxPerMeter);
                     }
                     sphere = new THREE.Mesh(geometry, material);
                     sphere.position.x = object.x;
                     sphere.position.z = object.y;
+                    floorOffset = floors[object.floorIndex].offset.z + 70;
                     sphere.position.y = floorOffset;
                     objects.pathPoints.push(sphere);
                 }
@@ -171,10 +169,11 @@ function Viewer() {
                 }
                 var floors = data.modelManager.floors;
                 var material = new THREE.MeshBasicMaterial({color: 0x624D8C});
+                var radius = data.modelManager.settings.pxPerMeter/8;
                 var edge = Geometries.edgeGeometry(
                         new THREE.Vector3(object.Ax, floors[object.Afloor].offset.z + 70, object.Ay),
                         new THREE.Vector3(object.Bx, floors[object.Bfloor].offset.z + 70, object.By),
-                        {"radiusAtTop": 10, "radiusAtBottom": 10, "radiusSegments": 6, "heightSegments": 4},
+                        {"radiusAtTop": radius, "radiusAtBottom": radius, "radiusSegments": 6, "heightSegments": 4},
                 material
                         );
                 objects.edges.push(edge);
