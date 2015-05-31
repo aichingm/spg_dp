@@ -22,5 +22,9 @@ Materials = new function () {
         transparent: false,
         side: THREE.DoubleSide
     });
+    this.pathStartPoint = new THREE.MeshBasicMaterial({color: 0xF2470C});
+    this.pathEndPoint = new THREE.MeshBasicMaterial({color: 0xffff00});
+    this.pathPoint = new THREE.MeshBasicMaterial({color: 0x624D8C});
+
     return this;
 };

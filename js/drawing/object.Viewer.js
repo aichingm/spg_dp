@@ -130,18 +130,32 @@ function Viewer() {
         var vertices = [];
         $(this.data.paths.vertices).each(function (data, viewer) {
             return function (i, object) {
-                if ($.inArray(object.floorIndex, selectedFloors) === -1 || !Arrays.boolInArray(object.name, viewer.path)) {
+                var indexOfPath = viewer.path.indexOf(object.name);
+                if ($.inArray(object.floorIndex, selectedFloors) === -1 || indexOfPath === -1) {
                     return;
+                } else {
+                    var material, sphere, floors, geometry, sphere, floorOffset;
+                    vertices.push({"x": object.x, "y": object.y, "floorIndex": object.floorIndex});
+                    floors = data.modelManager.floors;
+                    if (indexOfPath === 0) {
+                        material = Materials.pathStartPoint;
+                        floorOffset = floors[object.floorIndex].offset.z + 70;
+                        geometry = new THREE.SphereGeometry(50, 32, 32);
+                    } else if (indexOfPath === viewer.path.length - 1) {
+                        material = Materials.pathEndPoint;
+                        floorOffset = floors[object.floorIndex].offset.z + 70;
+                        geometry = new THREE.SphereGeometry(50, 32, 32);
+                    } else {
+                        material = Materials.pathPoint;
+                        floorOffset = floors[object.floorIndex].offset.z + 70;
+                        geometry = new THREE.SphereGeometry(20, 32, 32);
+                    }
+                    sphere = new THREE.Mesh(geometry, material);
+                    sphere.position.x = object.x;
+                    sphere.position.z = object.y;
+                    sphere.position.y = floorOffset;
+                    objects.pathPoints.push(sphere);
                 }
-                vertices.push({"x": object.x, "y": object.y, "floorIndex": object.floorIndex});
-                var floors = data.modelManager.floors;
-                var geometry = new THREE.SphereGeometry(50, 32, 32);
-                var material = new THREE.MeshBasicMaterial({color: 0xffff00});
-                var sphere = new THREE.Mesh(geometry, material);
-                sphere.position.x = object.x;
-                sphere.position.z = object.y;
-                sphere.position.y = floors[object.floorIndex].offset.z + 70;
-                objects.pathPoints.push(sphere);
             };
         }(this.data, this));
 
@@ -160,7 +174,7 @@ function Viewer() {
                     return;
                 }
                 var floors = data.modelManager.floors;
-                var material = new THREE.MeshBasicMaterial({color: 0x0000ff});
+                var material = new THREE.MeshBasicMaterial({color: 0x624D8C});
                 var edge = Geometries.edgeGeometry(
                         new THREE.Vector3(object.Ax, floors[object.Afloor].offset.z + 70, object.Ay),
                         new THREE.Vector3(object.Bx, floors[object.Bfloor].offset.z + 70, object.By),

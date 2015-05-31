@@ -201,3 +201,9 @@ button{
 .snackbars .snackbar .controls button.cancel:hover {
     background: none repeat scroll 0 0 #444444;
 }
+.snackbars .snackbar.showPathBar span.startPosition {
+    color: #F2470C;
+}
+.snackbars .snackbar.showPathBar span.endPosition {
+    color: #ffff00;
+}
