@@ -46,7 +46,7 @@ body > canvas{
 }
 
 .leftDrawer{
-    z-index: 2;
+    z-index: 15;
     position: absolute;
     top: 0;
     left: calc(-100%);
@@ -56,7 +56,7 @@ body > canvas{
 
 
 .leftDrawer .content{
-    z-index: 2;
+    z-index: 15;
     color: #ebecf4;
     float: left;
     background-color: #6571be;
@@ -110,7 +110,7 @@ body > canvas{
     position: absolute;top: 10px;right: 15px;
 }
 
-.leftDrawer  button{
+button{
     border: 0 none;
     border-radius: 2px 2px 2px 2px;
     color: #ebecf4;
@@ -172,4 +172,32 @@ body > canvas{
 
 .error{
     display: none;
+}
+/******** SNACKBAR ************/
+.snackbars{
+    z-index: 2;
+    position: absolute;
+    bottom: 0;
+    left: calc(50% - 400px);
+}
+.snackbar{
+    color: #ebecf4;
+    background-color: #6571be;
+    width: 800px;
+    height: 100px;
+    padding: 15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    display: none;
+}
+.snackbars .snackbar .controls{
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+.snackbars .snackbar .controls button.cancel {
+    background: none repeat scroll 0 0 #E0645C;
+}
+.snackbars .snackbar .controls button.cancel:hover {
+    background: none repeat scroll 0 0 #444444;
 }

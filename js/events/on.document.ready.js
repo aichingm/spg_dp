@@ -23,6 +23,11 @@ $(document).ready(function (e) {
         for (i = 0; i < paths.vertices.length; i++) {
             data.paths.vshadow[paths.vertices[i].name] = i;
         }
+        data.paths.eabShadow = {};
+        for (i = 0; i < paths.edges.length; i++) {
+            data.paths.eabShadow[paths.edges[i].Ax+"|"+paths.edges[i].Ay+"|"+paths.edges[i].Afloor+"|"+
+                        paths.edges[i].Bx+"|"+paths.edges[i].By+"|"+paths.edges[i].Bfloor+"|"] = i;
+        }
         return data;
     };
     STORAGE.reloadData();

@@ -5,8 +5,7 @@
         <meta charset="utf-8">
         <link rel="shortcut icon"  href="favicon.png">
         <link rel="stylesheet" type="text/css" href="styles.css">
-    </head>
-    <body>
+
         <script src="js/globalVariables.js"></script>
         <script src="js/libs/three.min.js"></script>
         <script src="js/libs/OrbitControls.js"></script>
@@ -16,8 +15,10 @@
         <script src="js/libs/Stats.js"></script>
         <script src="editor/Arrays.js"></script>
         <script src="js/utils/StorageControler.js"></script>
+        <script src="js/utils/Time.js"></script>
         <script type="text/javascript" src="editor/editorjs/Paths.js"></script>
         <script type="text/javascript" src="js/navigation/object.DistanceCalculators.js"></script>
+        <script type="text/javascript" src="js/navigation/object.CalculationHelpers.js"></script>
         <script type="text/javascript" src="js/navigation/function.buildMapFromDataPaths.js"></script>
         <script type="text/javascript" src="js/navigation/function.buildVetexNameList.js"></script>
         <script type="text/javascript" src="js/navigation/function.buildVetexCategoryList.js"></script>
@@ -30,7 +31,12 @@
         <script type="text/javascript" src="js/events/on..leftDrawer.route.leftDeawer-show.js"></script>
         <script type="text/javascript" src="js/events/on..leftDrawer.findNext.leftDeawer-show.js"></script>
         <script type="text/javascript" src="js/events/on..leftDrawer.controls.click.js"></script>
+        <script type="text/javascript" src="js/snackbars/showPathBar.js"></script>
+        
+        
         <script type="text/javascript" src="js/events/on.document.ready.js"></script>
+    </head>
+    <body>
         <div id="settings">
             <div class="settingsLine settingsLineH1">
                 Settings
@@ -50,6 +56,7 @@
                     <select name="distanceType"></select><br /><br />
                     <label>Use only public ways<input type="checkbox" name="onlyPublic" checked="checked"></label><br /><br />
                     <label>Use only accessible ways<input type="checkbox" name="onlyAccessible" checked="checked"></label><br /><br />
+                    <label>Speed&nbsp;<input type="number" name="kmh" value="4">&nbsp;km/h</label><br /><br />
                     <div class="error noRoute">Sorry no route found!</div>
                 </div>
                 <div class="content">
@@ -84,6 +91,18 @@
                 </div>
                 <div class="opener">
                     &#8608;
+                </div>
+            </div>
+
+        </div>
+        <div class="snackbars">
+            <div class="snackbar showPathBar">
+                Your position: <span class="startPosition"></span><br />
+                Destination: <span class="endPosition"></span><br />
+                Distance (in meters): <span class="distance"></span><br />
+                Time to walk approximately: <span class="time"></span><br />
+                <div class="controls">
+                    <button class="cancel">&#10007;</button>
                 </div>
             </div>
         </div>
