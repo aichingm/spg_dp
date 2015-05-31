@@ -540,11 +540,10 @@ $(document).ready(function () {
 
     $("#modelSettings").on("showen", function () {
         $("#modelSettings input[name='modelSettings.pxPerMeter']").val(editor.modelManager.model.settings.pxPerMeter);
-        storage.save();
     });
     $("#modelSettings").on("closed-apply", function () {
         editor.modelManager.model.settings.pxPerMeter = parseInt($("#modelSettings input[name='modelSettings.pxPerMeter']").val());
-
+        storage.save();
     });
     $("#modelSettings").on("closed", function () {
 
