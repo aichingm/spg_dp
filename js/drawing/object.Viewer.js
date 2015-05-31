@@ -7,6 +7,7 @@ function Viewer() {
     this.data;
     this.updateFunctions = [];
     this.stats;
+    this.selectedFloors = [];
     this.init = function () {
         // Create the scene and set the scene size.
         this.scene = new THREE.Scene();
@@ -44,12 +45,6 @@ function Viewer() {
 
     this.draw = function (clear) {
         this.path = this.path ? this.path : [];
-        var selectedFloors = [];
-        if ($("#drawFloors").val()) {
-            $.each($("#drawFloors").val(), function (v, k) {
-                selectedFloors.push(parseInt(k));
-            });
-        }
         if (clear === true) {
             this.clearScene();
         }
@@ -62,7 +57,8 @@ function Viewer() {
         objects.interfloorFloors = [];
         objects.pathPoints = [];
         objects.edges = [];
-
+        //fix Viewer.selectedFloors access in the anonymous Functions
+        var selectedFloors = this.selectedFloors;
         $(this.data.modelManager.floors).each(function (k) {
             if ($.inArray(k, selectedFloors) === -1) {
                 return;
@@ -257,6 +253,9 @@ function Viewer() {
     };
     this.setPath = function (path) {
         this.path = path;
+    };
+    this.setSelectedFloors = function (floors) {
+        this.selectedFloors = floors;
     };
     this.setStats = function (stats) {
         this.stats = stats;
