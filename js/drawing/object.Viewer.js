@@ -8,6 +8,7 @@ function Viewer() {
     this.updateFunctions = [];
     this.stats;
     this.selectedFloors = [];
+    this.drawingHeightFactor = 1;
     this.init = function () {
         // Create the scene and set the scene size.
         this.scene = new THREE.Scene();
@@ -59,6 +60,7 @@ function Viewer() {
         objects.edges = [];
         //fix Viewer.selectedFloors access in the anonymous Functions
         var selectedFloors = this.selectedFloors;
+        var drawingHeightFactor = this.drawingHeightFactor;
         $(this.data.modelManager.floors).each(function (k) {
             if ($.inArray(k, selectedFloors) === -1) {
                 return;
@@ -73,23 +75,23 @@ function Viewer() {
                             objects.floors.push(mesh);
                             break;
                         case "wall":
-                            var geometry = Geometries.wallGemometry(this.points, floor.offset.z, floor.height);
+                            var geometry = Geometries.wallGemometry(this.points, floor.offset.z, floor.height * drawingHeightFactor);
                             geometry.computeBoundingSphere();
                             var mesh = new THREE.Mesh(geometry, Materials.wall);
                             objects.walls.push(mesh);
                             break;
                         case "door":
-                            var geometryDoor = Geometries.doorGemometry(this.points, floor.offset.z, floor.height);
+                            var geometryDoor = Geometries.doorGemometry(this.points, floor.offset.z, floor.height * drawingHeightFactor);
                             geometryDoor.computeBoundingSphere();
                             var meshDoor = new THREE.Mesh(geometryDoor, Materials.door);
                             objects.doors.push(meshDoor);
-                            var geometryOverDoor = Geometries.overDoorGemometry(this.points, floor.offset.z, floor.height);
+                            var geometryOverDoor = Geometries.overDoorGemometry(this.points, floor.offset.z, floor.height * drawingHeightFactor);
                             geometryOverDoor.computeBoundingSphere();
                             var meshOverDoor = new THREE.Mesh(geometryOverDoor, Materials.wall);
                             objects.doors.push(meshOverDoor);
                             break;
                         case "window":
-                            var geometryWindow = Geometries.windowGeometry(this.points, floor.offset.z, floor.height);
+                            var geometryWindow = Geometries.windowGeometry(this.points, floor.offset.z, floor.height * drawingHeightFactor);
                             geometryWindow.computeBoundingSphere();
                             var meshWindow = new THREE.Mesh(geometryWindow, Materials.window);
                             objects.windows.push(meshWindow);
@@ -261,6 +263,12 @@ function Viewer() {
     };
     this.getStats = function () {
         return this.stats;
+    };
+     this.setDrawingHeightPercentage = function (percentage) {
+         if(percentage < 0 || percentage > 100){
+             throw new Error("the Percentage has to be between 0 and 100 (incl 0 and 100)");
+         }
+        return this.drawingHeightFactor = percentage/100;
     };
 
 
