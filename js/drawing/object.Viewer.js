@@ -40,7 +40,7 @@ function Viewer() {
         //light.position.set(-1000, 2000, 1000);
         //scene.add(light);
         this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-        this.controls.userPanSpeed = 15;
+        this.controls.userPanSpeed = 60;
     };
 
     this.draw = function (clear) {
