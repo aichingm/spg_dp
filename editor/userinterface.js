@@ -180,6 +180,25 @@ $(document).ready(function () {
         //convert the exportOjects to string and display them
         $("#textarea").val(editor.toString());
     });
+     $("#toString button[name='save']").click(function () {
+        var data = editor.toString();
+        
+        var textToWrite = JSON.stringify(data);
+        var textFileAsBlob = new Blob([textToWrite], {type: 'text/plain'});
+        var fileNameToSaveAs = "model.js";
+        var downloadLink = document.createElement("a");
+        downloadLink.download = fileNameToSaveAs;
+        downloadLink.innerHTML = "Download File";
+        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+        downloadLink.onclick = function (e) {
+            document.body.removeChild(e.target);
+        };
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+    });
+    
+    
     //setup the listener for the closed-apply event on the oi-overlay with the id toString
     $("#toString").on("closed-apply", function () {
         //load the exportObjects to the editor
