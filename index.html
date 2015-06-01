@@ -28,6 +28,7 @@
         <script type="text/javascript" src="js/drawing/object.Materials.js"></script>
         <script type="text/javascript" src="js/events/on.document.keypress.js"></script>
         <script type="text/javascript" src="js/events/on..opener.click.js"></script>
+        <script type="text/javascript" src="js/events/on..leftDrawer.load.leftDeawer-show.js"></script>
         <script type="text/javascript" src="js/events/on..leftDrawer.route.leftDeawer-show.js"></script>
         <script type="text/javascript" src="js/events/on..leftDrawer.findNext.leftDeawer-show.js"></script>
         <script type="text/javascript" src="js/events/on..leftDrawer.controls.click.js"></script>
@@ -59,6 +60,16 @@
             </div>
         </div>
         <div id="leftDrawers">
+            <div class="leftDrawer load">
+                <div class="content">
+                    <h1>Load a model</h1>
+                    <label>File: <input type="file" name="loadFile"></label><br /><br />
+                </div>
+                <div class="controls">
+                    <button class="apply">&#10003;</button>
+                    <button class="cancel">&#10007;</button>
+                </div>
+            </div>
             <div class="leftDrawer route">
                 <div class="content">
                     <h1>Select a route to show</h1>
@@ -96,6 +107,9 @@
                 </div>
             </div>
             <div class="openers">
+                <div class="opener">
+                    &#x21f1;
+                </div>
                 <div class="opener">
                     &#8605;
                 </div>
