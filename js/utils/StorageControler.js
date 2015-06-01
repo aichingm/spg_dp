@@ -17,7 +17,6 @@ function StorageControler(storageKey) {
     this.handler = function (obj) {
         return function (e) {
             var f;
-            console.log("cahnge")
             if (!e) {
                 e = window.event;
             }
