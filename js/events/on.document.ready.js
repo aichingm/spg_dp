@@ -4,14 +4,18 @@ $(document).ready(function (e) {
     STORAGE.setupChangeListener();
     STORAGE.dataManipulator = function (data) {
         var i, e, paths = new Paths();
-        if(!data.paths){
-            data.paths = {};
-        }
-        if(!data.paths.vertices){
-            data.paths.vertices = [];
-        }
-         if(!data.paths.edges){
-            data.paths.edges = [];
+        if (!data) {
+            data = new EmptyDataObject();
+        } else {
+            if (!data.paths) {
+                data.paths = {};
+            }
+            if (!data.paths.vertices) {
+                data.paths.vertices = [];
+            }
+            if (!data.paths.edges) {
+                data.paths.edges = [];
+            }
         }
         paths.load(data.paths);
         for (i = 0; i < paths.edges.length; i++) {
@@ -25,8 +29,8 @@ $(document).ready(function (e) {
         }
         data.paths.eabShadow = {};
         for (i = 0; i < paths.edges.length; i++) {
-            data.paths.eabShadow[paths.edges[i].Ax+"|"+paths.edges[i].Ay+"|"+paths.edges[i].Afloor+"|"+
-                        paths.edges[i].Bx+"|"+paths.edges[i].By+"|"+paths.edges[i].Bfloor+"|"] = i;
+            data.paths.eabShadow[paths.edges[i].Ax + "|" + paths.edges[i].Ay + "|" + paths.edges[i].Afloor + "|" +
+                    paths.edges[i].Bx + "|" + paths.edges[i].By + "|" + paths.edges[i].Bfloor + "|"] = i;
         }
         return data;
     };
