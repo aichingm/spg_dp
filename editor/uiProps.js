@@ -12,7 +12,6 @@ function uiPropsSetUp() {
     uiProps.on("editorStyle", function (key, val) {
         editor.setOptions({"style": Styles[val]});
         //jQuery .attr() does not refresh the checkbox
-        $("#settingsMaxSelected").val(val);
     });
     
     uiProps.on("mouseMode", function (key, val) {
