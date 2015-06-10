@@ -21,9 +21,9 @@ var CalculationHelpers = {
             vac = new THREE.Vector3(a.x, a.y, aZ);
             aHash = a.x + "|" + a.y + "|" + a.floorIndex;
             bHash = b.x + "|" + b.y + "|" + b.floorIndex;
-            if (data.paths.eabShadow[aHash+"|"+bHash]) {
+            if (data.paths.eabShadow[aHash+"|"+bHash] !== undefined) {
                 percentage = data.paths.edges[data.paths.eabShadow[aHash+"|"+bHash]].metric[0];
-            } else if (data.paths.eabShadow[bHash+"|"+aHash]) {
+            } else if (data.paths.eabShadow[bHash+"|"+aHash] !== undefined) {
                 percentage = data.paths.edges[data.paths.eabShadow[bHash+"|"+aHash]].metric[1];
             } else {
                 throw new Error("no edge found from " + aHash + " to " + bHash);
