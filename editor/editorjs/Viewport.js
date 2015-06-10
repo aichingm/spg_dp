@@ -62,6 +62,7 @@ function Viewport(height, width, context, drawer) {
         context.translate(this.moveData.areaSize.min.x * -1, this.moveData.areaSize.min.y * -1);
         switch (this.moveData.moveMethod) {
             case 1:
+                this.drawer.drawBackground(context);
                 this.drawer.drawAll(context);
                 this.moveData.imageData = offscreenCanvas;
                 break;

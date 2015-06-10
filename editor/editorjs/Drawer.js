@@ -186,8 +186,14 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
         }(this);
         img.src = data;
     };
-    this.drawBackground = function () {
-        this.context.drawImage(this.backgroundImage, 0, 0);
+    this.drawBackground = function (context) {
+        if (this.backgroundImage) {
+            if (context) {
+                context.drawImage(this.backgroundImage, 0, 0);
+            } else {
+                this.context.drawImage(this.backgroundImage, 0, 0);
+            }
+        }
     };
     /*
      * SETTERS
