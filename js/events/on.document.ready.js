@@ -30,7 +30,7 @@ $(document).ready(function (e) {
         data.paths.eabShadow = {};
         for (i = 0; i < paths.edges.length; i++) {
             data.paths.eabShadow[paths.edges[i].Ax + "|" + paths.edges[i].Ay + "|" + paths.edges[i].Afloor + "|" +
-                    paths.edges[i].Bx + "|" + paths.edges[i].By + "|" + paths.edges[i].Bfloor + "|"] = i;
+                    paths.edges[i].Bx + "|" + paths.edges[i].By + "|" + paths.edges[i].Bfloor] = i;
         }
         return data;
     };
