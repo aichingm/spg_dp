@@ -7,7 +7,7 @@ function Editor(canvas, options) {
         this.pointsManager = new PointsManager();
         this.paths = new Paths();
         this.edgeSelection = new EdgeSelection();
-        this.drawer = new Drawer(canvas, this.modelManager, this.pointsManager, this.paths, this.edgeSelection,this.options.style?this.options.style:Styles.ClassicStyle);
+        this.drawer = new Drawer(canvas, this.modelManager, this.pointsManager, this.paths, this.edgeSelection, this.options.style ? this.options.style : Styles.ClassicStyle);
         this.interFloorObjects = new InterFloorObjects();
     };
     this.init(canvas, options);
@@ -103,6 +103,7 @@ function Editor(canvas, options) {
             }
         }
     };
+    /*   DELETE STUFF   */
     this.deleteElements = function (fuzzy) {
         var selectedPoints = this.pointsManager.getSelectedPointsAsArrays();
         var indices = new Array();
@@ -115,6 +116,34 @@ function Editor(canvas, options) {
         this.getModelManager().setFloorElemets(this.floorIndex, Arrays.deleteIndicesFromArray(elements, indices));
         this.getPointsManager().setPoints(this.getModelManager().getAllPointsOnFloor(this.floorIndex));
         this.getDrawer().redraw();
+    };
+    this.deleteFloor = function (index) {
+        var vertex, i, j, isOnFloor, interFloorObject, point;
+        for (i = 0; i < this.paths.vertices.length; i++) {
+            vertex = this.paths.vertices[i];
+            if (vertex.floorIndex === index) {
+                this.paths.vertices.splice(index, 1);
+            } else if (vertex.floorIndex > index) {
+                vertex.floorIndex--;
+            }
+        }
+        for (i = 0; i < this.interFloorObjects.objects.length; i++) {
+            interFloorObject = this.interFloorObjects.objects[i];
+            isOnFloor = false;
+            for (j = 0; j < interFloorObject.points.length; j++) {
+                point = interFloorObject.points[j];
+                if (point.floorIndex === index) {
+                    isOnFloor = true;
+                    break;
+                } else if (point.floorIndex > index) {
+                    point.floorIndex--;
+                }
+            }
+            if (isOnFloor) {
+                this.interFloorObjects.objects.splice(i,1);
+            }
+        }
+        this.modelManager.deleteFloor(index);
     };
 
 
@@ -189,9 +218,9 @@ function Editor(canvas, options) {
      * SETTERS
      */
     this.setOptions = function (options) {
-    	if(options.style){
-    		this.getDrawer().setStyle(options.style);
-    	}
+        if (options.style) {
+            this.getDrawer().setStyle(options.style);
+        }
         this.options = $.extend(this.options, options);
     };
     this.setFloorIndex = function (index) {

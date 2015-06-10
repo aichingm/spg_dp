@@ -228,7 +228,7 @@ $(document).ready(function () {
 
         $("#floorManagerSelectFloor").trigger("change");
         $("#floorManagerTable tr td button.delete").click(function (e) {
-            editor.getModelManager().deleteFloor(e.currentTarget.dataset.floor);
+            editor.deleteFloor(e.currentTarget.dataset.floor);
             $("#floorManager").trigger("showen");
             storage.save();
         });
