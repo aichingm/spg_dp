@@ -257,6 +257,13 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
                 size.max.y = Math.max(size.max.y, this.paths.vertices[i].y);
             }
         }
+        if (this.backgroundImage) {
+                size.min.x = Math.min(size.min.x, 0);
+                size.max.x = Math.max(size.max.x, this.backgroundImage.width);
+                size.min.y = Math.min(size.min.y, 0);
+                size.max.y = Math.max(size.max.y, this.backgroundImage.height);
+        }
+        
         return size;
     };
 
