@@ -70,7 +70,7 @@ $(document).ready(function (e) {
             $(".snackbar.showPathBar").show();
         } catch (exception) {
             if (exception.name === "NoRoute") {//#leftDrawers > div.leftDrawer.route.isIn > div:nth-child(1) > div
-                $(".leftDrawer.route div .error.noRoute").show();
+                $(".leftDrawer.findNext div .error.noRoute").show();
                 event.preventDefault();
             }
             console.log(exception);
