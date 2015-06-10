@@ -33,6 +33,7 @@ function keys(editor, uioverlay) {
             } else if (e.charCode === 107) {//k
                 if (confirm("Löschen?")) {
                     editor.getClean();
+                    document.location.reload(true);
                 }
             } else if (e.charCode === 115) {//s
                 editor.createLine("window");
