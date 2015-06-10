@@ -148,7 +148,7 @@ function Viewer() {
                     sphere = new THREE.Mesh(geometry, material);
                     sphere.position.x = object.x;
                     sphere.position.z = object.y;
-                    floorOffset = floors[object.floorIndex].offset.z + 70;
+                    floorOffset = floors[object.floorIndex].offset.z + data.modelManager.settings.pxPerMeter;
                     sphere.position.y = floorOffset;
                     objects.pathPoints.push(sphere);
                 }
@@ -173,8 +173,8 @@ function Viewer() {
                 var material = new THREE.MeshBasicMaterial({color: 0x624D8C});
                 var radius = data.modelManager.settings.pxPerMeter/8;
                 var edge = Geometries.edgeGeometry(
-                        new THREE.Vector3(object.Ax, floors[object.Afloor].offset.z + 70, object.Ay),
-                        new THREE.Vector3(object.Bx, floors[object.Bfloor].offset.z + 70, object.By),
+                        new THREE.Vector3(object.Ax, floors[object.Afloor].offset.z + data.modelManager.settings.pxPerMeter, object.Ay),
+                        new THREE.Vector3(object.Bx, floors[object.Bfloor].offset.z + data.modelManager.settings.pxPerMeter, object.By),
                         {"radiusAtTop": radius, "radiusAtBottom": radius, "radiusSegments": 6, "heightSegments": 4},
                 material
                         );
