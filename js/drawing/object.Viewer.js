@@ -49,6 +49,12 @@ function Viewer() {
         if (clear === true) {
             this.clearScene();
         }
+
+        this.camera.lookAt(new THREE.Vector3(this.data.center.x, this.data.center.y, this.data.center.z));
+        this.controls.center.fromArray([this.data.center.x, this.data.center.y, this.data.center.z]);
+        console.log(this.data.center)
+        this.scene.add(this.camera);
+
         var objects = {};
         objects.floors = [];
         objects.walls = [];
@@ -171,7 +177,7 @@ function Viewer() {
                 }
                 var floors = data.modelManager.floors;
                 var material = new THREE.MeshBasicMaterial({color: 0x624D8C});
-                var radius = data.modelManager.settings.pxPerMeter/8;
+                var radius = data.modelManager.settings.pxPerMeter / 8;
                 var edge = Geometries.edgeGeometry(
                         new THREE.Vector3(object.Ax, floors[object.Afloor].offset.z + data.modelManager.settings.pxPerMeter, object.Ay),
                         new THREE.Vector3(object.Bx, floors[object.Bfloor].offset.z + data.modelManager.settings.pxPerMeter, object.By),
@@ -264,11 +270,11 @@ function Viewer() {
     this.getStats = function () {
         return this.stats;
     };
-     this.setDrawingHeightPercentage = function (percentage) {
-         if(percentage < 0 || percentage > 100){
-             throw new Error("the Percentage has to be between 0 and 100 (incl 0 and 100)");
-         }
-        return this.drawingHeightFactor = percentage/100;
+    this.setDrawingHeightPercentage = function (percentage) {
+        if (percentage < 0 || percentage > 100) {
+            throw new Error("the Percentage has to be between 0 and 100 (incl 0 and 100)");
+        }
+        return this.drawingHeightFactor = percentage / 100;
     };
 
 
