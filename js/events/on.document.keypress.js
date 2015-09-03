@@ -23,19 +23,23 @@ $(document).ready(function (e) {
             try {
                 var simulation = new Simulation();
                 //TODO for all populated rooms do this with the closest exit
-                var routes = [{from:"6",to:"Raum12"},{from:"7",to:"Raum12"}];
-                for (var q = 0; q < routes.length;q++){
-                    
+                var routes = [{from: "Lehrer Raum 6", to: "Notausgang"}, {from: "Lehrer Raum 1", to: "Notausgang"}];
+                for (var q = 0; q < routes.length; q++) {
+
                     var path = graph.getPath(routes[q].from, routes[q].to);
-                    console.log(path,q,routes[q])
+                    console.log(path)
+                    console.log(path, q, routes[q])
+                    console.log(exports.paths.edges)
                     var pathSegments = [];
                     for (var j = 0; j < exports.paths.edges.length; j++) {
                         var edge = exports.paths.edges[j];
                         var aPos = path.indexOf(edge.A.name);
                         var bPos = path.indexOf(edge.B.name);
                         if (aPos === -1 || bPos === -1) {
+                            console.log("continue")
                             continue;
                         }
+                        console.log("not continue")
                         if (bPos === aPos + 1) {
                             var pathSegment = new PathSegment();
                             pathSegment.a.x = edge.Ax;
@@ -63,7 +67,7 @@ $(document).ready(function (e) {
 
                     }
                     console.log(pathSegments)
-                    
+
                     simulation.addRunners(25, pathSegments, function () {
                         return Math.floor((Math.random() * 150) + 50);
                     });
@@ -71,7 +75,7 @@ $(document).ready(function (e) {
                     console.log(simulation.runners[0].position)
 
                 }
-                    console.log(simulation.runners)
+                console.log(simulation.runners)
 
 
                 var allMeshes = [];
@@ -79,7 +83,7 @@ $(document).ready(function (e) {
                     var geometry = new THREE.BoxGeometry(20, 1, 20);
                     var material = new THREE.MeshBasicMaterial({color: 0x000000});
                     var mesh = new THREE.Mesh(geometry, material);
-                                        console.log(simulation.runners[k].position)
+                    console.log(simulation.runners[k].position)
 
                     mesh.position.set(simulation.runners[k].position.x, simulation.runners[k].position.z, simulation.runners[k].position.y);
                     allMeshes.push(mesh);
