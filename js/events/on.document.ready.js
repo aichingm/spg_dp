@@ -60,13 +60,13 @@ $(document).ready(function (e) {
     STORAGE.reloadData();
     VIEWER = new Viewer();
 
-    VIEWER.setStats(new Stats());
-    VIEWER.getStats().setMode(0);
-    VIEWER.getStats().domElement.style.position = 'absolute';
-    VIEWER.getStats().domElement.style.left = '0px';
-    VIEWER.getStats().domElement.style.bottom = '0px';
-    VIEWER.getStats().domElement.style.zIndex = '1000';
-    document.body.appendChild(VIEWER.getStats().domElement);
+    //VIEWER.setStats(new Stats());
+    //VIEWER.getStats().setMode(0);
+    //VIEWER.getStats().domElement.style.position = 'absolute';
+    //VIEWER.getStats().domElement.style.left = '0px';
+    //VIEWER.getStats().domElement.style.bottom = '0px';
+    //VIEWER.getStats().domElement.style.zIndex = '1000';
+    //document.body.appendChild(VIEWER.getStats().domElement);
 
     VIEWER.init();
     VIEWER.animate();

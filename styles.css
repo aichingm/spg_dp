@@ -37,6 +37,7 @@ body > canvas{
     width: 30px;
     height: 30px;
     float: left;
+    cursor: pointer;
 }
 #settings .opener {
     border-bottom-left-radius: 7px;
