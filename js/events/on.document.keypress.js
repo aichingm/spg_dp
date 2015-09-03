@@ -24,22 +24,16 @@ $(document).ready(function (e) {
                 var simulation = new Simulation();
                 //TODO for all populated rooms do this with the closest exit
                 var routes = [{from: "Lehrer Raum 6", to: "Notausgang"}, {from: "Lehrer Raum 1", to: "Notausgang"}];
+                var pathSegments = [];
                 for (var q = 0; q < routes.length; q++) {
-
                     var path = graph.getPath(routes[q].from, routes[q].to);
-                    console.log(path)
-                    console.log(path, q, routes[q])
-                    console.log(exports.paths.edges)
-                    var pathSegments = [];
                     for (var j = 0; j < exports.paths.edges.length; j++) {
                         var edge = exports.paths.edges[j];
                         var aPos = path.indexOf(edge.A.name);
                         var bPos = path.indexOf(edge.B.name);
                         if (aPos === -1 || bPos === -1) {
-                            console.log("continue")
                             continue;
                         }
-                        console.log("not continue")
                         if (bPos === aPos + 1) {
                             var pathSegment = new PathSegment();
                             pathSegment.a.x = edge.Ax;
@@ -63,19 +57,27 @@ $(document).ready(function (e) {
                             pathSegment.prepare();
                             pathSegments[aPos - 1] = pathSegment;
                         }
-
-
                     }
-                    console.log(pathSegments)
-
                     simulation.addRunners(25, pathSegments, function () {
                         return Math.floor((Math.random() * 150) + 50);
                     });
-
-                    console.log(simulation.runners[0].position)
-
                 }
-                console.log(simulation.runners)
+
+                console.log(pathSegments)
+                var allPaths = {};
+                for (var k = 0; k < pathSegments.length; k++) {
+                    var p = pathSegments[k];
+                    var material = new THREE.MeshBasicMaterial({color: 0x624D8C});
+                    console.log(exports.modelManager.settings.pxPerMeter)
+                    var radius = exports.modelManager.settings.pxPerMeter / 8;
+                    var edge = Geometries.edgeGeometry(
+                            new THREE.Vector3(p.a.x, p.a.z + exports.modelManager.settings.pxPerMeter , p.a.y),
+                            new THREE.Vector3(p.b.x, p.b.z +exports.modelManager.settings.pxPerMeter , p.b.y),
+                            {"radiusAtTop": radius, "radiusAtBottom": radius, "radiusSegments": 6, "heightSegments": 4},
+                    material
+                            );
+                    VIEWER.scene.add(edge);
+                }
 
 
                 var allMeshes = [];
