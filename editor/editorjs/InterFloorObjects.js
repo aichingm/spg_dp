@@ -1,7 +1,7 @@
 function InterFloorObjects() {
     this.objects = [];
     this.add = function (type, points) {
-        this.objects.push({"type": type, "points": points});
+        this.objects.push({"type": type, "points": Clone.cloneNoFuncs(points)});
     };
 
     this.remove = function (i) {

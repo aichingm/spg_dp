@@ -186,8 +186,14 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
         }(this);
         img.src = data;
     };
-    this.drawBackground = function () {
-        this.context.drawImage(this.backgroundImage, 0, 0);
+    this.drawBackground = function (context) {
+        if (this.backgroundImage) {
+            if (context) {
+                context.drawImage(this.backgroundImage, 0, 0);
+            } else {
+                this.context.drawImage(this.backgroundImage, 0, 0);
+            }
+        }
     };
     /*
      * SETTERS
@@ -251,6 +257,13 @@ function Drawer(canvas, modelManager, pointsManager, paths, edgeSelection, style
                 size.max.y = Math.max(size.max.y, this.paths.vertices[i].y);
             }
         }
+        if (this.backgroundImage) {
+                size.min.x = Math.min(size.min.x, 0);
+                size.max.x = Math.max(size.max.x, this.backgroundImage.width);
+                size.min.y = Math.min(size.min.y, 0);
+                size.max.y = Math.max(size.max.y, this.backgroundImage.height);
+        }
+        
         return size;
     };
 

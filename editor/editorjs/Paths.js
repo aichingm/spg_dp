@@ -132,6 +132,11 @@ function Paths() {
         }
         return false;
     };
+    this.getClean = function () {
+        this.edges = [];
+        this.vertices = [];
+        this.selectedVertex = undefined;
+    };
     this.save = function () {
         return {"vertices": this.vertices, "edges": this.edges};
     };

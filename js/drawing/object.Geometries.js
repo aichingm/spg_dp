@@ -122,21 +122,28 @@ Geometries = {
     },
     edgeGeometry: function (pointX, pointY, geometryOptions, material) {
         var direction = new THREE.Vector3().subVectors(pointY, pointX);
-        var arrow = new THREE.ArrowHelper(direction, pointX);
+        var length = direction.length();
+        direction.normalize();
+        var arrow = new THREE.ArrowHelper(direction, pointX, length);
         var edgeGeometry = new THREE.CylinderGeometry(
                 geometryOptions.radiusAtTop,
                 geometryOptions.radiusAtBottom,
-                direction.length(),
+                length,
                 geometryOptions.radiusSegments,
                 geometryOptions.heightSegments);
         var edge = new THREE.Mesh(edgeGeometry, material);
         edge.rotation.x = arrow.rotation.x;
         edge.rotation.y = arrow.rotation.y;
         edge.rotation.z = arrow.rotation.z;
-        var finalPosition = new THREE.Vector3().addVectors(pointX, direction.multiplyScalar(0.5));
-        edge.position.x = finalPosition.x;
-        edge.position.y = finalPosition.y;
-        edge.position.z = finalPosition.z;
+        edge.position.x = (pointX.x + pointY.x) / 2;
+        edge.position.y = (pointX.y + pointY.y) / 2;
+        edge.position.z = (pointX.z + pointY.z) / 2;
         return edge;
+    },
+    vertexStartEndPoint: function (pxPerMeter) {
+        return new THREE.SphereGeometry(Math.round(pxPerMeter/2), 32, 32);
+    },
+    vertexPoint: function (pxPerMeter) {
+        return new THREE.SphereGeometry(Math.round(pxPerMeter/4), 32, 32);
     }
 };

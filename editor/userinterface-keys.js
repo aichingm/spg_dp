@@ -33,6 +33,7 @@ function keys(editor, uioverlay) {
             } else if (e.charCode === 107) {//k
                 if (confirm("Löschen?")) {
                     editor.getClean();
+                    document.location.reload(true);
                 }
             } else if (e.charCode === 115) {//s
                 editor.createLine("window");
@@ -93,6 +94,8 @@ function keys(editor, uioverlay) {
                 }
             } else if (e.charCode === 196) { //Ä
                 uioverlay.open("#PathPoints");
+            } else if (e.charCode === 79) { //O
+                uioverlay.open("#modelSettings");
             } else if (e.charCode === 214) { //Ö
                 uioverlay.open("#PathEdges");
             } else if (e.charCode === 246) { //ö

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $(".opener").click(function () {
+    $(".openers .opener").click(function () {
         var index = $(this).index() + 1;
         $drawer = $(".leftDrawer:nth-child(" + index + ")");
         var event = jQuery.Event("leftDrawer-open");
@@ -15,6 +15,19 @@ $(document).ready(function () {
             }).addClass("isIn");
             $(this).animate({
                 "margin-left": $drawer.width()
+            }, 200);
+        }
+    });
+    $("#settings .opener").click(function () {
+        if ($("#settings").hasClass("isIn")) {
+            $("#settings").removeClass("isIn");
+            $("#settings").animate({
+                right: "-200px"
+            }, 200);
+        } else {
+            $("#settings").addClass("isIn");
+            $("#settings").animate({
+                right: "0px"
             }, 200);
         }
     });

@@ -1,25 +1,24 @@
 function buildShowDiv() {
     if (typeof (Storage) !== "undefined") {
-        var exports = localStorage.getItem("PieceofShit.exports");
-        //check if they are valid
-        if (exports !== null && exports !== undefined && exports.length > 0) {
-            //draw them
-            var data = JSON.parse(exports);
-            $("#drawFloors").html("");
-            $(data.modelManager.floors).each(function (k) {
-                $("#drawFloors").append("<option selected='selected' value='" + k + "'>" + this.name + "</option>");
-            });
-            $("#drawFloors").attr("size", data.modelManager.floors.length);
-        }
+        var data = STORAGE.getData();
+        $("#drawFloors").html("");
+        var selectedFloors = [];
+        $(data.modelManager.floors).each(function (k) {
+            selectedFloors.push(parseInt(k));
+            $("#drawFloors").append("<option selected='selected' value='" + k + "'>" + this.name + "</option>");
+        });
+        VIEWER.setSelectedFloors(selectedFloors);
+        $("#drawFloors").attr("size", data.modelManager.floors.length);
+
         $("#drawFloors").change(function (e) {
-            if (typeof (Storage) !== "undefined") {
-                var exports = localStorage.getItem("PieceofShit.exports");
-                //check if they are valid
-                if (exports !== null && exports !== undefined && exports.length > 0) {
-                    //draw them
-                    VIEWER.draw(true);
-                }
+            var selectedFloors = [];
+            if ($("#drawFloors").val()) {
+                $.each($("#drawFloors").val(), function (v, k) {
+                    selectedFloors.push(parseInt(k));
+                });
             }
+            VIEWER.setSelectedFloors(selectedFloors);
+            VIEWER.draw(true);
         });
     }
 }

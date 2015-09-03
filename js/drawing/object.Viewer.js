@@ -7,6 +7,8 @@ function Viewer() {
     this.data;
     this.updateFunctions = [];
     this.stats;
+    this.selectedFloors = [];
+    this.drawingHeightFactor = 1;
     this.init = function () {
         // Create the scene and set the scene size.
         this.scene = new THREE.Scene();
@@ -39,20 +41,20 @@ function Viewer() {
         //light.position.set(-1000, 2000, 1000);
         //scene.add(light);
         this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-        this.controls.userPanSpeed = 15;
+        this.controls.userPanSpeed = 60;
     };
 
     this.draw = function (clear) {
         this.path = this.path ? this.path : [];
-        var selectedFloors = [];
-        if ($("#drawFloors").val()) {
-            $.each($("#drawFloors").val(), function (v, k) {
-                selectedFloors.push(parseInt(k));
-            });
-        }
         if (clear === true) {
             this.clearScene();
         }
+
+        this.camera.lookAt(new THREE.Vector3(this.data.center.x, this.data.center.y, this.data.center.z));
+        this.controls.center.fromArray([this.data.center.x, this.data.center.y, this.data.center.z]);
+        console.log(this.data.center)
+        this.scene.add(this.camera);
+
         var objects = {};
         objects.floors = [];
         objects.walls = [];
@@ -62,7 +64,9 @@ function Viewer() {
         objects.interfloorFloors = [];
         objects.pathPoints = [];
         objects.edges = [];
-
+        //fix Viewer.selectedFloors access in the anonymous Functions
+        var selectedFloors = this.selectedFloors;
+        var drawingHeightFactor = this.drawingHeightFactor;
         $(this.data.modelManager.floors).each(function (k) {
             if ($.inArray(k, selectedFloors) === -1) {
                 return;
@@ -77,23 +81,23 @@ function Viewer() {
                             objects.floors.push(mesh);
                             break;
                         case "wall":
-                            var geometry = Geometries.wallGemometry(this.points, floor.offset.z, floor.height);
+                            var geometry = Geometries.wallGemometry(this.points, floor.offset.z, floor.height * drawingHeightFactor);
                             geometry.computeBoundingSphere();
                             var mesh = new THREE.Mesh(geometry, Materials.wall);
                             objects.walls.push(mesh);
                             break;
                         case "door":
-                            var geometryDoor = Geometries.doorGemometry(this.points, floor.offset.z, floor.height);
+                            var geometryDoor = Geometries.doorGemometry(this.points, floor.offset.z, floor.height * drawingHeightFactor);
                             geometryDoor.computeBoundingSphere();
                             var meshDoor = new THREE.Mesh(geometryDoor, Materials.door);
                             objects.doors.push(meshDoor);
-                            var geometryOverDoor = Geometries.overDoorGemometry(this.points, floor.offset.z, floor.height);
+                            var geometryOverDoor = Geometries.overDoorGemometry(this.points, floor.offset.z, floor.height * drawingHeightFactor);
                             geometryOverDoor.computeBoundingSphere();
                             var meshOverDoor = new THREE.Mesh(geometryOverDoor, Materials.wall);
                             objects.doors.push(meshOverDoor);
                             break;
                         case "window":
-                            var geometryWindow = Geometries.windowGeometry(this.points, floor.offset.z, floor.height);
+                            var geometryWindow = Geometries.windowGeometry(this.points, floor.offset.z, floor.height * drawingHeightFactor);
                             geometryWindow.computeBoundingSphere();
                             var meshWindow = new THREE.Mesh(geometryWindow, Materials.window);
                             objects.windows.push(meshWindow);
@@ -130,18 +134,30 @@ function Viewer() {
         var vertices = [];
         $(this.data.paths.vertices).each(function (data, viewer) {
             return function (i, object) {
-                if ($.inArray(object.floorIndex, selectedFloors) === -1 || !Arrays.boolInArray(object.name, viewer.path)) {
+                var indexOfPath = viewer.path.indexOf(object.name);
+                if ($.inArray(object.floorIndex, selectedFloors) === -1 || indexOfPath === -1) {
                     return;
+                } else {
+                    var material, sphere, floors, geometry, sphere, floorOffset;
+                    vertices.push({"x": object.x, "y": object.y, "floorIndex": object.floorIndex});
+                    floors = data.modelManager.floors;
+                    if (indexOfPath === 0) {
+                        material = Materials.pathStartPoint;
+                        geometry = Geometries.vertexStartEndPoint(data.modelManager.settings.pxPerMeter);
+                    } else if (indexOfPath === viewer.path.length - 1) {
+                        material = Materials.pathEndPoint;
+                        geometry = Geometries.vertexStartEndPoint(data.modelManager.settings.pxPerMeter);
+                    } else {
+                        material = Materials.pathPoint;
+                        geometry = Geometries.vertexPoint(data.modelManager.settings.pxPerMeter);
+                    }
+                    sphere = new THREE.Mesh(geometry, material);
+                    sphere.position.x = object.x;
+                    sphere.position.z = object.y;
+                    floorOffset = floors[object.floorIndex].offset.z + data.modelManager.settings.pxPerMeter;
+                    sphere.position.y = floorOffset;
+                    objects.pathPoints.push(sphere);
                 }
-                vertices.push({"x": object.x, "y": object.y, "floorIndex": object.floorIndex});
-                var floors = data.modelManager.floors;
-                var geometry = new THREE.SphereGeometry(50, 32, 32);
-                var material = new THREE.MeshBasicMaterial({color: 0xffff00});
-                var sphere = new THREE.Mesh(geometry, material);
-                sphere.position.x = object.x;
-                sphere.position.z = object.y;
-                sphere.position.y = floors[object.floorIndex].offset.z + 70;
-                objects.pathPoints.push(sphere);
             };
         }(this.data, this));
 
@@ -160,11 +176,12 @@ function Viewer() {
                     return;
                 }
                 var floors = data.modelManager.floors;
-                var material = new THREE.MeshBasicMaterial({color: 0x0000ff});
+                var material = new THREE.MeshBasicMaterial({color: 0x624D8C});
+                var radius = data.modelManager.settings.pxPerMeter / 8;
                 var edge = Geometries.edgeGeometry(
-                        new THREE.Vector3(object.Ax, floors[object.Afloor].offset.z + 70, object.Ay),
-                        new THREE.Vector3(object.Bx, floors[object.Bfloor].offset.z + 70, object.By),
-                        {"radiusAtTop": 10, "radiusAtBottom": 10, "radiusSegments": 6, "heightSegments": 4},
+                        new THREE.Vector3(object.Ax, floors[object.Afloor].offset.z + data.modelManager.settings.pxPerMeter, object.Ay),
+                        new THREE.Vector3(object.Bx, floors[object.Bfloor].offset.z + data.modelManager.settings.pxPerMeter, object.By),
+                        {"radiusAtTop": radius, "radiusAtBottom": radius, "radiusSegments": 6, "heightSegments": 4},
                 material
                         );
                 objects.edges.push(edge);
@@ -244,11 +261,20 @@ function Viewer() {
     this.setPath = function (path) {
         this.path = path;
     };
+    this.setSelectedFloors = function (floors) {
+        this.selectedFloors = floors;
+    };
     this.setStats = function (stats) {
         this.stats = stats;
     };
     this.getStats = function () {
         return this.stats;
+    };
+    this.setDrawingHeightPercentage = function (percentage) {
+        if (percentage < 0 || percentage > 100) {
+            throw new Error("the Percentage has to be between 0 and 100 (incl 0 and 100)");
+        }
+        return this.drawingHeightFactor = percentage / 100;
     };
 
 

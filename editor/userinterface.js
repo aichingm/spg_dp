@@ -180,6 +180,25 @@ $(document).ready(function () {
         //convert the exportOjects to string and display them
         $("#textarea").val(editor.toString());
     });
+     $("#toString button[name='save']").click(function () {
+        var data = editor.toString();
+        
+        var textToWrite = JSON.stringify(data);
+        var textFileAsBlob = new Blob([textToWrite], {type: 'text/plain'});
+        var fileNameToSaveAs = "model.js";
+        var downloadLink = document.createElement("a");
+        downloadLink.download = fileNameToSaveAs;
+        downloadLink.innerHTML = "Download File";
+        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+        downloadLink.onclick = function (e) {
+            document.body.removeChild(e.target);
+        };
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+    });
+    
+    
     //setup the listener for the closed-apply event on the oi-overlay with the id toString
     $("#toString").on("closed-apply", function () {
         //load the exportObjects to the editor
@@ -209,7 +228,7 @@ $(document).ready(function () {
 
         $("#floorManagerSelectFloor").trigger("change");
         $("#floorManagerTable tr td button.delete").click(function (e) {
-            editor.getModelManager().deleteFloor(e.currentTarget.dataset.floor);
+            editor.deleteFloor(e.currentTarget.dataset.floor);
             $("#floorManager").trigger("showen");
             storage.save();
         });
@@ -264,7 +283,14 @@ $(document).ready(function () {
         ;
         $("#interFloorPointsObjectsTable").html("");
         for (var i = 0; i < objectLlist.length; i++) {
-            $("#interFloorPointsObjectsTable").append("<tr><td>" + JSON.stringify(objectLlist[i]) + "</td><td class=\"center\"><button class='delete' data-index='" + i + "'>&times;</button></td></tr>");
+            var content = "<tr><td>" + objectLlist[i].type + "</td><td><table><thead><tr><td>x</td><td>y</td><td>floor</td></tr></thead><tbody>"
+            for (var j = 0; j < objectLlist[i].points.length; j++) {
+                content += "<tr><td>" + objectLlist[i].points[j].x + "</td><td>"
+                        + objectLlist[i].points[j].y + "</td><td>"
+                        + objectLlist[i].points[j].floorIndex + ": \"" + editor.modelManager.model.floors[objectLlist[i].points[j].floorIndex].name + "\"</td></tr>";
+            }
+            content += "</tbody></table></td><td class=\"center\"><button class='delete' data-index='" + i + "'>&times;</button></td></tr>";
+            $("#interFloorPointsObjectsTable").append(content);
         }
         $("#interFloorPointsObjectsTable tr td button.delete").click(function (e) {
             editor.getInterFloorObjects().remove(e.currentTarget.dataset.index);
@@ -497,6 +523,53 @@ $(document).ready(function () {
     $(".ui-overlay .controls .transparent").mouseleave(function () {
         $(".ui-overlay").css("opacity", "1");
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//########################################################
+//########################################################
+//########################################################
+//#################### Model Settings ####################
+//########################################################
+//########################################################
+//########################################################
+
+    $("#modelSettings").on("showen", function () {
+        $("#modelSettings input[name='modelSettings.pxPerMeter']").val(editor.modelManager.model.settings.pxPerMeter);
+    });
+    $("#modelSettings").on("closed-apply", function () {
+        editor.modelManager.model.settings.pxPerMeter = parseInt($("#modelSettings input[name='modelSettings.pxPerMeter']").val());
+        storage.save();
+    });
+    $("#modelSettings").on("closed", function () {
+
+    });
+
+
+
     //set up the closed listener for the ui-overlay with the id backgroundImage
     $("#backgroundImageInput").on("change", function () {
         if ($('#backgroundImageInput').get(0).files[0] !== null && $('#backgroundImageInput').get(0).files[0] !== undefined) {

@@ -1,12 +1,11 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>SPG_DP</title>
+        <title>Building Explorer Viewer</title>
         <meta charset="utf-8">
         <link rel="shortcut icon"  href="favicon.png">
         <link rel="stylesheet" type="text/css" href="styles.css">
-    </head>
-    <body>
+
         <script src="js/globalVariables.js"></script>
         <script src="js/libs/three.min.js"></script>
         <script src="js/libs/OrbitControls.js"></script>
@@ -16,8 +15,11 @@
         <script src="js/libs/Stats.js"></script>
         <script src="editor/Arrays.js"></script>
         <script src="js/utils/StorageControler.js"></script>
+        <script src="js/utils/Time.js"></script>
+        <script src="js/EmptyDataObject.js"></script>
         <script type="text/javascript" src="editor/editorjs/Paths.js"></script>
         <script type="text/javascript" src="js/navigation/object.DistanceCalculators.js"></script>
+        <script type="text/javascript" src="js/navigation/object.CalculationHelpers.js"></script>
         <script type="text/javascript" src="js/navigation/function.buildMapFromDataPaths.js"></script>
         <script type="text/javascript" src="js/navigation/function.buildVetexNameList.js"></script>
         <script type="text/javascript" src="js/navigation/function.buildVetexCategoryList.js"></script>
@@ -27,34 +29,65 @@
         <script type="text/javascript" src="js/drawing/object.Materials.js"></script>
         <script type="text/javascript" src="js/events/on.document.keypress.js"></script>
         <script type="text/javascript" src="js/events/on..opener.click.js"></script>
+        <script type="text/javascript" src="js/events/on..leftDrawer.load.leftDeawer-show.js"></script>
         <script type="text/javascript" src="js/events/on..leftDrawer.route.leftDeawer-show.js"></script>
         <script type="text/javascript" src="js/events/on..leftDrawer.findNext.leftDeawer-show.js"></script>
         <script type="text/javascript" src="js/events/on..leftDrawer.controls.click.js"></script>
+        <script type="text/javascript" src="js/snackbars/showPathBar.js"></script>
+
+
         <script type="text/javascript" src="js/events/on.document.ready.js"></script>
         <!--        Simulation Stuff-->
         <script type="text/javascript" src="js/simulation/object.PathSegment.js"></script>
         <script type="text/javascript" src="js/simulation/object.Runner.js"></script>
         <script type="text/javascript" src="js/simulation/object.Simulation.js"></script>
 
+        <script type="text/javascript" src="js/events/on..settings.change.js"></script>
+
+    </head>
+    <body>
         <div id="settings">
-            <div class="settingsLine settingsLineH1">
-                Settings
+            <div class="opener">
+                &#9881;
             </div>
-            <div class="settingsLine">
-                Draw Floors<br>
-                <select multiple="" id="drawFloors">
-                </select>
+            <div class="content">
+                <div class="settingsLine settingsLineH1">
+                    Options
+                </div>
+                <div class="settingsLine">
+                    Draw Floors<br>
+                    <select multiple="" id="drawFloors">
+                    </select>
+                </div>
+                <div class="settingsLine">
+                    Drawing Height Percentage<br>
+                    <input type="number" class="drawingHeightPercentage" min="0" max="100" value="100">
+                </div>
             </div>
         </div>
         <div id="leftDrawers">
+            <div class="leftDrawer load">
+                <div class="content">
+                    <h1>Load a model</h1>
+                    <label>File: <input type="file" name="loadFile"></label><br /><br />
+                </div>
+                <div class="controls">
+                    <button class="apply">&#10003;</button>
+                    <button class="cancel">&#10007;</button>
+                </div>
+            </div>
             <div class="leftDrawer route">
                 <div class="content">
                     <h1>Select a route to show</h1>
                     <select name="from"></select><br /><br />
                     <select name="to" disabled="disabled"></select><br /><br />
-                    <select name="distanceType"></select><br /><br />
                     <label>Use only public ways<input type="checkbox" name="onlyPublic" checked="checked"></label><br /><br />
                     <label>Use only accessible ways<input type="checkbox" name="onlyAccessible" checked="checked"></label><br /><br />
+                    <label>Calculation Method <select class="calcType">
+                            <option value="0">fastest</option>
+                            <option value="1">shortest</option>
+                        </select></label><br /><br />
+                    <label>Speed&nbsp;<input type="number" name="kmh" value="4">&nbsp;km/h</label><br /><br />
                     <div class="error noRoute">Sorry no route found!</div>
                 </div>
                 <div class="content">
@@ -70,9 +103,13 @@
                     <h1>Select a route to show</h1>
                     <select name="from"></select><br /><br />
                     <select name="category"></select><br /><br />
-                    <select name="distanceType"></select><br /><br />
                     <label>Use only public ways<input type="checkbox" name="onlyPublic" checked="checked"></label><br /><br />
                     <label>Use only accessible ways<input type="checkbox" name="onlyAccessible" checked="checked"></label><br /><br />
+                    <label>Calculation Method <select class="calcType">
+                            <option value="0">fastest</option>
+                            <option value="1">shortest</option>
+                        </select></label><br /><br />
+                    <label>Speed&nbsp;<input type="number" name="kmh" value="4">&nbsp;km/h</label><br /><br />
                     <div class="error noRoute">Sorry no route found!</div>
                 </div>
                 <div class="content">
@@ -96,6 +133,9 @@
             </div>
             <div class="openers">
                 <div class="opener">
+                    &#x21f1;
+                </div>
+                <div class="opener">
                     &#8605;
                 </div>
                 <div class="opener">
@@ -103,6 +143,18 @@
                 </div>
                 <div class="opener">
                     #;
+                </div>
+            </div>
+
+        </div>
+        <div class="snackbars">
+            <div class="snackbar showPathBar">
+                Your position: <span class="startPosition"></span><br />
+                Destination: <span class="endPosition"></span><br />
+                Distance (in meters): <span class="distance"></span><br />
+                Time to walk approximately: <span class="time"></span><br />
+                <div class="controls">
+                    <button class="cancel">&#10007;</button>
                 </div>
             </div>
         </div>

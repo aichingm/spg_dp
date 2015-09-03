@@ -20,12 +20,6 @@ $(document).ready(function (e) {
             $(".leftDrawer.route div select[name='to']").append("<option>" + list[i] + "</option>");
         }
         $(".leftDrawer.route div select[name='distanceType']").html("");
-
-        for (var i in DistanceCalculators) {
-            $(".leftDrawer.route div select[name='distanceType']").append("<option>" + i + "</option>");
-        }
-
-
     });
     $(".leftDrawer.route div button.apply").attr("disabled", "disabled");
     $(".leftDrawer.route div select[name='from']").on("change", function (e) {
@@ -52,19 +46,37 @@ $(document).ready(function (e) {
             onlyPublic: $(".leftDrawer.route div input[name='onlyPublic']").is(":checked"),
             onlyAccessible: $(".leftDrawer.route div input[name='onlyAccessible']").is(":checked")
         };
-        distanceCalculator = DistanceCalculators[$(".leftDrawer.route div select[name='distanceType']").val()];
-        map = buildMapFromDataPaths(exports,distanceCalculator,mapBuildOptions);
-        console.log(map)
+        console.log($(".leftDrawer.route div .calcType").val())
+        switch (parseInt($(".leftDrawer.route div .calcType").val())) {
+            case 1:
+                distanceCalculator = DistanceCalculators.calculateByVectorDistance3D;
+                break;
+            default :
+                distanceCalculator = DistanceCalculators.calculateByVectorDistance3DPercentMetric;
+                break;
+        }
+        map = buildMapFromDataPaths(exports, distanceCalculator, mapBuildOptions);
         graph = new Dijkstra(map);
         try {
             path = graph.getPath($(".leftDrawer.route div select[name='from']").val(), $(".leftDrawer.route div select[name='to']").val());
-        console.log(path    )
             VIEWER.setPath(path);
             VIEWER.draw(true);
+            $(".snackbar.showPathBar .startPosition").html(path[0]);
+            $(".snackbar.showPathBar .endPosition").html(path[path.length - 1]);
+            var distance = CalculationHelpers.calculatePathLength3D(exports, path);
+            var meters = (distance / exports.modelManager.settings.pxPerMeter);
+            $(".snackbar.showPathBar .distance").html(Math.round(meters * 100) / 100);
+            //include metric in to the calculation
+            distance = CalculationHelpers.calculatePathLength3DPercentMetric(exports, path);
+            meters = (distance / exports.modelManager.settings.pxPerMeter);
+            $(".snackbar.showPathBar .time").html(Time.secondsToReadable(Math.round(meters / ((parseInt($(".leftDrawer.route div input[name='kmh']").val()) * 1000) / 3600))));
+            $(".snackbar.showPathBar").show();
         } catch (exception) {
             if (exception.name === "NoRoute") {//#leftDrawers > div.leftDrawer.route.isIn > div:nth-child(1) > div
                 $(".leftDrawer.route div .error.noRoute").show();
                 event.preventDefault();
+            } else {
+                console.log(exception);
             }
         }
     });

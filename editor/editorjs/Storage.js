@@ -1,5 +1,5 @@
 function Storage(settings) {
-    this.settings = $.extend({"editorExportKey" : "PieceofShit.exports"},settings);
+    this.settings = $.extend({"editorExportKey" : "BuildingExplorer.exports"},settings);
     
     this.save = function () {
         if (typeof (Storage) !== "undefined") {

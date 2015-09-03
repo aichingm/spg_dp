@@ -14,31 +14,31 @@ function StorageControler(storageKey) {
     this.updateOnChange = true;
     this.jsonConvert = true;
     this.dataManipulator;
+    this.handler = function (obj) {
+        return function (e) {
+            var f;
+            if (!e) {
+                e = window.event;
+            }
+            if (e.key === obj.storageKey) {
+                if (obj.updateOnChange) {
+                    obj.reloadData();
+                }
+                for (f in obj.changeListeners) {
+                    if (obj.jsonConvert) {
+                        obj.changeListeners[f](obj.getData(), e, obj);
+                    } else {
+                        obj.changeListeners[f](e.newValue, e, obj);
+                    }
+                }
+            }
+        };
+    }(this);
     this.setupChangeListener = function () {
-        var f;
-        var handler = function (obj) {
-            return function (e) {
-                if (!e) {
-                    e = window.event;
-                }
-                if (e.key === obj.storageKey) {
-                    if (obj.updateOnChange) {
-                        obj.reloadData();
-                    }
-                    for (f in obj.changeListeners) {
-                        if (obj.jsonConvert) {
-                            obj.changeListeners[f](obj.getData(), e, obj);
-                        } else {
-                            obj.changeListeners[f](e.newValue, e, obj);
-                        }
-                    }
-                }
-            };
-        }(this);
         if (window.addEventListener) {
-            window.addEventListener("storage", handler, false);
+            window.addEventListener("storage", this.handler, false);
         } else {
-            window.attachEvent("onstorage", handler);
+            window.attachEvent("onstorage", this.handler);
         }
     };
     this.onChange = function (listener) {
@@ -61,12 +61,9 @@ function StorageControler(storageKey) {
     this.getData = function () {
         return this.data;
     };
-    this.putData = function (data) {
-        if (this.jsonConvert) {
-            this.data = this.storage.setItem(this.storageKey, JSON.stringify(data));
-        } else {
-            this.data = this.storage.setItem(this.storageKey, data);
-        }
+    this.putDataRaw = function (data) {
+        this.storage.setItem(this.storageKey, data);
+        this.handler({key: this.storageKey, newValue: data});
     };
     return this;
 }
