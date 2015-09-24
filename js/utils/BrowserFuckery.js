@@ -1,7 +1,7 @@
 BrowserFuckery = {
     fixMouseEventButtons: function (mouseEvent) {
         var buttons = [];
-        if (mouseEvent.buttons !== undefined && [1, 2, 2, 3, 4, 5, 6, 7].indexOf(mouseEvent.buttons)) {
+        if (mouseEvent.buttons !== undefined && [1, 2, 2, 3, 4, 5, 6, 7].indexOf(mouseEvent.buttons) > -1) {
             switch (mouseEvent.buttons) {
                 //1 = left
                 //2 = right
