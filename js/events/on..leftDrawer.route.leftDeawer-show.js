@@ -46,7 +46,6 @@ $(document).ready(function (e) {
             onlyPublic: $(".leftDrawer.route div input[name='onlyPublic']").is(":checked"),
             onlyAccessible: $(".leftDrawer.route div input[name='onlyAccessible']").is(":checked")
         };
-        console.log($(".leftDrawer.route div .calcType").val())
         switch (parseInt($(".leftDrawer.route div .calcType").val())) {
             case 1:
                 distanceCalculator = DistanceCalculators.calculateByVectorDistance3D;

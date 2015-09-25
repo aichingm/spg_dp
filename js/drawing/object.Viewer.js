@@ -5,6 +5,7 @@ function Viewer() {
     this.camera;
     this.path;
     this.data;
+    this.simulationData = {edges: [], simulationInterval: -1};
     this.updateFunctions = [];
     this.stats;
     this.selectedFloors = [];
@@ -52,7 +53,6 @@ function Viewer() {
 
         this.camera.lookAt(new THREE.Vector3(this.data.center.x, this.data.center.y, this.data.center.z));
         this.controls.center.fromArray([this.data.center.x, this.data.center.y, this.data.center.z]);
-        console.log(this.data.center)
         this.scene.add(this.camera);
 
         var objects = {};
@@ -203,6 +203,10 @@ function Viewer() {
         $.each(objects.edges, function () {
             _this.scene.add(this);
         });
+        $.each(this.simulationData.edges, function () {
+            _this.scene.add(this);
+        });
+
         THREEx.Transparency.init(objects.walls);
         $.each(objects.doors, function () {
             _this.scene.add(this);

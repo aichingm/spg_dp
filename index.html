@@ -16,6 +16,7 @@
         <script src="editor/Arrays.js"></script>
         <script src="js/utils/StorageControler.js"></script>
         <script src="js/utils/Time.js"></script>
+        <script src="js/utils/GradiantColor.js"></script>
         <script src="js/EmptyDataObject.js"></script>
         <script type="text/javascript" src="editor/editorjs/Paths.js"></script>
         <script type="text/javascript" src="js/navigation/object.DistanceCalculators.js"></script>
@@ -32,11 +33,19 @@
         <script type="text/javascript" src="js/events/on..leftDrawer.load.leftDeawer-show.js"></script>
         <script type="text/javascript" src="js/events/on..leftDrawer.route.leftDeawer-show.js"></script>
         <script type="text/javascript" src="js/events/on..leftDrawer.findNext.leftDeawer-show.js"></script>
+        <script type="text/javascript" src="js/events/on..leftDrawer.simulationCreator.leftDeawer-show.js"></script>
+        <script type="text/javascript" src="js/events/on..leftDrawer.simulationRunner.leftDeawer-show.js"></script>
         <script type="text/javascript" src="js/events/on..leftDrawer.controls.click.js"></script>
         <script type="text/javascript" src="js/snackbars/showPathBar.js"></script>
+        <script type="text/javascript" src="js/snackbars/showSimulationBar.js"></script>
 
 
         <script type="text/javascript" src="js/events/on.document.ready.js"></script>
+        <!--        Simulation Stuff-->
+        <script type="text/javascript" src="js/simulation/object.PathSegment.js"></script>
+        <script type="text/javascript" src="js/simulation/object.Runner.js"></script>
+        <script type="text/javascript" src="js/simulation/object.Simulation.js"></script>
+
         <script type="text/javascript" src="js/events/on..settings.change.js"></script>
 
     </head>
@@ -115,6 +124,44 @@
                     <button class="cancel">&#10007;</button>
                 </div>
             </div>
+            <div class="leftDrawer simulationCreator">
+                <div class="content">
+                    <h1>Simulation Creator</h1>
+
+                    <label>Habitat: <select name="habitat"></select><br><br></label>
+                    <label>Population: <input type="number" name="population" value="10"> <br><br></label>
+                    <label>Objective: <select name="objective">
+                            <optgroup label="Category"></optgroup>
+                            <optgroup label="Room"></optgroup>
+                        </select></label><br><br>
+                    <button name="add">Add</button><br><br>
+                    <table>
+                        <thead>
+                            <tr><td>Habitat</td><td>Population</td><td>Objective</td><td>Objective Type</td><td>Delete</td></tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table><br>
+                    <input type="file" name="loadFile"> <br>
+                    <br><button name="load">Load</button><br><br>
+                    <br><br><button name="save">Save</button><br><br>
+                </div>
+                <div class="controls">
+                    <!--                    <button class="apply">&#10003;</button>-->
+                    <button class="cancel">&#10007;</button>
+                </div>
+            </div>
+            <div class="leftDrawer simulationRunner">
+                <div class="content">
+                    <h1>Simulation Runner</h1>
+                    <input type="file" name="loadFile"> <br>
+                    <br><button name="load">Load a population Map</button><br><br>
+                </div>
+                <div class="controls">
+                    <!--                    <button class="apply">&#10003;</button>-->
+                    <button class="cancel">&#10007;</button>
+                </div>
+            </div>
             <div class="openers">
                 <div class="opener">
                     &#x21f1;
@@ -125,6 +172,12 @@
                 <div class="opener">
                     &#8608;
                 </div>
+                <div class="opener">
+                    &#9786;
+                </div>
+                <div class="opener">
+                    &#8633;
+                </div>
             </div>
 
         </div>
@@ -134,6 +187,19 @@
                 Destination: <span class="endPosition"></span><br />
                 Distance (in meters): <span class="distance"></span><br />
                 Time to walk approximately: <span class="time"></span><br />
+                <div class="controls">
+                    <button class="cancel">&#10007;</button>
+                </div>
+            </div>
+            <div class="snackbar showSimulationBar">
+                Time: <span class="time"></span><br />
+                People in the house: <span class="peopleInTheHouse"></span><br />
+                People in safety: <span class="peopleInSafety"></span><br />
+                <hr>
+                Time to safe all: <span class="time100"></span><br />
+                Time to safe 75%: <span class="time75"></span><br />
+                Time to safe 50%: <span class="time50"></span><br />
+                First out: <span class="firstout"></span><br />
                 <div class="controls">
                     <button class="cancel">&#10007;</button>
                 </div>
