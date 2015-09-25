@@ -9,14 +9,13 @@ function Runner() {
 
     this.calculatePosition = function (passedTime) {
         //TODO respect metric in any kind
-        if (this.state !== 3){
+        if (this.state !== 3) {
             var v = Math.min(this.velocity * passedTime / 1000, this.path.complex[this.currentPath].length - this.currentPathProgress);
             this.position.x += this.path.complex[this.currentPath].unitVector.x * v;
             this.position.y += this.path.complex[this.currentPath].unitVector.y * v;
             this.position.z += this.path.complex[this.currentPath].unitVector.z * v;
             this.currentPathProgress += v;
             if (this.currentPathProgress >= this.path.complex[this.currentPath].length) {
-                console.log("changing path");
                 this.nextPath();
             }
             //TODO move on if time is left changing paths (the last move in a path does not use all posible time)
@@ -29,15 +28,18 @@ function Runner() {
         this.position.y = this.path.simple[0].y;
         this.position.z = this.path.simple[0].z;
         this.currentPath = 0;
+        this.path.complex[this.currentPath].currentRunners++;
         this.currentPathProgress = 0;
     };
+    //TODO this calculation is bad!
     this.nextPath = function () {
+        this.path.complex[this.currentPath].currentRunners--;
         this.currentPath++;
         if (this.currentPath >= this.path.complex.length) {
             this.state = 3;
-            console.log("fuck yeah")
             return;
         }
+        this.path.complex[this.currentPath].currentRunners++;
         this.position.x = this.path.simple[this.currentPath].x;
         this.position.y = this.path.simple[this.currentPath].y;
         this.position.z = this.path.simple[this.currentPath].z;

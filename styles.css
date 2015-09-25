@@ -84,6 +84,7 @@ body > canvas{
     width: calc(100% - 30px);
     height: 100%;
     padding: 15px;
+    overflow-y: scroll;
 }
 .leftDrawer .content h1{
     margin-top: 0;
@@ -210,6 +211,7 @@ button{
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     display: none;
+    overflow-y: scroll;
 }
 .snackbars .snackbar .controls{
     position: absolute;
@@ -227,4 +229,6 @@ button{
 }
 .snackbars .snackbar.showPathBar span.endPosition {
     color: #ffff00;
+}
+.snackbars .snackbar.showSimulationBar {
 }

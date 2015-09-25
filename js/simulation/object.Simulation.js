@@ -1,11 +1,13 @@
 function Simulation() {
     this.runners = [];
+    this.runnersCount = 0;
     this.pathSegments = [];
     this.pathSegmentsShadow = {};
     this.elapsedTime = 0; //milliseconds
 
 
     this.addRunners = function (count, pathSegments, velocityFunction) {
+        this.runnersCount += count;
         var i = 0, simple = [];
 
         for (i = 0; i < pathSegments.length; i++) {
@@ -30,10 +32,14 @@ function Simulation() {
         var i;
         for (i = 0; i < this.runners.length; i++) {
             this.runners[i].calculatePosition(deltaTime);
-            //TOTO remove from runners if state is finished (3)
+            if (this.runners[i].state === 3) {
+                this.runners.splice(i, 1);
+            }
         }
         this.elapsedTime += deltaTime;
-        //TODO stop simulation if no runners left
+        if (this.runners.length === 0) {
+            throw "end";
+        }
     };
     return this;
 }
