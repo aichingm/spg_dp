@@ -183,7 +183,7 @@ $(document).ready(function () {
      $("#toString button[name='save']").click(function () {
         var data = editor.toString();
         
-        var textToWrite = JSON.stringify(data);
+        var textToWrite = data;
         var textFileAsBlob = new Blob([textToWrite], {type: 'text/plain'});
         var fileNameToSaveAs = "model.js";
         var downloadLink = document.createElement("a");

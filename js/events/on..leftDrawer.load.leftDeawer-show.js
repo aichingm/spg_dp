@@ -7,7 +7,7 @@ $(document).ready(function (e) {
         if (f) {
             var r = new FileReader();
             r.onload = function (e) {
-                var model = JSON.parse(e.target.result);
+                var model = e.target.result;
                 STORAGE.putDataRaw(model);
                 VIEWER.draw(true);
             };
