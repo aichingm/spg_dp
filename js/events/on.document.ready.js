@@ -43,8 +43,12 @@ $(document).ready(function (e) {
         paths.load(data.paths);
         for (i = 0; i < paths.edges.length; i++) {
             e = paths.edges[i];
-            e.A = paths.getVertex(e.Ax, e.Ay, e.Afloor);
-            e.B = paths.getVertex(e.Bx, e.By, e.Bfloor);
+            try {
+                e.A = paths.getVertex(e.Ax, e.Ay, e.Afloor);
+                e.B = paths.getVertex(e.Bx, e.By, e.Bfloor);
+            } catch (e) {
+                console.error(e);
+            }
         }
         data.paths.vshadow = {};
         for (i = 0; i < paths.vertices.length; i++) {

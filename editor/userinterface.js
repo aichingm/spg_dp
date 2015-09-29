@@ -8,6 +8,7 @@ var storage = new Storage();
 var wasMove = false;
 var selectDown;
 
+
 $(document).ready(function () {
     interFloorSelection = new InterFloorSelection();
     //the canvas to which the editor will be attached
@@ -180,9 +181,9 @@ $(document).ready(function () {
         //convert the exportOjects to string and display them
         $("#textarea").val(editor.toString());
     });
-     $("#toString button[name='save']").click(function () {
+    $("#toString button[name='save']").click(function () {
         var data = editor.toString();
-        
+
         var textToWrite = data;
         var textFileAsBlob = new Blob([textToWrite], {type: 'text/plain'});
         var fileNameToSaveAs = "model.js";
@@ -197,8 +198,8 @@ $(document).ready(function () {
         document.body.appendChild(downloadLink);
         downloadLink.click();
     });
-    
-    
+
+
     //setup the listener for the closed-apply event on the oi-overlay with the id toString
     $("#toString").on("closed-apply", function () {
         //load the exportObjects to the editor
@@ -483,20 +484,24 @@ $(document).ready(function () {
         $("#PathEdgesTable").html("");
         var list = editor.getPaths().edges;
         for (var i = 0; i < list.length; i++) {
-            $("#PathEdgesTable").append("<tr>"
-                    + "<td>Point names: " + editor.getPaths().getVertex(list[i].Ax, list[i].Ay, list[i].Afloor).name + " / " + editor.getPaths().getVertex(list[i].Bx, list[i].By, list[i].Bfloor).name + "</td>"
-                    + "<td>x: " + list[i].Ax + ", y: " + list[i].Ay + ", floor: " + list[i].Afloor + "</td>"
-                    + "<td>x: " + list[i].Bx + ", y: " + list[i].By + ", floor: " + list[i].Bfloor + "</td>"
-                    + "<td><input name=\"metricAB\" value=\"" + list[i].metric[0] + "\"></td>"
-                    + "<td><input name=\"metricBA\" value=\"" + list[i].metric[1] + "\"></td>"
-                    + "<td class=\"center\"><input type=\"checkbox\" name=\"public\" " + (list[i].public ? "checked=\"checked\"" : "") + "></td>"
-                    + "<td class=\"center\"><input type=\"checkbox\" name=\"accessible\" " + (list[i].accessible ? "checked=\"checked\"" : "") + "></td>"
-                    + "<td><input name=\"internalDescription\" value=\"" + list[i].internalDescription + "\"></td>"
-                    + "<td class=\"center\"><button class=\"save\">Save</button></td>"
-                    + "<td class=\"center\"><button class=\"delete\">&#10007;</button></td>"
-                    + "<input type=\"hidden\" name=\"i\" value=\"" + i + "\">"
-                    + "</tr>"
-                    );
+            try {
+                $("#PathEdgesTable").append("<tr>"
+                        + "<td>Point names: " + editor.getPaths().getVertex(list[i].Ax, list[i].Ay, list[i].Afloor).name + " / " + editor.getPaths().getVertex(list[i].Bx, list[i].By, list[i].Bfloor).name + "</td>"
+                        + "<td>x: " + list[i].Ax + ", y: " + list[i].Ay + ", floor: " + list[i].Afloor + "</td>"
+                        + "<td>x: " + list[i].Bx + ", y: " + list[i].By + ", floor: " + list[i].Bfloor + "</td>"
+                        + "<td><input name=\"metricAB\" value=\"" + list[i].metric[0] + "\"></td>"
+                        + "<td><input name=\"metricBA\" value=\"" + list[i].metric[1] + "\"></td>"
+                        + "<td class=\"center\"><input type=\"checkbox\" name=\"public\" " + (list[i].public ? "checked=\"checked\"" : "") + "></td>"
+                        + "<td class=\"center\"><input type=\"checkbox\" name=\"accessible\" " + (list[i].accessible ? "checked=\"checked\"" : "") + "></td>"
+                        + "<td><input name=\"internalDescription\" value=\"" + list[i].internalDescription + "\"></td>"
+                        + "<td class=\"center\"><button class=\"save\">Save</button></td>"
+                        + "<td class=\"center\"><button class=\"delete\">&#10007;</button></td>"
+                        + "<input type=\"hidden\" name=\"i\" value=\"" + i + "\">"
+                        + "</tr>"
+                        );
+            } catch (e) {
+                console.error(e);
+            }
         }
         $("#PathEdgesTable .save").click(function (e) {
             var tr = $(e.currentTarget).parent().parent();
