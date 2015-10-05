@@ -31,9 +31,37 @@ BrowserFuckery = {
                     buttons = [];
                     break;
             }
-        } else if ([0, 1, 2, 3].indexOf(mouseEvent.which) !== -1) {
-            buttons = [mouseEvent.which];
-        } else {
+        } else if (mouseEvent.which !== undefined && [0, 1, 2, 3].indexOf(mouseEvent.which) !== -1) {
+            switch (mouseEvent.which) {
+                case 0:
+                    buttons = [];
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                    buttons = [mouseEvent.which];
+                    break;
+                default:
+                    buttons = [];
+                    break;
+            }
+
+        } else if ([0, 1, 2, 3, 4].indexOf(mouseEvent.button) !== -1) {
+            switch (mouseEvent.button) {
+                case 0:
+                    buttons = [1];
+                    break;
+                case 1:
+                    buttons = [2];
+                    break;
+                case 2:
+                     buttons = [3];
+                     break;
+                default:
+                    buttons = [];
+                    break;
+            }
+        }else {
             throw new Error("Some heavy BrowserFuckery is going on!!!1!!11 Can't fix mouse event buttons.");
         }
         mouseEvent.bf_mouseButtons = new BrowserFuckery.MouseButton(buttons);
