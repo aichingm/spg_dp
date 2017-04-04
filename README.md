@@ -1,9 +1,9 @@
-#Spengergasse Diplom Project#
+# Spengergasse Diplom Project #
 
 A 3D building modeler and viewer
 
 
-##Third Party Libraries ##
+## Third Party Libraries ##
 
 * [JQuery](https://jquery.com/)
 * [Three.js](threejs.org)
@@ -11,15 +11,15 @@ A 3D building modeler and viewer
 * [Stats.js](https://github.com/mrdoob/stats.js/)
 * [dijkstraJs](https://github.com/aichingm/dijkstrajs) by Mario Aichigner
 
-##Launching the Editor##
+## Launching the Editor ##
 
 * open the file editor/index.html with your favorite web browser
 
-##Launching the Viewer##
+## Launching the Viewer ##
 
 * open the file index.html with your favorite web browser
 
-##Code Entry Points##
+## Code Entry Points ##
 
 * for the Editor 
 > * editor/userinterface.js
